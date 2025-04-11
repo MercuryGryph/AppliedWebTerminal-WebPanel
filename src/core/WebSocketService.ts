@@ -38,49 +38,57 @@ class WebSocketService {
   public addOnOpenListener(
     key: string,
     listener: (e: Event) => void,
-  ): void {
-    this._onOpenListeners.set(key, listener);
+  ): this {
+    this._onOpenListeners.set(key, listener)
+    return this
   }
-  public removeOnOpenListener(key: string): void {
+  public removeOnOpenListener(key: string): this {
     this._onOpenListeners.delete(key);
+    return this
   }
 
   public addOnMessageListener(
     key: string,
     listener: (e: MessageEvent) => void,
-  ) {
+  ): this {
     this._onMessageListeners.set(key, listener);
+    return this
   }
-  public removeOnMessageListener(key: string): void {
+  public removeOnMessageListener(key: string): this {
     this._onMessageListeners.delete(key);
+    return this
   }
 
   public addOnCloseListener(
     key: string,
     listener: (e: CloseEvent) => void,
-  ) {
+  ): this {
     this._onCloseListeners.set(key, listener);
+    return this
   }
-  public removeOnCloseListener(key: string): void {
+  public removeOnCloseListener(key: string): this {
     this._onCloseListeners.delete(key);
+    return this
   }
 
   public addOnErrorListener(
     key: string,
     listener: (e: Event) => void,
-  ) {
+  ): this {
     this._onErrorListeners.set(key, listener);
+    return this
   }
-  public removeOnErrorListener(key: string): void {
+  public removeOnErrorListener(key: string): this {
     this._onErrorListeners.delete(key);
+    return this
   }
 
-
-  public setToken(token: string) {
+  public setToken(token: string): this {
     this._token = token;
+    return this;
   }
 
-  public connect(token: string = this._token!) {
+  public connect(token: string = this._token!): void {
     Logger.info(`connecting to WebSocket with token : ${token}`);
     if (!this._token) {
       this._token = token;

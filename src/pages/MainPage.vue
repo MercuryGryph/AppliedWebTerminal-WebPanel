@@ -3,8 +3,9 @@ import type TerminalInfo from "~/core/data/TerminalInfo"
 
 import { ref } from 'vue'
 
-import { fetchTerminalList } from "~/core/TerminalInfoService"
+import { fetchTerminalList } from "~/core/TerminalUtils"
 import { useAppStorage } from "~/data/AppStorage"
+import DialogTerminalLogin from "~/pages/DialogTerminalLogin.vue";
 import Logger from "~/utils/Logger"
 
 const appStorage = useAppStorage()
@@ -34,6 +35,10 @@ function onSelectTerminal(
 </script>
 
 <template>
+  <div v-if="appStorage.currentTerminal">
+    <DialogTerminalLogin />
+  </div>
+
   <div class="h-full w-full">
     <div class="mx-a h-full max-w-2000px min-w-300px w-70%">
       <el-row class="m-4" justify="space-between">

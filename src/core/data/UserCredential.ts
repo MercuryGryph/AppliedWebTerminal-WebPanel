@@ -1,5 +1,5 @@
 interface UserCredential {
-  readonly uuid: string
+  uuid: string
   password: string
 }
 
