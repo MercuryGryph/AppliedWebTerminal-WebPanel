@@ -7,17 +7,9 @@ node {
     download = false
 }
 
-task npmBuild(type: NpmTask) {
+tasks.register("npmBuild", NpmTask) {
+    dependsOn(tasks.named('npmInstall'))
+    description = 'Run \'npm build\' command'
+    group = 'npm'
     args = ['run', 'build']
 }
-
-clean {
-    delete "dist"
-}
-
-task copy(type: Copy) {
-
-}
-
-processResources.dependsOn(npmBuild)
-
