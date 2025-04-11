@@ -2,6 +2,7 @@
 
 import { useConfig } from "~/data/Config";
 import { fetchServerConfig } from "~/data/ServerConfig";
+import MainPage from "~/pages/MainPage.vue";
 
 const config = useConfig()
 
@@ -15,6 +16,6 @@ fetchServerConfig((it)=>{
 <template>
   <el-col class="h-full min-h-100vh w-full">
     <TopBar />
-    <RouterView />
+    <MainPage />
   </el-col>
 </template>
