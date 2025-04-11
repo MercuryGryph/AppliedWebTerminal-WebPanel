@@ -1,0 +1,22 @@
+.section_div {
+  min-width: 300px;
+  width: 70%;
+  max-width: 1000px;
+  margin: 1.25rem auto;
+  padding: 2.5rem;
+  border: 1px solid #555;
+  border-radius: 2.5rem;
+  backdrop-filter: blur(0.7rem);
+  background: var(--el-text-color-primary)+'33';
+}
+
+@media (max-width: 1000px) {
+  .section_div {
+    padding: 2rem 1rem;
+  }
+}
+
+.bg-blur {
+  backdrop-filter: blur(0.7rem);
+  background: var(--el-text-color-primary)+'33';
+}

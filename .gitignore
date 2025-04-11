@@ -1,0 +1,21 @@
+.vite-ssg-temp
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+
+.idea
+.vscode
+
+# Generated
+/src/typed-router.d.ts
+/auto-imports.d.ts
+
+# lock
+yarn.lock
+package-lock.json
+
+*.log
+

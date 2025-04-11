@@ -1,0 +1,9 @@
+
+# website title
+# 网页标题
+#
+# default: "Applied Web Terminal"
+title: "Applied Web Terminal YAML"
+
+useWss: false
+
