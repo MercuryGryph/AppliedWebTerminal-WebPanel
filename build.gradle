@@ -1,0 +1,23 @@
+plugins {
+    id 'java-library'
+    id("com.github.node-gradle.node") version "7.1.0"
+}
+
+node {
+    download = false
+}
+
+task npmBuild(type: NpmTask) {
+    args = ['run', 'build']
+}
+
+clean {
+    delete "dist"
+}
+
+task copy(type: Copy) {
+
+}
+
+processResources.dependsOn(npmBuild)
+
