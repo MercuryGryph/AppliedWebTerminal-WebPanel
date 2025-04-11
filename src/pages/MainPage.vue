@@ -45,7 +45,9 @@ function onSelectTerminal(
           :disabled="!appStorage.terminals && !errorOnFetching"
           @click="reloadTerminalList"
         >
-          <span class="material-symbols-outlined"></span>
+          <span class="material-symbols-outlined">
+            refresh
+          </span>
         </el-button>
       </el-row>
       <el-divider class="my-4" />
