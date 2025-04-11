@@ -1,3 +1,4 @@
+import { useConfig } from "~/data/Config";
 import Logger from "~/utils/Logger";
 
 class WebSocketService {
@@ -87,8 +88,14 @@ class WebSocketService {
     if (this._webSocket) {
       this.close()
     }
+    
+    const config = useConfig()
+    
+    const configUrl = config.serverConfig.webSocketUrl
+    
+    const baseUrl = configUrl || `ws://${location.host}`
 
-    this._webSocket = new WebSocket(`ws://${location.host}?token=${token}`)
+    this._webSocket = new WebSocket(`${baseUrl}?token=${token}`)
 
     this._webSocket.addEventListener("open", this._onOpen.bind(this))
     this._webSocket.addEventListener("message", this._onMessage.bind(this))

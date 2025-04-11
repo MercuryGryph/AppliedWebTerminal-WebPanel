@@ -4,6 +4,7 @@ import Logger from "~/utils/Logger";
 interface ServerConfig {
   readonly useWss: boolean,
   readonly title: string,
+  readonly webSocketUrl?: string,
 }
 
 export default ServerConfig
@@ -22,6 +23,7 @@ export function fetchServerConfig(
     {
       method: 'GET',
       mode: 'cors',
+      cache: 'no-cache',
       headers: {
         'Content-Type': 'application/json',
       },
