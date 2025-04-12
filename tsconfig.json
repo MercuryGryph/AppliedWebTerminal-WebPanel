@@ -18,7 +18,6 @@
     "resolveJsonModule": true,
     "types": [
       "vite/client",
-      "unplugin-vue-router/client"
     ],
     "strict": true,
     "sourceMap": true,

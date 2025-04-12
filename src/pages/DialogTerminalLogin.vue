@@ -70,6 +70,11 @@ function onConfirmRequest(): void {
       autocomplete="off"
       placeholder="Password"
       :disabled="isLoggingIn"
+      @keydown="(e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+          onConfirmRequest()
+        }
+      }"
       class="my-2"
     />
 

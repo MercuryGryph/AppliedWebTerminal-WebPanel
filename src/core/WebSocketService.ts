@@ -103,7 +103,7 @@ class WebSocketService {
     
     const baseUrl = configUrl || `ws://${location.host}`
 
-    this._webSocket = new WebSocket(`${baseUrl}?token=`)
+    this._webSocket = new WebSocket(`${baseUrl}?token=${token}`)
 
     this._webSocket.addEventListener("open", this._onOpen.bind(this))
     this._webSocket.addEventListener("message", this._onMessage.bind(this))

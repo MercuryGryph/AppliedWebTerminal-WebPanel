@@ -1,4 +1,3 @@
-import YAML from "yaml";
 import Logger from "~/utils/Logger";
 
 interface ServerConfig {
@@ -31,13 +30,12 @@ export function fetchServerConfig(
 
   response.then(response => {
     if (response.ok) {
-      const raw = response.text();
+      const data: Promise<ServerConfig> = response.json();
 
-      raw.then(data => {
-        const res: ServerConfig = YAML.parse(data)
+      data.then(data => {
         Logger.info('Fetch ServerConfig.yaml Success :')
-        Logger.info(res);
-        onSuccess(res);
+        Logger.info(data);
+        onSuccess(data);
       })
 
     } else {

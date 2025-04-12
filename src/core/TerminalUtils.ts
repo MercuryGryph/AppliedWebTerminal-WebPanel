@@ -1,7 +1,7 @@
 import type TerminalInfo from "~/core/data/TerminalInfo";
+import type UserAuthResult from "~/core/data/UserAuthResult";
+import type UserCredential from "~/core/data/UserCredential";
 import Logger from "~/utils/Logger";
-import UserCredential from "~/core/data/UserCredential";
-import UserAuthResult from "~/core/data/UserAuthResult";
 
 export async function fetchTerminalList(): Promise<TerminalInfo[]> {
   Logger.info("Fetching Terminal list...");

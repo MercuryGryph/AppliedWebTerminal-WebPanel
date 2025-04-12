@@ -11,6 +11,7 @@ dist-ssr
 
 # Generated
 /auto-imports.d.ts
+/src/components.d.ts
 
 # lock
 yarn.lock

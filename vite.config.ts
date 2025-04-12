@@ -56,4 +56,39 @@ export default defineConfig({
     // TODO: workaround until they support native ESM
     noExternal: ['element-plus'],
   },
+
+  build: {
+    // minify: false,
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            const paths = id.split(/[/, \\]/)
+            const index = paths.indexOf("node_modules")
+
+            if (index === -1) return 'node-modules'
+
+            const name = paths[index + 1]
+
+            if (name) {
+              return `node-modules_${name}`
+            } else {
+              return 'node-modules'
+            }
+
+          } else if (id.includes('src')) {
+            const paths = id.split(/[/, \\]/)
+            const index = paths.indexOf("src")
+            if (index === -1 || paths.length <= index + 2) return
+
+            return paths[index + 1]
+
+          } else if (id.includes('components')) {
+            return 'components'
+
+          }
+        }
+      }
+    }
+  }
 })
