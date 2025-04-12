@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { isDark, toggleDark } from "~/composables/dark";
+import { useAppStorage } from "~/data/AppStorage";
 import { useConfig } from "~/data/Config";
 
 const config = useConfig()
+const appStorage = useAppStorage()
+
+function pageBackToRoot(): void {
+  appStorage.inTerminalPage = false
+  appStorage.currentTerminal = undefined
+}
 
 </script>
 
@@ -10,6 +17,17 @@ const config = useConfig()
   <div class="h-60px w-full">
     <el-row justify="space-between" class="h-full w-full">
       <el-row class="h-full w-fit">
+        <el-button
+          v-if="appStorage.inTerminalPage"
+          circle
+          class="my-a ml-4"
+          @click="pageBackToRoot"
+        >
+          <span class="material-symbols-outlined">
+            arrow_back
+          </span>
+        </el-button>
+
         <el-text type="primary" class="mx-4 my-a font-size-6 font-bold">
           {{ config.serverConfig.title }}
         </el-text>
