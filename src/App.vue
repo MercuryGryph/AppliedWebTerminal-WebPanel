@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { watch } from "vue";
 
 import { useAppStorage } from "~/data/AppStorage";
 import { useConfig } from "~/data/Config";
 import { fetchServerConfig } from "~/data/ServerConfig";
-
 import MainPage from "~/pages/MainPage.vue";
 import TerminalPage from "~/pages/TerminalPage.vue";
 
@@ -16,12 +16,16 @@ fetchServerConfig((it)=>{
 
 const appStorage = useAppStorage()
 
+watch(config.localConfig,()=>{
+  appStorage.localConfigStoreManager.set(config.localConfig)
+})
+
 </script>
 
 <template>
   <el-col class="h-full min-h-100vh w-full">
     <TopBar />
-    <div v-if="appStorage.inTerminal">
+    <div v-if="appStorage.inTerminalPage">
       <TerminalPage />
     </div>
     <div v-else>

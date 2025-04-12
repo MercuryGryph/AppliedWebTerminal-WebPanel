@@ -51,3 +51,7 @@ export async function loginTerminal(
 
   return TerminalLoginError.HttpError
 }
+
+export async function logout(): Promise<void> {
+  
+}

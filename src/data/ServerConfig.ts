@@ -7,6 +7,13 @@ interface ServerConfig {
 
 export default ServerConfig
 
+export function defaultServerConfigValue(): ServerConfig {
+  return {
+    title: 'Applied Web Terminal'
+  }
+}
+
+
 const ServerConfigUrl = '/settings'
 
 export function fetchServerConfig(
