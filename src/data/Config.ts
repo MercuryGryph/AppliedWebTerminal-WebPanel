@@ -10,7 +10,6 @@ export default Config
 export const useConfig = defineStore('appConfig', {
   state: (): Config => ({
     serverConfig: {
-      useWss: false,
       title: 'Applied Web Terminal',
     }
   }),

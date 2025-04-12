@@ -44,7 +44,7 @@ export async function loginTerminal(
   if (response.ok) {
     const data: UserAuthResult = await response.json();
     if (data.success) {
-      if (data.token) return data.token
+      if (data.payload) return data.payload
     }
     return TerminalLoginError.ServerReturnedNotSuccess
   }

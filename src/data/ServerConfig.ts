@@ -2,14 +2,13 @@ import YAML from "yaml";
 import Logger from "~/utils/Logger";
 
 interface ServerConfig {
-  readonly useWss: boolean,
   readonly title: string,
   readonly webSocketUrl?: string,
 }
 
 export default ServerConfig
 
-const ServerConfigUrl = '/data/ServerConfig.yaml'
+const ServerConfigUrl = '/settings'
 
 export function fetchServerConfig(
   onSuccess: (serverConfig: ServerConfig) => void,
