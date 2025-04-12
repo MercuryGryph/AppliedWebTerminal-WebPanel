@@ -42,16 +42,20 @@ export async function loginTerminal(
   })
 
   if (response.ok) {
-    const data: UserAuthResult = await response.json();
-    if (data.success) {
-      if (data.payload) return data.payload
+    try {
+      const data: UserAuthResult = await response.json();
+      if (data.success) {
+        if (data.payload) return data.payload
+      }
+      return TerminalLoginError.ServerReturnedNotSuccess
+    } catch (_) {
+      return TerminalLoginError.HttpError
     }
-    return TerminalLoginError.ServerReturnedNotSuccess
   }
 
   return TerminalLoginError.HttpError
 }
 
 export async function logout(): Promise<void> {
-  
+
 }

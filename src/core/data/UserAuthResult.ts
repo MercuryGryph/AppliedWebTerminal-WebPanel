@@ -1,6 +1,6 @@
 interface UserAuthResult {
   readonly success: boolean
-  readonly payload: string | undefined
+  readonly payload: string
 }
 
 export default UserAuthResult

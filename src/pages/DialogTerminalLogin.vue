@@ -35,6 +35,10 @@ function onConfirmRequest(): void {
         {
           type: 'error',
           confirmButtonText: 'OK',
+          beforeClose: (_, __, done) => {
+            isLoggingIn.value = false
+            done()
+          }
         }
       ).then(() => {
         isLoggingIn.value = false
