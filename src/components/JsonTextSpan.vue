@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-import {sprintf, vsprintf} from "sprintf-js"
-
 import type JsonText from "~/core/data/minecraft/JsonText";
-import {computed} from "vue";
+
+import { vsprintf } from "sprintf-js"
+import { computed } from "vue";
 
 const props = defineProps<{
   jsonText: JsonText
