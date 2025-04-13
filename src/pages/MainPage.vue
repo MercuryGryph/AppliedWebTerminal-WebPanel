@@ -57,7 +57,7 @@ function onSelectTerminal(
       </el-row>
       <el-divider class="my-4" />
 
-      <div v-if="appStorage.terminals" class="flex flex-wrap justify-center gap-4">
+      <div v-if="appStorage.terminals" class="m-4 flex flex-wrap items-stretch justify-center gap-4">
         <div v-for="term in appStorage.terminals!!" :key="term.uuid">
           <TerminalInfoCard :terminal-info="term" :on-click="onSelectTerminal" />
         </div>

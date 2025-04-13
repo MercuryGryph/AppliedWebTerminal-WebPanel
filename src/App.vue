@@ -25,7 +25,7 @@ watch(config.localConfig,()=>{
 <template>
   <el-col class="h-full min-h-100vh w-full">
     <TopBar />
-    <div v-if="appStorage.inTerminalPage">
+    <div v-if="appStorage.inTerminalPage" class="h-full">
       <TerminalPage />
     </div>
     <div v-else>

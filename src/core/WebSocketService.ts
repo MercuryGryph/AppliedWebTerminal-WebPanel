@@ -101,7 +101,7 @@ class WebSocketService {
     
     const configUrl = config.serverConfig.webSocketUrl
     
-    const baseUrl = configUrl || `ws://${location.host}`
+    const baseUrl = configUrl || `ws://${location.host}/ws`
 
     this._webSocket = new WebSocket(`${baseUrl}?token=${token}`)
 

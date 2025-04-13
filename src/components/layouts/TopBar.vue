@@ -14,8 +14,8 @@ function pageBackToRoot(): void {
 </script>
 
 <template>
-  <div class="h-60px w-full">
-    <el-row justify="space-between" class="h-full w-full">
+  <div class="w-full">
+    <el-row justify="space-between" class="my-2 h-full w-full">
       <el-row class="h-full w-fit">
         <el-button
           v-if="appStorage.inTerminalPage"

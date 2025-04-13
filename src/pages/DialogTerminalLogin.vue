@@ -57,7 +57,7 @@ function onConfirmRequest(): void {
     width="350px"
     :before-close="onCloseRequest"
   >
-    <el-text class="font-italic">
+    <el-text type="info" size="small" class="font-italic">
       Terminal Name:
     </el-text>
     <el-text

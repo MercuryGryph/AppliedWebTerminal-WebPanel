@@ -9,3 +9,14 @@
     'GRAD' 0,
     'opsz' 24
 }
+
+/**
+ * Jetbrains Mono @ https://www.jetbrains.com/lp/mono/
+ */
+.jetbrains-mono-regular {
+  font-family: "JetBrains Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
