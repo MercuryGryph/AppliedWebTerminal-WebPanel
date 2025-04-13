@@ -23,13 +23,10 @@ watch(config.localConfig,()=>{
 </script>
 
 <template>
-  <el-col class="h-full min-h-100vh w-full">
+  <el-col class="h-full min-h-100vh w-full flex flex-col items-stretch">
     <TopBar />
-    <div v-if="appStorage.inTerminalPage" class="h-full">
-      <TerminalPage />
-    </div>
-    <div v-else>
-      <MainPage />
-    </div>
+
+    <TerminalPage v-if="appStorage.inTerminalPage" class="grow" />
+    <MainPage v-else class="grow" />
   </el-col>
 </template>

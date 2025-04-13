@@ -1,0 +1,53 @@
+@import "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200";
+
+@font-face {
+    font-family: 'Minecraft';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Minecraft'), url('https://fonts.cdnfonts.com/s/25041/1_MinecraftRegular1.woff') format('woff');
+}
+@font-face {
+    font-family: 'Minecraft';
+    font-style: italic;
+    font-weight: 400;
+    src: local('Minecraft'), url('https://fonts.cdnfonts.com/s/25041/2_MinecraftItalic1.woff') format('woff');
+}
+@font-face {
+    font-family: 'Minecraft';
+    font-style: normal;
+    font-weight: bold;
+    src: local('Minecraft'), url('https://fonts.cdnfonts.com/s/25041/3_MinecraftBold1.woff') format('woff');
+}
+@font-face {
+    font-family: 'Minecraft';
+    font-style: italic;
+    font-weight: bold;
+    src: local('Minecraft'), url('https://fonts.cdnfonts.com/s/25041/4_MinecraftBoldItalic1.woff') format('woff');
+}
+
+
+
+/**
+ * Google Fonts Material Symbols
+ */
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+/**
+ * Jetbrains Mono @ https://www.jetbrains.com/lp/mono/
+ */
+.jetbrains-mono-regular {
+    font-family: "JetBrains Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.minecraft-font {
+    font-family: 'Minecraft', sans-serif;
+    font-style: normal;
+}

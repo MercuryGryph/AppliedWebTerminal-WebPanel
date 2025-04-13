@@ -2,9 +2,11 @@
 import type { TerminalLoginError } from "~/core/TerminalUtils";
 
 import { ElMessageBox } from "element-plus";
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { loginTerminal } from "~/core/TerminalUtils";
 import { useAppStorage } from "~/data/AppStorage";
+import Logger from "~/utils/Logger";
+import { clamp } from "~/utils/utils";
 
 const appStorage = useAppStorage()
 
@@ -47,6 +49,17 @@ function onConfirmRequest(): void {
   })
 }
 
+const dialogWidth = computed<number>(()=>{
+  const width = document.getElementsByTagName('html')[0].clientWidth
+
+  const min = 300
+  const max = 350
+  const relativeFactor = 0.6
+
+  const res = clamp(relativeFactor * width, min, max)
+  Logger.debug(`dialog width: ${res}`)
+  return res
+})
 
 </script>
 
@@ -54,7 +67,7 @@ function onConfirmRequest(): void {
   <el-dialog
     v-model="model"
     title="Login Terminal"
-    width="350px"
+    :width="`${dialogWidth}px`"
     :before-close="onCloseRequest"
   >
     <el-text type="info" size="small" class="font-italic">

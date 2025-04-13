@@ -20,7 +20,7 @@ function pageBackToRoot(): void {
         <el-button
           v-if="appStorage.inTerminalPage"
           circle
-          class="my-a ml-4"
+          class="my-a ml-2"
           @click="pageBackToRoot"
         >
           <span class="material-symbols-outlined">
@@ -28,16 +28,16 @@ function pageBackToRoot(): void {
           </span>
         </el-button>
 
-        <el-text type="primary" class="mx-4 my-a font-size-6 font-bold">
+        <el-text type="primary" class="mx-2 my-a font-bold">
           {{ config.serverConfig.title }}
         </el-text>
-        <el-divider direction="vertical" class="my-a h-8" />
+        <el-divider direction="vertical" class="my-a h-6" />
       </el-row>
       
       <el-row>
         <el-button
           circle
-          class="float-right my-a mr-4"
+          class="float-right my-a mr-2"
           @click="toggleDark"
         >
           <span v-if="isDark" class="material-symbols-outlined">

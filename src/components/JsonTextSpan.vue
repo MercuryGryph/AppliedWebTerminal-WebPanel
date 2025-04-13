@@ -6,49 +6,81 @@ import { vsprintf } from "sprintf-js"
 import { computed } from "vue";
 
 const props = defineProps<{
-  jsonText: JsonText
+  jsonText: JsonText,
+  minecraftFont: boolean,
 }>()
 
-const styleClasses = computed<string>(()=>{
+const classes = computed<string>(() => {
+  let result: string = ""
+  if (props.minecraftFont) {
+    result += "minecraft-font "
+  }
+  return result
+})
+
+const style = computed<string>(()=>{
   let result: string = ""
   const jsonText = props.jsonText
 
   if (jsonText.bold) {
-    result += " font-bold"
+    result += "font-weight: bold;\n"
   }
+
   if (jsonText.italic) {
-    result += " font-italic"
+    result += "font-style: italic;\n"
   }
-  if (jsonText.underline) {
-    result += " underline"
+
+  if (jsonText.underline && jsonText.strikethrough) {
+    result += "text-decoration: underline line-through;\n"
+  } else if (jsonText.underline) {
+    result += "text-decoration: underline;\n"
+  } else if (jsonText.strikethrough) {
+    result += "text-decoration: line-through;\n"
   }
-  if (jsonText.strikethrough) {
-    result += " line-through"
+
+  if (jsonText.color) {
+    result += `color: ${jsonText.color}\n`
   }
   return result
 })
 
-const chars = computed<string[]>(()=>{
-  const result: string[] = []
+// const chars = computed<string[]>(()=>{
+//   const result: string[] = []
+//   const rawText = props.jsonText.text
+//   let formattedText: string;
+//   if (props.jsonText.with) {
+//     formattedText = vsprintf(rawText, props.jsonText.with);
+//   } else {
+//     formattedText = rawText
+//   }
+//   for (let i = 0; i < formattedText.length; i++) {
+//     result.push(formattedText.charAt(i))
+//   }
+//   return result
+// })
+
+const text = computed<string>(() => {
   const rawText = props.jsonText.text
-  let formattedText: string;
-  if (props.jsonText.with) {
-    formattedText = vsprintf(rawText, props.jsonText.with);
-  } else {
-    formattedText = rawText
-  }
-  for (let i = 0; i < formattedText.length; i++) {
-    result.push(formattedText.charAt(i))
-  }
-  return result
+  try {
+    if (props.jsonText.with) {
+      return vsprintf(rawText, props.jsonText.with)
+    } else {
+      return rawText
+    }
+  } catch (_) {}
+  return rawText
 })
 
 </script>
 
-<template class="inline">
-  <div v-for="char in chars">
-    <span :class="styleClasses">
-      {{ char }}
-    </span>
-  </div>
+<template>
+  <span :style="style" :class="classes">
+    {{ text }}
+  </span>
+
+<!--  <div v-for="char in chars">-->
+<!--    <span :class="styleClasses">-->
+<!--      {{ char }}-->
+<!--    </span>-->
+<!--  </div>-->
 </template>

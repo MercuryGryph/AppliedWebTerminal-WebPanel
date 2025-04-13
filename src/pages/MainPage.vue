@@ -35,14 +35,13 @@ function onSelectTerminal(
 </script>
 
 <template>
-  <div v-if="appStorage.currentTerminal">
-    <DialogTerminalLogin />
-  </div>
-
-  <div class="h-full w-full">
+  <div>
+    <div v-if="appStorage.currentTerminal">
+      <DialogTerminalLogin />
+    </div>
     <div class="mx-a h-full max-w-2000px min-w-300px w-70%">
-      <el-row class="m-4" justify="space-between">
-        <el-text class="font-size-6 font-bold">
+      <el-row class="mx-4 my-2" justify="space-between">
+        <el-text size="large" class="font-bold">
           Select A Terminal
         </el-text>
         <el-button
@@ -55,7 +54,7 @@ function onSelectTerminal(
           </span>
         </el-button>
       </el-row>
-      <el-divider class="my-4" />
+      <el-divider class="my-1" />
 
       <div v-if="appStorage.terminals" class="m-4 flex flex-wrap items-stretch justify-center gap-4">
         <div v-for="term in appStorage.terminals!!" :key="term.uuid">

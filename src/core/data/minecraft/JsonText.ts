@@ -4,6 +4,7 @@ interface JsonText {
   underline?: boolean;
   strikethrough?: boolean;
   obfuscated?: boolean;
+  color?: string;
   text: string;
   with?: string[];
 }

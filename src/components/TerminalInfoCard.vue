@@ -12,8 +12,8 @@ const props = defineProps<{
 <template>
   <el-card
     shadow="hover"
-    @click="() => { props.onClick(props.terminalInfo) }"
     class="w-260px"
+    @click="() => { props.onClick(props.terminalInfo) }"
   >
     <el-text size="large" truncated class="block w-80% font-bold">
       {{ props.terminalInfo.name }}
