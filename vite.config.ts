@@ -1,12 +1,17 @@
+import type {ProxyOptions} from 'vite';
 import path from 'node:path'
 import Vue from '@vitejs/plugin-vue'
-
 import Unocss from 'unocss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
-
 import {defineConfig} from 'vite'
+
+// eslint-disable-next-line unused-imports/no-unused-vars
+const proxyRedirectConfigDefault: ProxyOptions = {
+    target: 'http://localhost:11451',
+    changeOrigin: true,
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -90,5 +95,20 @@ export default defineConfig({
                 }
             }
         }
-    }
+    },
+    // server: {
+    //     proxy: {
+    //         '/settings': proxyRedirectConfigDefault,
+    //         '/list': proxyRedirectConfigDefault,
+    //
+    //         '/login': proxyRedirectConfigDefault,
+    //         '/validate': proxyRedirectConfigDefault,
+    //
+    //         '/translate': proxyRedirectConfigDefault,
+    //         '/registries': proxyRedirectConfigDefault,
+    //
+    //         '/storage': proxyRedirectConfigDefault,
+    //         '/crafting': proxyRedirectConfigDefault,
+    //     }
+    // },
 })

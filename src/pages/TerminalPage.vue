@@ -1,7 +1,7 @@
 <script setup lang="ts">
-
-import type JsonText from "~/core/data/minecraft/JsonText";
 import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
+import type JsonText from "~/core/data/minecraft/JsonText";
+import CraftingPlanEntryCard from "~/components/CraftingPlanEntryCard.vue";
 
 const jsonText: JsonText = {
     color: "#8ae",
@@ -16,8 +16,25 @@ const jsonText: JsonText = {
 
 const entry: CraftingPlanSummaryEntry = {
     craftAmount: 100,
-    missingAmount: 0,
-    storedAmount: 0,
+    missingAmount: 50,
+    storedAmount: 13,
+    what: {
+        id: 'xxx',
+        type: 'xxx',
+        displayName: 'xxx'
+    }
+}
+const entry2: CraftingPlanSummaryEntry = {
+    craftAmount: 100,
+    storedAmount: 13,
+    what: {
+        id: 'xxx',
+        type: 'xxx',
+        displayName: 'xxx'
+    }
+}
+const entry3: CraftingPlanSummaryEntry = {
+    storedAmount: 13,
     what: {
         id: 'xxx',
         type: 'xxx',
@@ -36,7 +53,9 @@ const entry: CraftingPlanSummaryEntry = {
 
         <div class="grow">
             progress
-            <CraftingPlanSummaryEntry :entry="entry" />
+            <CraftingPlanEntryCard :entry="entry" />
+            <CraftingPlanEntryCard :entry="entry2" />
+            <CraftingPlanEntryCard :entry="entry3" />
         </div>
     </div>
 </template>
