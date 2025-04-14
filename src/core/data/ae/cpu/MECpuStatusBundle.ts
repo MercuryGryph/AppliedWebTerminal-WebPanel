@@ -1,4 +1,4 @@
-import type MECraftingJobStatusBundle from "~/core/data/ae/MECraftingJobStatusBundle";
+import type MECraftingJobStatusBundle from "~/core/data/ae/cpu/crafting/MECraftingJobStatusBundle";
 
 interface MECpuStatusBundle {
   readonly id: number
@@ -6,7 +6,7 @@ interface MECpuStatusBundle {
   readonly busy: boolean
   readonly storageSize: number
   readonly coProcessorCount: number
-  readonly craftingStatus? : MECraftingJobStatusBundle
+  readonly craftingStatus?: MECraftingJobStatusBundle
 }
 
 export default MECpuStatusBundle

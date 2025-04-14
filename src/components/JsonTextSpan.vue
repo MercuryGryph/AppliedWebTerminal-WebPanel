@@ -3,7 +3,9 @@
 import type JsonText from "~/core/data/minecraft/JsonText";
 
 import { vsprintf } from "sprintf-js"
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import Logger from "~/utils/Logger";
+import {fetchTranslatedText} from "~/core/JsonTextUtils";
 
 const props = defineProps<{
   jsonText: JsonText,
@@ -59,16 +61,32 @@ const style = computed<string>(()=>{
 //   return result
 // })
 
+const translatedString = ref<string | undefined>(undefined)
+
 const text = computed<string>(() => {
   const rawText = props.jsonText.text
+  const translateKey = props.jsonText.translate
+
+  if (translateKey && !translatedString.value) {
+    fetchTranslatedText(translateKey, 'en_us').then((data) => {
+      Logger.debug(`Get translate of ${translateKey}: ${data}`)
+      translatedString.value = data
+    })
+  }
+
+  const actualText = translatedString.value || translateKey || rawText
+
+  Logger.debug(`Chosen: '${actualText}' , from: ['${translatedString.value}', ' ${translateKey}', '${rawText}']`)
+
   try {
     if (props.jsonText.with) {
-      return vsprintf(rawText, props.jsonText.with)
+      return vsprintf(actualText, props.jsonText.with)
     } else {
-      return rawText
+      return actualText
     }
-  } catch (_) {}
-  return rawText
+  } catch (_) {
+  }
+  return actualText
 })
 
 </script>

@@ -1,4 +1,4 @@
-import type TerminalInfo from "~/core/data/TerminalInfo"
+import type TerminalInfo from "~/core/data/terminal/TerminalInfo"
 import type LocalConfig from "~/data/LocalConfig";
 
 import { defineStore } from "pinia"

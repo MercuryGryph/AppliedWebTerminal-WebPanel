@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import type TerminalInfo from "~/core/data/TerminalInfo";
+import type TerminalInfo from "~/core/data/terminal/TerminalInfo";
 
 const props = defineProps<{
   terminalInfo: TerminalInfo,

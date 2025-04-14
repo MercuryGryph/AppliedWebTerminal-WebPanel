@@ -1,4 +1,4 @@
-import type MECpuStatusBundle from "~/core/data/ae/MECpuStatusBundle";
+import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 import type MECraftingStatusBundle from "~/core/data/ae/MECraftingStatusBundle";
 import { updateMECraftingStatusBundle } from "~/core/data/ae/MECraftingStatusBundle";
 

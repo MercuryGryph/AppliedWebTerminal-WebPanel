@@ -1,4 +1,4 @@
-import type MEStack from "~/core/data/ae/MEStack";
+import type MEStack from "~/core/data/ae/core/MEStack";
 
 interface MECraftingJobStatusBundle {
   readonly crafting: MEStack

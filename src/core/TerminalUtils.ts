@@ -1,7 +1,8 @@
-import type TerminalInfo from "~/core/data/TerminalInfo";
-import type UserAuthResult from "~/core/data/UserAuthResult";
-import type UserCredential from "~/core/data/UserCredential";
+import type TerminalInfo from "~/core/data/terminal/TerminalInfo";
+import type UserAuthResult from "~/core/data/terminal/UserAuthResult";
+import type UserCredential from "~/core/data/terminal/UserCredential";
 import Logger from "~/utils/Logger";
+import TokenValiDateResponse from "~/core/data/terminal/TokenValiDateResponse";
 
 export async function fetchTerminalList(): Promise<TerminalInfo[]> {
   Logger.info("Fetching Terminal list...");
@@ -48,6 +49,7 @@ export async function loginTerminal(
         if (data.payload) return data.payload
       }
       return TerminalLoginError.ServerReturnedNotSuccess
+    // eslint-disable-next-line unused-imports/no-unused-vars
     } catch (_) {
       return TerminalLoginError.HttpError
     }
@@ -56,6 +58,18 @@ export async function loginTerminal(
   return TerminalLoginError.HttpError
 }
 
-export async function logout(): Promise<void> {
+export async function loginValiDate(
+  bearerToken: string,
+): Promise<TokenValiDateResponse| undefined> {
+  const response =
+    await fetch('/validate', {
+      cache: 'no-cache',
+      headers: {
+        'Authorization': `Bearer ${bearerToken}`,
+      }
+    })
 
+  if (response.ok) {
+    return await response.json() as TokenValiDateResponse;
+  }
 }

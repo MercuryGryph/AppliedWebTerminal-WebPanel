@@ -5,7 +5,9 @@ interface JsonText {
   strikethrough?: boolean;
   obfuscated?: boolean;
   color?: string;
-  text: string;
+
+  text?: string;
+  translate?: string;
   with?: string[];
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type TerminalInfo from "~/core/data/TerminalInfo"
+import type TerminalInfo from "~/core/data/terminal/TerminalInfo"
 
 import { ref } from 'vue'
 

@@ -1,4 +1,4 @@
-import type MECraftingStatusEntry from "~/core/data/ae/MECraftingStatusEntry";
+import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
 
 interface MECraftingStatusBundle {
   fullStatus: boolean

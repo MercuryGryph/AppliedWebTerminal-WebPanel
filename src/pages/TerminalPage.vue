@@ -8,6 +8,7 @@ const jsonText: JsonText = {
   italic: true,
   underline: true,
   strikethrough: true,
+  translate: "item.ae2.semi_dark_monitor",
   text: "test json text %s",
   with: ['hello', 'world']
 }
