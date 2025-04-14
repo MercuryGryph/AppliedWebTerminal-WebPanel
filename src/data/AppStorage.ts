@@ -1,34 +1,34 @@
 import type TerminalInfo from "~/core/data/terminal/TerminalInfo"
 import type LocalConfig from "~/data/LocalConfig";
 
-import { defineStore } from "pinia"
+import {defineStore} from "pinia"
 
 import WebSocketService from "~/core/WebSocketService"
-import { defaultLocalConfigValue } from "~/data/LocalConfig";
+import {defaultLocalConfigValue} from "~/data/LocalConfig";
 import LocalStorageManager from "~/data/LocalStorageManager";
 
 
 interface AppStorage {
-  readonly localConfigStoreManager: LocalStorageManager<LocalConfig>
-  webSocketService: WebSocketService
-  terminals?: Array<TerminalInfo>
-  currentTerminal?: TerminalInfo
-  inTerminalPage: boolean
+    readonly localConfigStoreManager: LocalStorageManager<LocalConfig>
+    webSocketService: WebSocketService
+    terminals?: Array<TerminalInfo>
+    currentTerminal?: TerminalInfo
+    inTerminalPage: boolean
 }
 
 export default AppStorage
 
 export function defaultAppStorageValue(): AppStorage {
-  return {
-    localConfigStoreManager: new LocalStorageManager<LocalConfig>(
-      defaultLocalConfigValue,
-      'LocalStorage',
-    ),
-    webSocketService: new WebSocketService(),
-    inTerminalPage: false,
-  }
+    return {
+        localConfigStoreManager: new LocalStorageManager<LocalConfig>(
+            defaultLocalConfigValue,
+            'LocalStorage',
+        ),
+        webSocketService: new WebSocketService(),
+        inTerminalPage: false,
+    }
 }
 
 export const useAppStorage = defineStore('appStorage', {
-  state: (): AppStorage => (defaultAppStorageValue()),
+    state: (): AppStorage => (defaultAppStorageValue()),
 })

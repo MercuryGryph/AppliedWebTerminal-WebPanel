@@ -1,6 +1,6 @@
 interface MEStack {
-  readonly id: string
-  readonly amount: number
+    readonly id: string
+    readonly amount: number
 }
 
 export default MEStack

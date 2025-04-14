@@ -9,7 +9,13 @@ node {
 
 tasks.register("npmBuild", NpmTask) {
     dependsOn(tasks.named('npmInstall'))
+    dependsOn(tasks.named('clearDist'))
     description = 'Run \'npm build\' command'
     group = 'npm'
     args = ['run', 'build']
+}
+
+tasks.register("clearDist", Delete) {
+    group = 'npm'
+    delete 'dist/'
 }

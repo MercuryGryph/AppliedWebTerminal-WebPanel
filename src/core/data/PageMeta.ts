@@ -3,25 +3,25 @@
  */
 interface PageMeta {
 
-  /**
-   * total items number
-   */
-  total: number;
+    /**
+     * total items number
+     */
+    total: number;
 
-  /**
-   * current page
-   */
-  page: number;
+    /**
+     * current page
+     */
+    page: number;
 
-  /**
-   * limit items number per page
-   */
-  limit: number;
+    /**
+     * limit items number per page
+     */
+    limit: number;
 
-  /**
-   * total pages number
-   */
-  totalPages: number;
+    /**
+     * total pages number
+     */
+    totalPages: number;
 }
 
 export default PageMeta

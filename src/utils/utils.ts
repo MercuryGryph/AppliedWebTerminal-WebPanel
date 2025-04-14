@@ -1,7 +1,7 @@
 export function clamp(
-  x: number,
-  min: number,
-  max: number
+    x: number,
+    min: number,
+    max: number
 ): number {
-  return Math.min(Math.max(x, min), max)
+    return Math.min(Math.max(x, min), max)
 }

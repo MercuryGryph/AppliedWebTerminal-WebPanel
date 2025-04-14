@@ -1,6 +1,6 @@
 interface TerminalInfo {
-  uuid: string,
-  name: string,
+    uuid: string,
+    name: string,
 }
 
 export default TerminalInfo

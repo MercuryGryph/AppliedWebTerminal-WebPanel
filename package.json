@@ -14,6 +14,7 @@
     "build": "vite build",
     "generate": "vite-ssg build",
     "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "preview": "vite preview",
     "typecheck": "vue-tsc --noEmit"
   },

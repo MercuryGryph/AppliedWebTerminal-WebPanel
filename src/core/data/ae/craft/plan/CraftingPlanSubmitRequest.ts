@@ -1,5 +1,5 @@
 interface CraftingPlanSubmitRequest {
-  id: number;
+    id: number;
 }
 
 export default CraftingPlanSubmitRequest

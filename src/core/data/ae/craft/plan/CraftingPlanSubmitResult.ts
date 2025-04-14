@@ -3,10 +3,10 @@ import type MissingIngredientError from "~/core/data/ae/craft/plan/error/Missing
 import type UnsuitableCpuError from "~/core/data/ae/craft/plan/error/UnsuitableCpuError";
 
 interface CraftingPlanSubmitResult {
-  id: number;
-  success: boolean;
-  errorCode: CraftingPlanRequestErrorCode;
-  errorDetail: MissingIngredientError | UnsuitableCpuError;
+    id: number;
+    success: boolean;
+    errorCode: CraftingPlanRequestErrorCode;
+    errorDetail: MissingIngredientError | UnsuitableCpuError;
 }
 
 export default CraftingPlanSubmitResult;

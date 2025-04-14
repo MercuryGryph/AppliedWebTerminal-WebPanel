@@ -1,6 +1,6 @@
 interface UserCredential {
-  uuid: string
-  password: string
+    uuid: string
+    password: string
 }
 
 export default UserCredential
