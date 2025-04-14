@@ -7,7 +7,7 @@ export async function fetchTranslatedText(
     key: string,
     language: string,
     localConfig: UnwrapRef<LocalConfig>): Promise<string | undefined> {
-    if (localConfig.translateCache.has(language)) {
+    if (!localConfig.translateCache.has(language)) {
         localConfig.translateCache.set(language, new Map())
     }
     if (localConfig.translateCache.get(language)!.has(key)) {

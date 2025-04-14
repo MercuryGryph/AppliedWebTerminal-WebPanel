@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import type JsonText from "~/core/data/minecraft/JsonText";
+import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
 
 const jsonText: JsonText = {
     color: "#8ae",
@@ -11,6 +12,17 @@ const jsonText: JsonText = {
     translate: "item.ae2.semi_dark_monitor",
     text: "test json text %s",
     with: ['hello', 'world']
+}
+
+const entry: CraftingPlanSummaryEntry = {
+    craftAmount: 100,
+    missingAmount: 0,
+    storedAmount: 0,
+    what: {
+        id: 'xxx',
+        type: 'xxx',
+        displayName: 'xxx'
+    }
 }
 
 </script>
@@ -24,6 +36,7 @@ const jsonText: JsonText = {
 
         <div class="grow">
             progress
+            <CraftingPlanSummaryEntry :entry="entry" />
         </div>
     </div>
 </template>
