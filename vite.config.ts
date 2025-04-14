@@ -96,19 +96,19 @@ export default defineConfig({
             }
         }
     },
-    // server: {
-    //     proxy: {
-    //         '/settings': proxyRedirectConfigDefault,
-    //         '/list': proxyRedirectConfigDefault,
-    //
-    //         '/login': proxyRedirectConfigDefault,
-    //         '/validate': proxyRedirectConfigDefault,
-    //
-    //         '/translate': proxyRedirectConfigDefault,
-    //         '/registries': proxyRedirectConfigDefault,
-    //
-    //         '/storage': proxyRedirectConfigDefault,
-    //         '/crafting': proxyRedirectConfigDefault,
-    //     }
-    // },
+    server: {
+        proxy: {
+            '/settings': proxyRedirectConfigDefault,
+            '/list': proxyRedirectConfigDefault,
+
+            '/login': proxyRedirectConfigDefault,
+            '/validate': proxyRedirectConfigDefault,
+
+            '/translate': proxyRedirectConfigDefault,
+            '/registries': proxyRedirectConfigDefault,
+
+            '/storage': proxyRedirectConfigDefault,
+            '/crafting': proxyRedirectConfigDefault,
+        }
+    },
 })

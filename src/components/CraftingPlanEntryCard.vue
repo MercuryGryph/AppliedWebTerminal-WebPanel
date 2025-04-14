@@ -18,8 +18,7 @@ const classed = computed<string>(()=>{
 
 <template>
     <el-card class="w-200px" :class="classed">
-        <div class="h-50px flex flex-wrap justify-end text-align-center">
-            <div class="w-16px" />
+        <div class="h-50px flex flex-wrap justify-end text-align-right">
             <div class="mx-a my-a grow">
                 <el-text
                     v-if="props.entry.missingAmount"
@@ -44,7 +43,7 @@ const classed = computed<string>(()=>{
                 </el-text>
             </div>
             <!-- height: 32px -->
-            <span class="material-symbols-outlined my-a block font-size-8">
+            <span class="material-symbols-outlined my-a block font-size-8 pl-14px">
                 deployed_code
             </span>
         </div>
