@@ -2,6 +2,7 @@
 
 import {ref} from "vue";
 import {useAppStorage} from "~/data/AppStorage";
+import {stringOf} from "../core/I18nService";
 
 const appStorage = useAppStorage()
 
@@ -30,14 +31,14 @@ const selectedPage = ref<Page|undefined>();
                             :disabled="selectedPage === Page.Storage"
                             @click="()=>{selectedPage = Page.Storage}"
                         >
-                            Storage
+                            {{ stringOf('terminal.button.storage_page') }}
                         </el-button>
                         <el-button
                             :type="selectedPage === Page.Crafting ? 'primary' : 'default'"
                             :disabled="selectedPage === Page.Crafting"
                             @click="()=>{selectedPage = Page.Crafting}"
                         >
-                            Crafting Status
+                            {{ stringOf('terminal.button.crafting_page') }}
                         </el-button>
                     </el-button-group>
                 </el-row>

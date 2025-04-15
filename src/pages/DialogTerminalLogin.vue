@@ -3,6 +3,7 @@ import type {TerminalLoginError} from "~/core/TerminalUtils";
 
 import {ElMessageBox} from "element-plus";
 import {computed, onMounted, ref} from 'vue'
+import {stringOf} from "~/core/I18nService"
 import {loginTerminal} from "~/core/TerminalUtils";
 import {useAppStorage} from "~/data/AppStorage";
 import {usePasswordStore} from "~/data/PasswordStore";
@@ -81,12 +82,12 @@ const dialogWidth = computed<number>(() => {
 <template>
     <el-dialog
         v-model="model"
-        title="Login Terminal"
+        :title="stringOf('main.terminals.login.title')"
         :width="`${dialogWidth}px`"
         :before-close="onCloseRequest"
     >
         <el-text type="info" size="small" class="font-italic">
-            Terminal Name:
+            {{ stringOf('main.terminals.login.label.terminal_name') }}
         </el-text>
         <el-text
             size="large"
@@ -110,7 +111,7 @@ const dialogWidth = computed<number>(() => {
             }"
         />
 
-        <el-checkbox v-model="rememberPassword" label="记住密码" />
+        <el-checkbox v-model="rememberPassword" :label="stringOf('main.terminals.login.button.remember_password')" />
 
         <template #footer>
             <el-row justify="end">
@@ -119,7 +120,7 @@ const dialogWidth = computed<number>(() => {
                     :disabled="isLoggingIn"
                     @click="onCloseRequest"
                 >
-                    Cancel
+                    {{ stringOf('common.button.cancel') }}
                 </el-button>
                 <el-button
                     type="primary"
@@ -127,7 +128,7 @@ const dialogWidth = computed<number>(() => {
                     :disabled="isLoggingIn"
                     @click="onConfirmRequest"
                 >
-                    Login
+                    {{ stringOf('main.terminals.login.button.login') }}
                 </el-button>
             </el-row>
         </template>

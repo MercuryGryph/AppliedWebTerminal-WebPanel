@@ -1,5 +1,5 @@
 const units: string[] = ["", "K", "M", "G", "T"]
-const pow3: number = Math.pow(10, 3)
+const pow3: number = 10**3
 
 export function formatNumber(number: number): string {
     if (number < 10000) return number.toString()

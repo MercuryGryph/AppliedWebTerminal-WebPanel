@@ -27,7 +27,7 @@ const Logger: ILogger = {
         tag?: string,
     ): void => {
         if (!env.DEV) {
-            if (level in [LogLevel.debug, LogLevel.info]) return
+            if (!([LogLevel.debug, LogLevel.info].includes(level))) return
         }
 
         const formatedTag: string =
