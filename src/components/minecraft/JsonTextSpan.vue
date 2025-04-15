@@ -11,7 +11,7 @@ import Logger from "~/utils/Logger";
 const props = withDefaults(
     defineProps<{
         jsonText: JsonText,
-        minecraftFont: boolean,
+        minecraftFont?: boolean,
     }>(),
     {
         minecraftFont: false,
@@ -64,7 +64,7 @@ const text = computed<string>(() => {
 
         // eslint-disable-next-line vue/no-async-in-computed-properties
         fetchTranslation(translateKey, lang).then((data) => {
-            Logger.debug(`Get translate of ${translateKey}: ${data}`)
+            Logger.debug(`Get translate of ${translateKey} in lang ${lang}: ${data}`)
             translatedString.value = data
         })
     }
@@ -91,10 +91,4 @@ const text = computed<string>(() => {
     <span :style="style" :class="classes">
         {{ text }}
     </span>
-
-    <!--  <div v-for="char in chars">-->
-    <!--    <span :class="styleClasses">-->
-    <!--      {{ char }}-->
-    <!--    </span>-->
-    <!--  </div>-->
 </template>

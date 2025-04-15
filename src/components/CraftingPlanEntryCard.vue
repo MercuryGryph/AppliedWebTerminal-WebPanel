@@ -51,13 +51,13 @@ const tooltipStyle = computed<string>(() => {
 
 const tooltips: string[] = new Array<string>()
 if (props.entry.missingAmount) {
-    tooltips.push(`${stringOf('ae.crafting.statue.missing')}${props.entry.missingAmount}`)
+    tooltips.push(`${stringOf('ae.crafting.statue.missing')} ${props.entry.missingAmount}`)
 }
 if (props.entry.storedAmount) {
-    tooltips.push(`${stringOf('ae.crafting.statue.available')}${props.entry.storedAmount}`)
+    tooltips.push(`${stringOf('ae.crafting.statue.available')} ${props.entry.storedAmount}`)
 }
 if (props.entry.craftAmount) {
-    tooltips.push(`${stringOf('ae.crafting.statue.to_craft')}${props.entry.craftAmount}`)
+    tooltips.push(`${stringOf('ae.crafting.statue.to_craft')} ${props.entry.craftAmount}`)
 }
 </script>
 
@@ -76,21 +76,21 @@ if (props.entry.craftAmount) {
                     size="small"
                     class="my-1 block"
                 >
-                    缺失数量: {{ props.entry.missingAmount }}
+                    {{ stringOf('ae.crafting.statue.missing') }} {{ props.entry.missingAmount }}
                 </el-text>
                 <el-text
                     v-if="props.entry.storedAmount"
                     size="small"
                     class="my-1 block"
                 >
-                    可用数量: {{ props.entry.storedAmount }}
+                    {{ stringOf('ae.crafting.statue.available') }} {{ props.entry.storedAmount }}
                 </el-text>
                 <el-text
                     v-if="props.entry.craftAmount"
                     size="small"
                     class="my-1 block"
                 >
-                    合成数量: {{ props.entry.craftAmount }}
+                    {{ stringOf('ae.crafting.statue.crafting') }} {{ props.entry.craftAmount }}
                 </el-text>
             </div>
             <!-- height: 32px -->
