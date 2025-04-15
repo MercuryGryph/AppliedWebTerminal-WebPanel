@@ -1,8 +1,12 @@
 html.dark {
   --app-card-bg-warn: #993c3c;
+  --app-divider-border: white;
+  --app-tooltip-color: rgba(0, 0, 0, 0.8)
 }
 html:not(.dark) {
   --app-card-bg-warn: #fba0a0;
+  --app-divider-border: #787575;
+  --app-tooltip-color: rgba(255, 255, 255, 0.8)
 }
 
 .card_bg_warn {
