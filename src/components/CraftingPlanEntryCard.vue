@@ -3,6 +3,7 @@ import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPla
 import type jsonText from "~/core/data/minecraft/JsonText";
 
 import {computed, ref} from "vue";
+import {stringOf} from "~/core/I18nService";
 import Logger from "~/utils/Logger";
 
 const props = defineProps<{
@@ -50,19 +51,24 @@ const tooltipStyle = computed<string>(() => {
 
 const tooltips: string[] = new Array<string>()
 if (props.entry.missingAmount) {
-    tooltips.push(`缺失数量: ${props.entry.missingAmount}`)
+    tooltips.push(`${stringOf('ae.crafting.statue.missing')}${props.entry.missingAmount}`)
 }
 if (props.entry.storedAmount) {
-    tooltips.push(`可用数量: ${props.entry.storedAmount}`)
+    tooltips.push(`${stringOf('ae.crafting.statue.available')}${props.entry.storedAmount}`)
 }
 if (props.entry.craftAmount) {
-    tooltips.push(`合成数量: ${props.entry.craftAmount}`)
+    tooltips.push(`${stringOf('ae.crafting.statue.to_craft')}${props.entry.craftAmount}`)
 }
 </script>
 
 <template>
-    <el-card @mouseover="showTooltip = true" @mouseleave="showTooltip = false" @mousemove="onMouseMove" class="w-200px"
-             :class="classed">
+    <el-card
+        :class="classed"
+        class="w-200px"
+        @mouseover="showTooltip = true"
+        @mouseleave="showTooltip = false"
+        @mousemove="onMouseMove"
+    >
         <div class="h-58px flex flex-wrap justify-end text-right">
             <div class="mx-a my-a grow">
                 <el-text
@@ -93,6 +99,11 @@ if (props.entry.craftAmount) {
             </span>
         </div>
     </el-card>
-    <ItemTooltip @mousemove="onMouseMove" v-if="displayName && showTooltip" :text="displayName" :tooltips="tooltips"
-                 :style="tooltipStyle"/>
+    <ItemTooltip
+        v-if="displayName && showTooltip"
+        :tooltips="tooltips"
+        :style="tooltipStyle"
+        :text="displayName"
+        @mousemove="onMouseMove"
+    />
 </template>

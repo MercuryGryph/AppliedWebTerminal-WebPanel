@@ -46,8 +46,8 @@ export const useTranslateStore = defineStore('translate', {
                     return translatedText;
                 }
             } catch (e) {
-                Logger.error('Could not find translate text');3
-                Logger.error(e);
+                Logger.error('Could not find translate text')
+                Logger.error(e)
             }
             return key
         }

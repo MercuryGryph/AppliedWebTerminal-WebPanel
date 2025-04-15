@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
 import {ref, watch} from "vue";
+import {stringOf} from "~/core/I18nService";
 import {fetchTranslation} from "~/core/JsonTextUtils";
 import {useAppStorage} from "~/data/AppStorage";
 import {useConfig} from "~/data/Config";
 import Logger from "~/utils/Logger";
-import {stringOf} from "~/core/I18nService";
 
 
 const model = defineModel<boolean>()

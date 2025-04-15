@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import JsonText from "~/core/data/minecraft/JsonText";
+import type JsonText from "~/core/data/minecraft/JsonText";
 
 const props = withDefaults(defineProps<{
     text: JsonText
@@ -11,9 +11,9 @@ const props = withDefaults(defineProps<{
 
 <template>
     <el-card class="w-fit rounded-xl backdrop-blur-md" style="background: var(--app-tooltip-color)">
-        <JsonTextSpan :json-text="props.text" class="px-4"/>
-        <el-divider v-if="props.tooltips.length" class="m-0 my-2 b-3" style="border-color: var(--app-divider-border)"/>
-        <el-text type="info" v-for="tooltip in props.tooltips" class="block my-2">
+        <JsonTextSpan :json-text="props.text" class="px-4" />
+        <el-divider v-if="props.tooltips.length" class="m-0 my-2 b-3" style="border-color: var(--app-divider-border)" />
+        <el-text v-for="tooltip in props.tooltips" :key="tooltip" type="info" class="my-2 block">
             {{ tooltip }}
         </el-text>
     </el-card>

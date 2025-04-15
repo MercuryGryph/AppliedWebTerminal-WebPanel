@@ -19,7 +19,13 @@ type AppStringKey =
     'language.add.placeholder.result' |
     'language.add.button.add' |
     'terminal.button.storage_page' |
-    'terminal.button.crafting_page'
+    'terminal.button.crafting_page' |
+    'ae.crafting.statue.missing' |
+    'ae.crafting.statue.available' |
+    'ae.crafting.statue.to_craft' |
+    'ae.crafting.statue.crafting' |
+    'ae.crafting.statue.scheduled'
+;
 
 type AppTranslate = {
     [key in AppStringKey]: string;
@@ -45,6 +51,11 @@ const enUs: AppTranslate = {
     "language.add.placeholder.result": "(result)",
     "terminal.button.crafting_page": "Crafting Status",
     "terminal.button.storage_page": "Storage",
+    "ae.crafting.statue.missing": "Missing: ",
+    "ae.crafting.statue.available": "Available: ",
+    "ae.crafting.statue.to_craft": "To Craft: ",
+    "ae.crafting.statue.crafting": "Crafting: ",
+    "ae.crafting.statue.scheduled": "Scheduled: ",
 }
 
 const zhCn: AppTranslate = {
@@ -67,6 +78,12 @@ const zhCn: AppTranslate = {
     "language.add.placeholder.result": "(结果)",
     "terminal.button.crafting_page": "合成状态",
     "terminal.button.storage_page": "存储",
+    "ae.crafting.statue.missing": "缺少数量：",
+    "ae.crafting.statue.available": "可用数量：",
+    "ae.crafting.statue.to_craft": "合成数量：",
+    "ae.crafting.statue.crafting": "正在合成：",
+    "ae.crafting.statue.scheduled": "计划合成：",
+
 }
 
 const enUd: AppTranslate = {
@@ -74,7 +91,7 @@ const enUd: AppTranslate = {
     "common.button.confirm": "ɯɹᴉɟuoƆ",
     "main.terminals.title": "lɐuᴉɯɹǝ┴ ∀ ʇɔǝlǝS",
     "main.terminals.login.title": "lɐuᴉɯɹǝ┴ uᴉƃo˥",
-    "main.terminals.login.label.terminal_name": ":ǝɯɐN lɐuᴉɯɹǝ┴",
+    "main.terminals.login.label.terminal_name": " :ǝɯɐN lɐuᴉɯɹǝ┴",
     "main.terminals.login.button.login": "uᴉƃo˥",
     'main.terminals.login.placeholder.password': "pɹoʍssɐԀ",
     "main.terminals.login.button.remember_password": "pɹoʍssɐԀ ɹǝqɯǝɯǝɹ",
@@ -89,6 +106,11 @@ const enUd: AppTranslate = {
     "language.add.placeholder.result": "(ʇlnsǝɹ)",
     "terminal.button.crafting_page": "snʇɐʇS ƃuᴉʇɟɐɹƆ",
     "terminal.button.storage_page": "ǝƃɐɹoʇS",
+    "ae.crafting.statue.missing": " :ƃuᴉssᴉW",
+    "ae.crafting.statue.available": " :ǝlqɐlᴉɐʌ∀",
+    "ae.crafting.statue.to_craft": " :ʇɟɐɹƆ o┴",
+    "ae.crafting.statue.crafting": " :ƃuᴉʇɟɐɹƆ",
+    "ae.crafting.statue.scheduled": " :pǝlnpǝɥɔS",
 }
 
 export function stringOf(
