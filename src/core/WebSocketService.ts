@@ -96,7 +96,10 @@ class WebSocketService {
         return this;
     }
 
-    public connect(token: string = this._token!): void {
+    public connect(
+        token: string = this._token!,
+        endPoint: string = 'cpuMonitor',
+    ): void {
         Logger.info(`connecting to WebSocket with token : ${token}`);
         if (!this._token) {
             this._token = token;
@@ -109,7 +112,7 @@ class WebSocketService {
 
         const configUrl = config.serverConfig.webSocketUrl
 
-        const baseUrl = configUrl || `ws://${location.host}/ws`
+        const baseUrl = `${configUrl}/${endPoint}` || `ws://${location.host}/${endPoint}`
 
         this._webSocket = new WebSocket(`${baseUrl}?token=${token}`)
 

@@ -1,5 +1,6 @@
 @import "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200";
 
+/* #region : font-face minecraft */
 @font-face {
     font-family: 'Minecraft';
     font-style: normal;
@@ -24,7 +25,7 @@
     font-weight: bold;
     src: local('Minecraft'), url('https://fonts.cdnfonts.com/s/25041/4_MinecraftBoldItalic1.woff') format('woff');
 }
-
+/* #endregion: font-face minecraft */
 
 
 /**

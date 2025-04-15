@@ -7,7 +7,6 @@ import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 import Components from 'unplugin-vue-components/vite'
 import {defineConfig} from 'vite'
 
-// eslint-disable-next-line unused-imports/no-unused-vars
 const proxyRedirectConfigDefault: ProxyOptions = {
     target: 'http://localhost:11451',
     changeOrigin: true,

@@ -2,19 +2,30 @@
 import type {TerminalLoginError} from "~/core/TerminalUtils";
 
 import {ElMessageBox} from "element-plus";
-import {computed, ref} from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import {loginTerminal} from "~/core/TerminalUtils";
 import {useAppStorage} from "~/data/AppStorage";
+import {usePasswordStore} from "~/data/PasswordStore";
 import Logger from "~/utils/Logger";
 import {clamp} from "~/utils/utils";
 
 const appStorage = useAppStorage()
+const passwordStorage = usePasswordStore()
 
 const isLoggingIn = ref(false)
 
 const model = ref(true)
 
 const password = ref('')
+const rememberPassword = ref(false)
+
+onMounted(() => {
+    const storedPassword = passwordStorage.getPassword(appStorage.currentTerminal!.uuid)
+    if (storedPassword) {
+        password.value = storedPassword
+        rememberPassword.value = true
+    }
+})
 
 function onCloseRequest(): void {
     if (isLoggingIn.value) return
@@ -22,9 +33,13 @@ function onCloseRequest(): void {
 }
 
 function onConfirmRequest(): void {
+    const uuid = appStorage.currentTerminal!.uuid
+    if (rememberPassword.value) {
+        passwordStorage.storePassword(uuid, password.value)
+    }
     isLoggingIn.value = true
     loginTerminal(
-        appStorage.currentTerminal!.uuid,
+        uuid,
         password.value,
     ).then((response: string | TerminalLoginError) => {
         if (typeof response === 'string') {
@@ -94,6 +109,8 @@ const dialogWidth = computed<number>(() => {
                 }
             }"
         />
+
+        <el-checkbox v-model="rememberPassword" label="记住密码" />
 
         <template #footer>
             <el-row justify="end">

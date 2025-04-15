@@ -6,11 +6,17 @@ import {vsprintf} from "sprintf-js"
 import {computed, ref} from "vue";
 import {fetchTranslation} from "~/core/JsonTextUtils";
 import Logger from "~/utils/Logger";
+import {useConfig} from "~/data/Config";
 
-const props = defineProps<{
-    jsonText: JsonText,
-    minecraftFont: boolean,
-}>()
+const props = withDefaults(
+    defineProps<{
+        jsonText: JsonText,
+        minecraftFont: boolean,
+    }>(),
+    {
+        minecraftFont: false,
+    }
+)
 
 const classes = computed<string>(() => {
     let result: string = ""
@@ -46,21 +52,6 @@ const style = computed<string>(() => {
     return result
 })
 
-// const chars = computed<string[]>(()=>{
-//   const result: string[] = []
-//   const rawText = props.jsonText.text
-//   let formattedText: string;
-//   if (props.jsonText.with) {
-//     formattedText = vsprintf(rawText, props.jsonText.with);
-//   } else {
-//     formattedText = rawText
-//   }
-//   for (let i = 0; i < formattedText.length; i++) {
-//     result.push(formattedText.charAt(i))
-//   }
-//   return result
-// })
-
 const translatedString = ref<string | undefined>(undefined)
 
 const text = computed<string>(() => {
@@ -68,13 +59,17 @@ const text = computed<string>(() => {
     const translateKey = props.jsonText.translate
 
     if (translateKey && !translatedString.value) {
-        fetchTranslation(translateKey, 'en_us').then((data) => {
+        const config = useConfig()
+        const lang = config.localConfig.language
+
+        // eslint-disable-next-line vue/no-async-in-computed-properties
+        fetchTranslation(translateKey, lang).then((data) => {
             Logger.debug(`Get translate of ${translateKey}: ${data}`)
             translatedString.value = data
         })
     }
 
-    const actualText!: string = translatedString.value || translateKey || rawText
+    const actualText: string = translatedString.value || translateKey || rawText
 
     Logger.debug(`Chosen: '${actualText}' , from: ['${translatedString.value}', ' ${translateKey}', '${rawText}']`)
 
@@ -84,6 +79,7 @@ const text = computed<string>(() => {
         } else {
             return actualText
         }
+        // eslint-disable-next-line unused-imports/no-unused-vars
     } catch (_) {
     }
     return actualText

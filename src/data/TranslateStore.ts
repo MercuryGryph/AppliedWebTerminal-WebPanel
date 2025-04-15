@@ -38,13 +38,16 @@ export const useTranslateStore = defineStore('translate', {
                 const response = await fetch(`/translate/${language}/${key}`);
                 if (response.ok) {
                     const translatedText = await response.text()
-                    this.translations.set(cacheKey, {value: translatedText, timestamp: currentTime})
-                    localStorage.setItem(cacheKey, translatedText)
-                    localStorage.setItem(`${cacheKey}_timestamp`, currentTime.toString())
+                    if (translatedText !== key) {
+                        this.translations.set(cacheKey, {value: translatedText, timestamp: currentTime})
+                        localStorage.setItem(cacheKey, translatedText)
+                        localStorage.setItem(`${cacheKey}_timestamp`, currentTime.toString())
+                    }
                     return translatedText;
                 }
-            } catch (e: unknown) {
-                Logger.error('Could not find translate text');
+            } catch (e) {
+                Logger.error('Could not find translate text');3
+                Logger.error(e);
             }
         }
     }

@@ -1,22 +1,14 @@
-.section_div {
-  min-width: 300px;
-  width: 70%;
-  max-width: 1000px;
-  margin: 1.25rem auto;
-  padding: 2.5rem;
-  border: 1px solid #555;
-  border-radius: 2.5rem;
-  backdrop-filter: blur(0.7rem);
-  background: var(--el-text-color-primary)+'33';
+html.dark {
+  --app-card-bg-warn: #993c3c;
+}
+html:not(.dark) {
+  --app-card-bg-warn: #fba0a0;
 }
 
-@media (max-width: 1000px) {
-  .section_div {
-    padding: 2rem 1rem;
-  }
+.card_bg_warn {
+  background: var(--app-card-bg-warn);
 }
 
-.bg-blur {
-  backdrop-filter: blur(0.7rem);
-  background: var(--el-text-color-primary)+'33';
+.border_color_el {
+  border-color: var(--el-border-color);
 }

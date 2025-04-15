@@ -1,61 +1,47 @@
 <script setup lang="ts">
-import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
-import type JsonText from "~/core/data/minecraft/JsonText";
-import CraftingPlanEntryCard from "~/components/CraftingPlanEntryCard.vue";
 
-const jsonText: JsonText = {
-    color: "#8ae",
-    bold: false,
-    italic: true,
-    underline: true,
-    strikethrough: true,
-    translate: "item.ae2.semi_dark_monitor",
-    text: "test json text %s",
-    with: ['hello', 'world']
+import {ref} from "vue";
+import {useAppStorage} from "~/data/AppStorage";
+
+const appStorage = useAppStorage()
+
+enum Page {
+    Storage, Crafting
 }
 
-const entry: CraftingPlanSummaryEntry = {
-    craftAmount: 100,
-    missingAmount: 50,
-    storedAmount: 13,
-    what: {
-        id: 'xxx',
-        type: 'xxx',
-        displayName: 'xxx'
-    }
-}
-const entry2: CraftingPlanSummaryEntry = {
-    craftAmount: 100,
-    storedAmount: 13,
-    what: {
-        id: 'xxx',
-        type: 'xxx',
-        displayName: 'xxx'
-    }
-}
-const entry3: CraftingPlanSummaryEntry = {
-    storedAmount: 13,
-    what: {
-        id: 'xxx',
-        type: 'xxx',
-        displayName: 'xxx'
-    }
-}
+const selectedPage = ref<Page|undefined>();
 
 </script>
 
 <template>
-    <div class="flex items-stretch">
-        <div class="max-w-300px min-w-150px w-30% b-r-1 b-r-#555 b-r-solid">
-            cpus
-            <JsonTextSpan :json-text="jsonText" minecraft-font class="block" />
-        </div>
+    <el-card class="m-4 mx-a max-w-1000px min-w-300px w-80% font-bold">
+        <template #header>
+            <el-row justify="space-between">
+                <el-row>
+                    <el-text size="large" type="primary">
+                        {{ appStorage.currentTerminal!.name }}
+                    </el-text>
+                </el-row>
 
-        <div class="grow">
-            progress
-            <CraftingPlanEntryCard :entry="entry" />
-            <CraftingPlanEntryCard :entry="entry2" />
-            <CraftingPlanEntryCard :entry="entry3" />
-        </div>
-    </div>
+                <el-row class="float-right">
+                    <el-button-group>
+                        <el-button
+                            :type="selectedPage === Page.Storage ? 'primary' : 'default'"
+                            :disabled="selectedPage === Page.Storage"
+                            @click="()=>{selectedPage = Page.Storage}"
+                        >
+                            Storage
+                        </el-button>
+                        <el-button
+                            :type="selectedPage === Page.Crafting ? 'primary' : 'default'"
+                            :disabled="selectedPage === Page.Crafting"
+                            @click="()=>{selectedPage = Page.Crafting}"
+                        >
+                            Crafting Status
+                        </el-button>
+                    </el-button-group>
+                </el-row>
+            </el-row>
+        </template>
+    </el-card>
 </template>
