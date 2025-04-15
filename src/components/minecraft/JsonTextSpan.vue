@@ -5,8 +5,8 @@ import type JsonText from "~/core/data/minecraft/JsonText";
 import {vsprintf} from "sprintf-js"
 import {computed, ref} from "vue";
 import {fetchTranslation} from "~/core/JsonTextUtils";
-import Logger from "~/utils/Logger";
 import {useConfig} from "~/data/Config";
+import Logger from "~/utils/Logger";
 
 const props = withDefaults(
     defineProps<{

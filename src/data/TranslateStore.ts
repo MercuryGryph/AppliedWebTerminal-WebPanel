@@ -14,7 +14,7 @@ export const useTranslateStore = defineStore('translate', {
         translations: new Map() as Map<string, Translate>,
     }),
     actions: {
-        async getTranslation(language: string, key: string) {
+        async getTranslation(language: string, key: string): Promise<string> {
             const cacheKey = `${language}_${key}`;
             const currentTime = new Date().getTime();
             if (this.translations.has(cacheKey) && currentTime - this.translations.get(cacheKey)!.timestamp < CACHE_EXPIRY_TIME) {
@@ -49,6 +49,7 @@ export const useTranslateStore = defineStore('translate', {
                 Logger.error('Could not find translate text');3
                 Logger.error(e);
             }
+            return key
         }
     }
 })

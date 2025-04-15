@@ -2,7 +2,7 @@ import type JsonText from "~/core/data/minecraft/JsonText";
 import type JsonTextString from "~/core/data/minecraft/JsonTextString";
 import {useTranslateStore} from "~/data/TranslateStore";
 
-export async function fetchTranslation(key: string, language: string): Promise<string | undefined> {
+export async function fetchTranslation(key: string, language: string): Promise<string> {
     const store = useTranslateStore()
     return store.getTranslation(language, key)
 }
