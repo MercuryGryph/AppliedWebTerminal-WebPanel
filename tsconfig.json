@@ -17,7 +17,7 @@
     },
     "resolveJsonModule": true,
     "types": [
-      "vite/client",
+      "vite/client"
     ],
     "strict": true,
     "sourceMap": true,

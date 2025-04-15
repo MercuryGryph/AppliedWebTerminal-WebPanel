@@ -4,8 +4,7 @@ import type JsonText from "~/core/data/minecraft/JsonText";
 
 import {vsprintf} from "sprintf-js"
 import {computed, ref} from "vue";
-import {fetchTranslatedText} from "~/core/JsonTextUtils";
-import {useConfig} from "~/data/Config";
+import {fetchTranslation} from "~/core/JsonTextUtils";
 import Logger from "~/utils/Logger";
 
 const props = defineProps<{
@@ -69,14 +68,13 @@ const text = computed<string>(() => {
     const translateKey = props.jsonText.translate
 
     if (translateKey && !translatedString.value) {
-        // eslint-disable-next-line vue/no-async-in-computed-properties
-        fetchTranslatedText(translateKey, 'en_us', useConfig().localConfig).then((data) => {
+        fetchTranslation(translateKey, 'en_us').then((data) => {
             Logger.debug(`Get translate of ${translateKey}: ${data}`)
             translatedString.value = data
         })
     }
 
-    const actualText: string = translatedString.value || translateKey || rawText
+    const actualText!: string = translatedString.value || translateKey || rawText
 
     Logger.debug(`Chosen: '${actualText}' , from: ['${translatedString.value}', ' ${translateKey}', '${rawText}']`)
 
