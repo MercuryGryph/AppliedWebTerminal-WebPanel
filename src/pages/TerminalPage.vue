@@ -5,6 +5,7 @@ import {tr} from "~/core/I18nService";
 import {useAppStorage} from "~/data/AppStorage";
 import CraftingPage from "~/pages/terminal/CraftingPage.vue";
 import StoragePage from "~/pages/terminal/StoragePage.vue";
+import {fetchCpuStatus} from "~/core/AeUtils";
 
 const appStorage = useAppStorage()
 
@@ -13,6 +14,15 @@ enum Page {
 }
 
 const selectedPage = ref<Page>(Page.Storage);
+const currentBusyCpu = ref<number | undefined>()
+
+fetchCpuStatus(appStorage.token!).then(it => {
+    if (it) {
+        let busyCount = it.filter(it1 => it1.busy).length
+        currentBusyCpu.value = busyCount == 0 ? undefined : busyCount
+    }
+})
+
 
 </script>
 
@@ -26,29 +36,31 @@ const selectedPage = ref<Page>(Page.Storage);
                     </el-text>
                 </el-row>
 
-                <el-row class="float-right">
+                <el-row class="float-right mx-4">
                     <el-button-group>
                         <el-button
                             :type="selectedPage === Page.Storage ? 'primary' : 'default'"
                             :disabled="selectedPage === Page.Storage"
-                            @click="()=>{selectedPage = Page.Storage}"
+                            @click="() => { selectedPage = Page.Storage }"
                         >
                             {{ tr('terminal.button.storage_page') }}
                         </el-button>
-                        <el-button
-                            :type="selectedPage === Page.Crafting ? 'primary' : 'default'"
-                            :disabled="selectedPage === Page.Crafting"
-                            @click="()=>{selectedPage = Page.Crafting}"
-                        >
-                            {{ tr('terminal.button.crafting_page') }}
-                        </el-button>
+                        <el-badge :value="currentBusyCpu" :max=99 type="info">
+                            <el-button
+                                :type="selectedPage === Page.Crafting ? 'primary' : 'default'"
+                                :disabled="selectedPage === Page.Crafting"
+                                @click="() => { selectedPage = Page.Crafting }"
+                            >
+                                {{ tr('terminal.button.crafting_page') }}
+                            </el-button>
+                        </el-badge>
                     </el-button-group>
                 </el-row>
             </el-row>
         </el-card>
         <div>
-            <StoragePage v-if="selectedPage === Page.Storage" />
-            <CraftingPage v-else-if="selectedPage === Page.Crafting" />
+            <StoragePage v-if="selectedPage === Page.Storage"/>
+            <CraftingPage v-else-if="selectedPage === Page.Crafting"/>
         </div>
     </div>
 </template>
