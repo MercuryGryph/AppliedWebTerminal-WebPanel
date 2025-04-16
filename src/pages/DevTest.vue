@@ -46,10 +46,10 @@ const entryLooooooooong: CraftingPlanSummaryEntry = {
 
 <template>
     <div class="flex flex-wrap items-center">
-        <ItemTooltip :text="tooltip1text" :tooltips="tooltip1tips" />
-        <CraftingPlanEntryCard :entry="entry1" />
-        <CraftingPlanEntryCard :entry="entry2" />
-        <CraftingPlanEntryCard :entry="entry3" />
-        <CraftingPlanEntryCard :entry="entryLooooooooong" />
+        <ItemTooltip :text="tooltip1text" :tooltips="tooltip1tips"/>
+        <CraftingPlanEntryCard :entry="entry1"/>
+        <CraftingPlanEntryCard :entry="entry2"/>
+        <CraftingPlanEntryCard :entry="entry3"/>
+        <CraftingPlanEntryCard :entry="entryLooooooooong"/>
     </div>
 </template>

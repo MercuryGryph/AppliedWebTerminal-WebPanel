@@ -112,7 +112,7 @@ const dialogWidth = computed<number>(() => {
             }"
         />
 
-        <el-checkbox v-model="rememberPassword" :label="tr('main.terminals.login.button.remember_password')" />
+        <el-checkbox v-model="rememberPassword" :label="tr('main.terminals.login.button.remember_password')"/>
 
         <template #footer>
             <el-row justify="end">

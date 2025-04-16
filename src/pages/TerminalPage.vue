@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
 import {ref} from "vue";
+import {fetchCpuStatus} from "~/core/AeUtils";
 import {tr} from "~/core/I18nService";
 import {useAppStorage} from "~/data/AppStorage";
 import CraftingPage from "~/pages/terminal/CraftingPage.vue";
 import StoragePage from "~/pages/terminal/StoragePage.vue";
-import {fetchCpuStatus} from "~/core/AeUtils";
 
 const appStorage = useAppStorage()
 
@@ -16,13 +16,16 @@ enum Page {
 const selectedPage = ref<Page>(Page.Storage);
 const currentBusyCpu = ref<number | undefined>()
 
-fetchCpuStatus(appStorage.token!).then(it => {
-    if (it) {
-        let busyCount = it.filter(it1 => it1.busy).length
-        currentBusyCpu.value = busyCount == 0 ? undefined : busyCount
-    }
-})
+function refreshCpuStatus() {
+    fetchCpuStatus(appStorage.token!).then(it => {
+        if (it) {
+            const busyCount = it.filter(it1 => it1.busy).length
+            currentBusyCpu.value = busyCount === 0 ? undefined : busyCount
+        }
+    })
+}
 
+setInterval(refreshCpuStatus, 1000)
 
 </script>
 
@@ -45,7 +48,7 @@ fetchCpuStatus(appStorage.token!).then(it => {
                         >
                             {{ tr('terminal.button.storage_page') }}
                         </el-button>
-                        <el-badge :value="currentBusyCpu" :max=99 type="info">
+                        <el-badge :value="currentBusyCpu" :max="99" type="info">
                             <el-button
                                 :type="selectedPage === Page.Crafting ? 'primary' : 'default'"
                                 :disabled="selectedPage === Page.Crafting"

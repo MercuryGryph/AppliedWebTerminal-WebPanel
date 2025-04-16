@@ -1,8 +1,6 @@
 import type AeKeyTypeInfo from "~/core/data/ae/core/aekey/AeKeyTypeInfo";
+import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 import type StorageData from "~/core/data/ae/StorageData";
-import {types} from "sass";
-import List = types.List;
-import MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 
 export type TerminalSort = 'BY_COUNT' | 'BY_NAME' | 'BY_ID'
 
@@ -25,7 +23,7 @@ export async function fetchAeStoragePaged(
 }
 
 export async function fetchCpuStatus(bearerToken: string): Promise<Array<MECpuStatusBundle> | undefined> {
-    let response = await fetch("crafting/cpus", {
+    const response = await fetch("crafting/cpus", {
         headers: {
             "Authorization": `Bearer ${bearerToken}`,
         }

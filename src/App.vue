@@ -24,9 +24,9 @@ watch(config.localConfig, () => {
 
 <template>
     <el-col class="h-full min-h-100vh w-full flex flex-col items-stretch">
-        <TopBar />
+        <TopBar/>
 
-        <TerminalPage v-if="appStorage.inTerminalPage" class="grow" />
-        <MainPage v-else class="grow" />
+        <TerminalPage v-if="appStorage.inTerminalPage" class="grow"/>
+        <MainPage v-else class="grow"/>
     </el-col>
 </template>
