@@ -59,9 +59,7 @@ function calcPadding() {
     if (containerRef.value) {
         const rect = containerRef.value.getBoundingClientRect() as DOMRect
         const lineElements = Math.floor(rect.width / 64)
-        console.log(lineElements)
         const padding = (rect.width - (lineElements * 64)) / 2
-        console.log(padding)
         scrollStyle.value = `padding-left: ${padding}px;`
     }
 }
