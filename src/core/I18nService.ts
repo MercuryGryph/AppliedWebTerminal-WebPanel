@@ -27,14 +27,11 @@ export async function initTranslate() {
     const resp = await fetch(`/lang/all.json`)
     if (!resp.ok) return
     const list = await resp.json() as Array<string>
-    console.log(list)
     for (let i = 0; i < list.length; i++) {
         const lang = list[i]
-        console.log(i, lang)
         const langResp = await fetch(`/lang/${lang}`)
         if (!langResp.ok) return
         const translate = new Map(Object.entries(await langResp.json())) as Map<string, string>
         fetchedTranslate.set(lang.replace('.json', ''), translate)
     }
-    console.log(fetchedTranslate)
 }
