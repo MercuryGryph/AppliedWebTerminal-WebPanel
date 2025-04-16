@@ -85,9 +85,9 @@ const keyImageUrl = computed(() => {
     <el-card
         ref="hoverElement"
         :class="classed"
-        class="w-220px m-2 relative"
+        class="relative m-2 max-w-220px min-w-220px"
         @mousemove="onMouseMove"
-        @mouseleave="showTooltip=false"
+        @mouseleave="()=>{showTooltip = false}"
     >
         <div class="h-58px flex flex-wrap justify-end text-right">
             <div class="mx-a my-a grow">
@@ -113,18 +113,17 @@ const keyImageUrl = computed(() => {
                     {{ tr('ae.crafting.statue.to_craft') }}{{ formatNumber(props.entry.craftAmount) }}
                 </el-text>
             </div>
-            <!-- height: 32px -->
             <img
-                class="my-a ml-1 block font-size-8 h-50px w-50px"
+                class="my-a ml-1 block h-50px w-50px font-size-8"
                 :alt="props.entry.what.id"
                 :src="keyImageUrl"
             >
         </div>
     </el-card>
     <ItemTooltip
-        class="z-10000"
         v-if="displayName"
         v-show="showTooltip"
+        class="z-10000"
         :tooltips="tooltips"
         :style="tooltipStyle"
         :text="displayName"

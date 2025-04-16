@@ -51,16 +51,16 @@ const style = computed<string>(() => {
     }
     return result
 })
+const config = useConfig()
 
 const translatedString = ref<string | undefined>(undefined)
 
 const text = computed<string>(() => {
     const rawText = props.jsonText.text
     const translateKey = props.jsonText.translate
+    const lang = config.localConfig.language
 
     if (translateKey && !translatedString.value) {
-        const config = useConfig()
-        const lang = config.localConfig.language
 
         // eslint-disable-next-line vue/no-async-in-computed-properties
         fetchTranslation(translateKey, lang).then((data) => {
