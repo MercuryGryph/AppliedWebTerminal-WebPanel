@@ -18,7 +18,7 @@ const selectedPage = ref<Page|undefined>();
 
 <template>
     <div class="terminal_page m-4 mx-a max-w-1000px min-w-300px w-80% font-bold">
-        <el-card class="pos-sticky top-50px bg-transparent backdrop-blur-lg z-500">
+        <el-card class="bg-transparent backdrop-blur-lg z-500">
             <el-row justify="space-between">
                 <el-row>
                     <el-text size="large" type="primary">

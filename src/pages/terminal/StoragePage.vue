@@ -2,7 +2,7 @@
 import type {TerminalSort} from "~/core/AeUtils";
 import type MEStack from "~/core/data/ae/core/MEStack";
 
-import {ref} from "vue"
+import {onMounted, onUnmounted, ref} from "vue"
 import {fetchAeStoragePaged} from "~/core/AeUtils";
 import {useAppStorage} from "~/data/AppStorage";
 import PageMeta from "~/core/data/PageMeta";
@@ -10,7 +10,7 @@ import Logger from "~/utils/Logger";
 
 const appStorage = useAppStorage()
 
-const STACK_PER_PAGE = 9*3
+const STACK_PER_PAGE = 15 * 5
 
 const sort = ref<TerminalSort>('BY_NAME')
 const stacks = ref<Array<MEStack>>([])
@@ -18,14 +18,15 @@ const stacks = ref<Array<MEStack>>([])
 const loadedPage = ref<number>(0)
 const pageMeta = ref<PageMeta | undefined>(undefined)
 const isLoading = ref<boolean>(false);
+const containerRef = ref<any>(null);
 
 function loadMore() {
-    // if (pageMeta.value !== undefined) {
-    //     if (loadedPage.value > pageMeta.value.totalPages) {
-    //         Logger.info(`refused to load more because loadedPage(${loadedPage.value}) > pageMeta(${pageMeta.value.totalPages})`)
-    //         return;
-    //     }
-    // }
+    if (pageMeta.value !== undefined) {
+        if (loadedPage.value > pageMeta.value.totalPages) {
+            Logger.info(`refused to load more because loadedPage(${loadedPage.value}) > pageMeta(${pageMeta.value.totalPages})`)
+            return;
+        }
+    }
     if (isLoading.value) {
         return;
     }
@@ -48,18 +49,50 @@ function loadMore() {
 
 loadMore()
 
+const scrollStyle = ref<string>('')
+
+function onResize(e: Event) {
+    calcPadding()
+}
+
+function calcPadding() {
+    if (containerRef.value) {
+        const rect = containerRef.value.getBoundingClientRect() as DOMRect
+        const lineElements = Math.floor(rect.width / 64)
+        console.log(lineElements)
+        const padding = (rect.width - (lineElements * 64)) / 2
+        console.log(padding)
+        scrollStyle.value = `padding-left: ${padding}px;`
+    }
+}
+
+onMounted(() => {
+    calcPadding()
+    window.addEventListener("resize", onResize)
+})
+
+onUnmounted(() => {
+    window.removeEventListener("resize", onResize)
+})
+
 </script>
 
 <template>
-    Storage
-    <div
-        v-infinite-scroll="loadMore"
-        class="max-h-50vh flex flex-wrap of-visible"
-    >
-        <MEStackComponent
-            v-for="stack in stacks"
-            :key="stack.what.id"
-            :stack="stack"
-        />
+    <div ref="containerRef">
+        <div
+            v-infinite-scroll="loadMore"
+            :infinite-scroll-distance="50"
+            class="flex flex-wrap items-center overflow-y-scroll h-80vh"
+            :style="scrollStyle"
+        >
+            <MEStackComponent
+                v-for="stack in stacks"
+                :key="stack.what.id"
+                :stack="stack"
+            />
+        </div>
+        <el-text size="large" v-if="isLoading">
+            Loading...
+        </el-text>
     </div>
 </template>
