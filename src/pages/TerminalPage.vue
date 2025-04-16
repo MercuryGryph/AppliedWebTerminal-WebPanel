@@ -1,8 +1,10 @@
 <script setup lang="ts">
 
 import {ref} from "vue";
-import {useAppStorage} from "~/data/AppStorage";
 import {tr} from "~/core/I18nService";
+import {useAppStorage} from "~/data/AppStorage";
+import StoragePage from "~/pages/terminal/StoragePage.vue";
+import CraftingPage from "~/pages/terminal/CraftingPage.vue";
 
 const appStorage = useAppStorage()
 
@@ -44,5 +46,7 @@ const selectedPage = ref<Page|undefined>();
                 </el-row>
             </el-row>
         </template>
+        <StoragePage v-if="selectedPage === Page.Storage" />
+        <CraftingPage v-else-if="selectedPage === Page.Crafting" />
     </el-card>
 </template>
