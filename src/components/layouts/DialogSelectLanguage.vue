@@ -15,9 +15,17 @@ const appStorage = useAppStorage()
 
 const selectedLanguage = ref<string>(config.localConfig.language)
 
-function setLanguage(): void {
+watch(selectedLanguage, ()=>{
+    setLanguage(false)
+})
+
+function setLanguage(
+    close: boolean = true
+): void {
     config.localConfig.language = selectedLanguage.value
-    model.value = false
+    if (close) {
+        model.value = false
+    }
 }
 
 const showDialogAddLanguage = ref<boolean>(false);
@@ -96,30 +104,36 @@ function removeLanguage(
         v-model="model"
         width="210px"
         :title="tr('language.selector.title')"
+        class="language-selector"
     >
         <el-radio-group v-model="selectedLanguage" class="max-h-60vh w-full flex-col items-stretch">
-            <el-radio value="zh_cn" class="grow ps-4 m-0!">
-                zh_cn
-            </el-radio>
-            <el-radio value="en_us" class="border_color_el grow b-t b-t-solid ps-4 m-0!">
-                en_us
-            </el-radio>
+            <el-card class="my-0.5">
+                <el-radio value="zh_cn" class="w-full ps-4 m-0!">
+                    zh_cn
+                </el-radio>
+            </el-card>
+            <el-card class="my-0.5">
+                <el-radio value="en_us" class="w-full ps-4 m-0!">
+                    en_us
+                </el-radio>
+            </el-card>
             <div
                 v-for="lang in config.localConfig.customLanguages"
                 :key="lang"
-                class="border_color_el h-48px flex grow justify-between b-t b-t-solid ps-4 m-0!"
+                class="h-48px grow m-0!"
             >
-                <el-radio
-                    :value="lang"
-                    class="my-a w-full"
-                >
-                    {{ lang }}
-                </el-radio>
-                <el-button circle class="my-a" @click="()=>{removeLanguage(lang)}">
-                    <span class="material-symbols-outlined">
-                        delete
-                    </span>
-                </el-button>
+                <el-card class="my-0.5 w-full">
+                    <el-row>
+                        <el-radio :value="lang" class="grow ps-4 m-0!">
+                            {{ lang }}
+                        </el-radio>
+                        <el-button circle class="my-a b-0" @click="()=>{removeLanguage(lang)}">
+                            <span class="material-symbols-outlined text-5">
+                                delete
+                            </span>
+                        </el-button>
+                    </el-row>
+                </el-card>
             </div>
         </el-radio-group>
 
@@ -172,3 +186,11 @@ function removeLanguage(
         </template>
     </el-dialog>
 </template>
+
+<style>
+.language-selector {
+    .el-card__body {
+        padding: 0;
+    }
+}
+</style>
