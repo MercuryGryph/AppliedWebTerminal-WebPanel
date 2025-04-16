@@ -80,7 +80,7 @@ onUnmounted(() => {
         <div
             v-infinite-scroll="loadMore"
             :infinite-scroll-distance="50"
-            class="h-80vh flex flex-wrap items-center overflow-y-scroll"
+            class="max-h-80vh flex flex-wrap justify-start overflow-y-scroll"
             :style="scrollStyle"
         >
             <MEStackComponent
