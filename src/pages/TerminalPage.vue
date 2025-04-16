@@ -12,7 +12,7 @@ enum Page {
     Storage, Crafting
 }
 
-const selectedPage = ref<Page|undefined>();
+const selectedPage = ref<Page>(Page.Storage);
 
 </script>
 
@@ -52,14 +52,3 @@ const selectedPage = ref<Page|undefined>();
         </div>
     </div>
 </template>
-
-<style>
-.terminal_page {
-    .el-card__body {
-        padding-top: 0;
-        padding-bottom: 0;
-        padding: 10px;
-        overflow-y: visible;
-    }
-}
-</style>
