@@ -3,11 +3,11 @@ import type TerminalInfo from "~/core/data/terminal/TerminalInfo"
 
 import {ref} from 'vue'
 
+import {tr} from "~/core/I18nService";
 import {fetchTerminalList} from "~/core/TerminalUtils"
 import {useAppStorage} from "~/data/AppStorage"
 import DialogTerminalLogin from "~/pages/DialogTerminalLogin.vue";
 import Logger from "~/utils/Logger"
-import {tr} from "~/core/I18nService";
 
 const appStorage = useAppStorage()
 

@@ -2,10 +2,10 @@
 import type {TerminalSort} from "~/core/AeUtils";
 import type MEStack from "~/core/data/ae/core/MEStack";
 
+import type PageMeta from "~/core/data/PageMeta";
 import {onMounted, onUnmounted, ref} from "vue"
 import {fetchAeStoragePaged} from "~/core/AeUtils";
 import {useAppStorage} from "~/data/AppStorage";
-import PageMeta from "~/core/data/PageMeta";
 import Logger from "~/utils/Logger";
 
 const appStorage = useAppStorage()
@@ -51,7 +51,7 @@ loadMore()
 
 const scrollStyle = ref<string>('')
 
-function onResize(e: Event) {
+function onResize() {
     calcPadding()
 }
 
@@ -80,7 +80,7 @@ onUnmounted(() => {
         <div
             v-infinite-scroll="loadMore"
             :infinite-scroll-distance="50"
-            class="flex flex-wrap items-center overflow-y-scroll h-80vh"
+            class="h-80vh flex flex-wrap items-center overflow-y-scroll"
             :style="scrollStyle"
         >
             <MEStackComponent
@@ -89,7 +89,7 @@ onUnmounted(() => {
                 :stack="stack"
             />
         </div>
-        <el-text size="large" v-if="isLoading">
+        <el-text v-if="isLoading" size="large">
             Loading...
         </el-text>
     </div>

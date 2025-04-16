@@ -1,4 +1,4 @@
-import AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
+import type AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
 
 interface MEStack {
     readonly what: AeKeyObject

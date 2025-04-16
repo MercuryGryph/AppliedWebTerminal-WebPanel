@@ -45,10 +45,7 @@ const onMouseMove = useThrottleFn((e: MouseEvent) => {
             y >= rect.top && y <= rect.bottom
         );
     }
-    mousePosition.value = {
-        x: x,
-        y: y
-    }
+    mousePosition.value = {x, y}
 }, 100)
 
 const tooltipStyle = computed<string>(() => {

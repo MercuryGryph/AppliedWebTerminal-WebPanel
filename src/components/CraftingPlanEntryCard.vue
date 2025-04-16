@@ -2,11 +2,11 @@
 import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
 import type jsonText from "~/core/data/minecraft/JsonText";
 
+import {useThrottleFn} from "@vueuse/core";
 import {computed, ref} from "vue";
 import {tr} from "~/core/I18nService";
-import Logger from "~/utils/Logger";
 import {formatNumber} from "~/core/NumberUtil";
-import {useThrottleFn} from "@vueuse/core";
+import Logger from "~/utils/Logger";
 
 const props = defineProps<{
     entry: CraftingPlanSummaryEntry
