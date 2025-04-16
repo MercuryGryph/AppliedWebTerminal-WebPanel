@@ -18,6 +18,9 @@ const props = withDefaults(
     }
 )
 
+const config = useConfig()
+
+
 const classes = computed<string>(() => {
     let result: string = ""
     if (props.minecraftFont) {
@@ -51,21 +54,22 @@ const style = computed<string>(() => {
     }
     return result
 })
-const config = useConfig()
 
 const translatedString = ref<string | undefined>(undefined)
+const translatedLang = ref<string | undefined>(undefined)
 
 const text = computed<string>(() => {
     const rawText = props.jsonText.text
     const translateKey = props.jsonText.translate
     const lang = config.localConfig.language
 
-    if (translateKey && !translatedString.value) {
+    if (translateKey && translatedLang.value !== lang) {
 
         // eslint-disable-next-line vue/no-async-in-computed-properties
         fetchTranslation(translateKey, lang).then((data) => {
             Logger.debug(`Get translate of ${translateKey} in lang ${lang}: ${data}`)
             translatedString.value = data
+            translatedLang.value = lang
         })
     }
 
