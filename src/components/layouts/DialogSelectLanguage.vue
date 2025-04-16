@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {ref, watch} from "vue";
-import {stringOf} from "~/core/I18nService";
+import {tr} from "~/core/I18nService";
 import {fetchTranslation} from "~/core/JsonTextUtils";
 import {useAppStorage} from "~/data/AppStorage";
 import {useConfig} from "~/data/Config";
@@ -95,7 +95,7 @@ function removeLanguage(
     <el-dialog
         v-model="model"
         width="210px"
-        :title="stringOf('language.selector.title')"
+        :title="tr('language.selector.title')"
     >
         <el-radio-group v-model="selectedLanguage" class="max-h-60vh w-full flex-col items-stretch">
             <el-radio value="zh_cn" class="grow ps-4 m-0!">
@@ -125,10 +125,10 @@ function removeLanguage(
 
         <div class="mt-2 flex">
             <el-button class="w-86px" @click="()=>{showDialogAddLanguage = true}">
-                {{ stringOf('language.selector.button.add') }}
+                {{ tr('language.selector.button.add') }}
             </el-button>
             <el-button type="primary" class="w-86px" @click="setLanguage">
-                {{ stringOf('common.button.confirm') }}
+                {{ tr('common.button.confirm') }}
             </el-button>
         </div>
     </el-dialog>
@@ -136,22 +136,22 @@ function removeLanguage(
     <el-dialog
         v-model="showDialogAddLanguage"
         width="300px"
-        :title="stringOf('language.add.title')"
+        :title="tr('language.add.title')"
     >
-        <el-input v-model="languageToAdd" :placeholder="stringOf('language.add.placeholder.lang')" />
+        <el-input v-model="languageToAdd" :placeholder="tr('language.add.placeholder.lang')" />
 
         <el-divider content-position="left">
             <el-text type="info" size="small">
-                {{ stringOf('language.add.label.test') }}
+                {{ tr('language.add.label.test') }}
             </el-text>
         </el-divider>
         <div class="flex justify-between gap-2">
-            <el-input v-model="keyToTest" :placeholder="stringOf('language.add.placeholder.test_key')" />
+            <el-input v-model="keyToTest" :placeholder="tr('language.add.placeholder.test_key')" />
             <el-button type="info" @click="test">
-                {{ stringOf('language.add.button.test') }}
+                {{ tr('language.add.button.test') }}
             </el-button>
         </div>
-        <el-input v-model="testResult" :placeholder="stringOf('language.add.placeholder.result')" disabled class="mt-2" />
+        <el-input v-model="testResult" :placeholder="tr('language.add.placeholder.result')" disabled class="mt-2" />
 
         <template #footer>
             <el-row justify="space-evenly">
@@ -159,14 +159,14 @@ function removeLanguage(
                     class="w-86px"
                     @click="()=>{ languageToAdd = ''; showDialogAddLanguage = false }"
                 >
-                    {{ stringOf('common.button.cancel') }}
+                    {{ tr('common.button.cancel') }}
                 </el-button>
                 <el-button
                     type="primary"
                     class="w-86px"
                     @click="addLanguage"
                 >
-                    {{ stringOf('language.add.button.add') }}
+                    {{ tr('language.add.button.add') }}
                 </el-button>
             </el-row>
         </template>

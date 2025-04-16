@@ -3,9 +3,10 @@ import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPla
 import type jsonText from "~/core/data/minecraft/JsonText";
 
 import {computed, ref} from "vue";
-import {stringOf} from "~/core/I18nService";
+import {tr} from "~/core/I18nService";
 import Logger from "~/utils/Logger";
 import {formatNumber} from "~/core/NumberUtil";
+import {useThrottleFn} from "@vueuse/core";
 
 const props = defineProps<{
     entry: CraftingPlanSummaryEntry
@@ -39,27 +40,37 @@ const mousePosition = ref({
     y: 0
 })
 
-function onMouseMove(e: MouseEvent) {
-    mousePosition.value = {
-        x: e.x,
-        y: e.y
+const hoverElement = ref<any>(null)
+
+const onMouseMove = useThrottleFn((e: MouseEvent) => {
+    const {pageX, pageY} = e
+    if (hoverElement.value) {
+        const rect = hoverElement.value.$el.getBoundingClientRect()
+        showTooltip.value = (
+            pageX >= rect.left && pageX <= rect.right &&
+            pageY >= rect.top && pageY <= rect.bottom
+        );
     }
-}
+    mousePosition.value = {
+        x: pageX,
+        y: pageY
+    }
+}, 100)
 
 const tooltipStyle = computed<string>(() => {
-    return `position: absolute; left: ${mousePosition.value.x - 10}px; top: ${mousePosition.value.y - 10}px;`
+    return `position: fixed; left: ${mousePosition.value.x + 10}px; top: ${mousePosition.value.y + 10}px;`
 })
 
 const tooltips = computed(() => {
     const result = new Array<string>()
     if (props.entry.missingAmount) {
-        result.push(`${stringOf('ae.crafting.statue.missing')} ${formatNumber(props.entry.missingAmount)}`)
+        result.push(`${tr('ae.crafting.statue.missing')}${formatNumber(props.entry.missingAmount)}`)
     }
     if (props.entry.storedAmount) {
-        result.push(`${stringOf('ae.crafting.statue.available')} ${formatNumber(props.entry.storedAmount)}`)
+        result.push(`${tr('ae.crafting.statue.available')}${formatNumber(props.entry.storedAmount)}`)
     }
     if (props.entry.craftAmount) {
-        result.push(`${stringOf('ae.crafting.statue.to_craft')} ${formatNumber(props.entry.craftAmount)}`)
+        result.push(`${tr('ae.crafting.statue.to_craft')}${formatNumber(props.entry.craftAmount)}`)
     }
     return result
 })
@@ -72,11 +83,11 @@ const keyImageUrl = computed(() => {
 
 <template>
     <el-card
+        ref="hoverElement"
         :class="classed"
-        class="w-220px m-2"
-        @mouseover="showTooltip = true"
-        @mouseleave="showTooltip = false"
+        class="w-220px m-2 relative"
         @mousemove="onMouseMove"
+        @mouseleave="showTooltip=false"
     >
         <div class="h-58px flex flex-wrap justify-end text-right">
             <div class="mx-a my-a grow">
@@ -85,21 +96,21 @@ const keyImageUrl = computed(() => {
                     size="small"
                     class="my-1 block"
                 >
-                    {{ stringOf('ae.crafting.statue.missing') }} {{ formatNumber(props.entry.missingAmount) }}
+                    {{ tr('ae.crafting.statue.missing') }}{{ formatNumber(props.entry.missingAmount) }}
                 </el-text>
                 <el-text
                     v-if="props.entry.storedAmount"
                     size="small"
                     class="my-1 block"
                 >
-                    {{ stringOf('ae.crafting.statue.available') }} {{ formatNumber(props.entry.storedAmount) }}
+                    {{ tr('ae.crafting.statue.available') }}{{ formatNumber(props.entry.storedAmount) }}
                 </el-text>
                 <el-text
                     v-if="props.entry.craftAmount"
                     size="small"
                     class="my-1 block"
                 >
-                    {{ stringOf('ae.crafting.statue.crafting') }} {{ formatNumber(props.entry.craftAmount) }}
+                    {{ tr('ae.crafting.statue.to_craft') }}{{ formatNumber(props.entry.craftAmount) }}
                 </el-text>
             </div>
             <!-- height: 32px -->
@@ -111,10 +122,11 @@ const keyImageUrl = computed(() => {
         </div>
     </el-card>
     <ItemTooltip
-        v-if="displayName && showTooltip"
+        class="z-10000"
+        v-if="displayName"
+        v-show="showTooltip"
         :tooltips="tooltips"
         :style="tooltipStyle"
         :text="displayName"
-        @mousemove="onMouseMove"
     />
 </template>

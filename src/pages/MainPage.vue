@@ -7,7 +7,7 @@ import {fetchTerminalList} from "~/core/TerminalUtils"
 import {useAppStorage} from "~/data/AppStorage"
 import DialogTerminalLogin from "~/pages/DialogTerminalLogin.vue";
 import Logger from "~/utils/Logger"
-import {stringOf} from "../core/I18nService";
+import {tr} from "~/core/I18nService";
 
 const appStorage = useAppStorage()
 
@@ -42,7 +42,7 @@ function onSelectTerminal(
     <div class="mx-a h-full max-w-2000px min-w-300px w-70%">
         <el-row class="mx-4 my-2" justify="space-between">
             <el-text size="large" class="font-bold">
-                {{ stringOf('main.terminals.title') }}
+                {{ tr('main.terminals.title') }}
             </el-text>
             <el-button
                 circle

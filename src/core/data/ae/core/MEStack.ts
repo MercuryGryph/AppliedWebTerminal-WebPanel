@@ -1,5 +1,7 @@
+import AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
+
 interface MEStack {
-    readonly id: string
+    readonly what: AeKeyObject
     readonly amount: number
 }
 

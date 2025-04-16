@@ -3,7 +3,7 @@ import type {TerminalLoginError} from "~/core/TerminalUtils";
 
 import {ElMessageBox} from "element-plus";
 import {computed, onMounted, ref} from 'vue'
-import {stringOf} from "~/core/I18nService"
+import {tr} from "~/core/I18nService"
 import {loginTerminal} from "~/core/TerminalUtils";
 import {useAppStorage} from "~/data/AppStorage";
 import {usePasswordStore} from "~/data/PasswordStore";
@@ -82,12 +82,12 @@ const dialogWidth = computed<number>(() => {
 <template>
     <el-dialog
         v-model="model"
-        :title="stringOf('main.terminals.login.title')"
+        :title="tr('main.terminals.login.title')"
         :width="`${dialogWidth}px`"
         :before-close="onCloseRequest"
     >
         <el-text type="info" size="small" class="font-italic">
-            {{ stringOf('main.terminals.login.label.terminal_name') }}
+            {{ tr('main.terminals.login.label.terminal_name') }}
         </el-text>
         <el-text
             size="large"
@@ -111,7 +111,7 @@ const dialogWidth = computed<number>(() => {
             }"
         />
 
-        <el-checkbox v-model="rememberPassword" :label="stringOf('main.terminals.login.button.remember_password')" />
+        <el-checkbox v-model="rememberPassword" :label="tr('main.terminals.login.button.remember_password')" />
 
         <template #footer>
             <el-row justify="end">
@@ -120,7 +120,7 @@ const dialogWidth = computed<number>(() => {
                     :disabled="isLoggingIn"
                     @click="onCloseRequest"
                 >
-                    {{ stringOf('common.button.cancel') }}
+                    {{ tr('common.button.cancel') }}
                 </el-button>
                 <el-button
                     type="primary"
@@ -128,7 +128,7 @@ const dialogWidth = computed<number>(() => {
                     :disabled="isLoggingIn"
                     @click="onConfirmRequest"
                 >
-                    {{ stringOf('main.terminals.login.button.login') }}
+                    {{ tr('main.terminals.login.button.login') }}
                 </el-button>
             </el-row>
         </template>

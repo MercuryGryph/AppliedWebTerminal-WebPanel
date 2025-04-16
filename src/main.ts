@@ -22,16 +22,21 @@ import 'uno.css'
 import 'element-plus/theme-chalk/src/message.scss'
 
 import 'element-plus/theme-chalk/src/message-box.scss'
+import Logger from "~/utils/Logger";
+import {initTranslate} from "~/core/I18nService";
+
 
 const app = createApp(App);
 
 const pinia = createPinia();
 
 app.use(ElementPlus)
-
 app.use(pinia)
 
-app.mount("#app");
+initTranslate().then(() => {
+    Logger.info("init translates")
+    app.mount("#app");
+})
 
 // https://github.com/antfu/vite-ssg
 // export const createApp = ViteSSG(
