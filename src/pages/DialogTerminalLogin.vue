@@ -46,6 +46,7 @@ function onConfirmRequest(): void {
         if (typeof response === 'string') {
             appStorage.webSocketService.setToken(response)
             appStorage.inTerminalPage = true
+            appStorage.token = response
         } else {
             ElMessageBox.alert(
                 `Error on login request: ${response}`,

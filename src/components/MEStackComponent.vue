@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import type MEStack from "~/core/data/ae/core/MEStack";
-import {computed, ref} from "vue";
-import {formatNumber} from "~/core/NumberUtil";
 import type jsonText from "~/core/data/minecraft/JsonText";
-import Logger from "~/utils/Logger";
-import {tr} from "~/core/I18nService";
 import {useThrottleFn} from "@vueuse/core";
+import {computed, ref} from "vue";
+import {tr} from "~/core/I18nService";
+import {formatNumber} from "~/core/NumberUtil";
+import Logger from "~/utils/Logger";
 
 const props = withDefaults(defineProps<{
     stack: MEStack
-    craftable: boolean
+    craftable?: boolean
 }>(), {
     craftable: false
 })
@@ -19,7 +19,7 @@ const displayName = computed<jsonText | undefined>(() => {
     try {
         const jsonText = JSON.parse(raw)
         if (jsonText) {
-            Logger.info(jsonText)
+            // Logger.info(jsonText)
             return jsonText
         }
     } catch (error) {
@@ -75,19 +75,19 @@ const keyImageUrl = computed(() => {
 <template>
     <div
         ref="hoverElement"
-        class="h-64px w-64px relative stack-container"
+        class="stack-container relative h-64px w-64px"
         @mouseleave="showTooltip = false"
         @mousemove="onMouseMove"
     >
         <img
-            class="w-100% h-100%"
+            class="h-100% w-100%"
             :alt="props.stack.what.id"
             :src="keyImageUrl"
         >
         <el-text class="absolute pos-bottom-2px pos-right-2px" size="small">
             {{ formatNumber(props.stack.amount) }}
         </el-text>
-        <el-text v-if="props.craftable" class="absolute pos-top-0px pos-left-2px">
+        <el-text v-if="props.craftable" class="absolute pos-left-2px pos-top-0px">
             +
         </el-text>
     </div>
@@ -97,6 +97,7 @@ const keyImageUrl = computed(() => {
         :tooltips="tooltips"
         :style="tooltipStyle"
         :text="displayName"
+        class="z-10000"
     />
 </template>
 

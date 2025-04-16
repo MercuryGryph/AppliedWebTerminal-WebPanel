@@ -18,7 +18,7 @@ export const useTranslateStore = defineStore('translate', {
             const cacheKey = `${language}_${key}`;
             const currentTime = new Date().getTime();
             if (this.translations.has(cacheKey) && currentTime - this.translations.get(cacheKey)!.timestamp < CACHE_EXPIRY_TIME) {
-                Logger.info('use cached translate')
+                // Logger.info('use cached translate')
                 return this.translations.get(cacheKey)!.value
             }
 
@@ -27,7 +27,7 @@ export const useTranslateStore = defineStore('translate', {
             if (cachedTranslation) {
                 const cachedTimestamp = localStorage.getItem(`${cacheKey}_timestamp`);
                 if (cachedTimestamp && currentTime - Number(cachedTimestamp) < CACHE_EXPIRY_TIME) {
-                    Logger.info('use localStorage translate')
+                    // Logger.info('use localStorage translate')
                     this.translations.set(cacheKey, {value: cachedTranslation, timestamp: Number(cachedTimestamp)})
                     return cachedTranslation;
                 }

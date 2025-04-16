@@ -3,8 +3,8 @@
 import {ref} from "vue";
 import {tr} from "~/core/I18nService";
 import {useAppStorage} from "~/data/AppStorage";
-import StoragePage from "~/pages/terminal/StoragePage.vue";
 import CraftingPage from "~/pages/terminal/CraftingPage.vue";
+import StoragePage from "~/pages/terminal/StoragePage.vue";
 
 const appStorage = useAppStorage()
 
@@ -17,8 +17,8 @@ const selectedPage = ref<Page|undefined>();
 </script>
 
 <template>
-    <el-card class="m-4 mx-a max-w-1000px min-w-300px w-80% font-bold">
-        <template #header>
+    <div class="terminal_page m-4 mx-a max-w-1000px min-w-300px w-80% font-bold">
+        <el-card class="pos-sticky top-50px bg-transparent backdrop-blur-lg z-500">
             <el-row justify="space-between">
                 <el-row>
                     <el-text size="large" type="primary">
@@ -45,8 +45,21 @@ const selectedPage = ref<Page|undefined>();
                     </el-button-group>
                 </el-row>
             </el-row>
-        </template>
-        <StoragePage v-if="selectedPage === Page.Storage" />
-        <CraftingPage v-else-if="selectedPage === Page.Crafting" />
-    </el-card>
+        </el-card>
+        <div>
+            <StoragePage v-if="selectedPage === Page.Storage" />
+            <CraftingPage v-else-if="selectedPage === Page.Crafting" />
+        </div>
+    </div>
 </template>
+
+<style>
+.terminal_page {
+    .el-card__body {
+        padding-top: 0;
+        padding-bottom: 0;
+        padding: 10px;
+        overflow-y: visible;
+    }
+}
+</style>

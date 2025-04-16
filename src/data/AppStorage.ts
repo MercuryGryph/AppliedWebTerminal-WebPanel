@@ -13,6 +13,7 @@ interface AppStorage {
     webSocketService: WebSocketService
     terminals?: Array<TerminalInfo>
     currentTerminal?: TerminalInfo
+    token?: string
     inTerminalPage: boolean
 }
 

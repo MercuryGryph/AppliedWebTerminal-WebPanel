@@ -67,7 +67,7 @@ const text = computed<string>(() => {
 
         // eslint-disable-next-line vue/no-async-in-computed-properties
         fetchTranslation(translateKey, lang).then((data) => {
-            Logger.debug(`Get translate of ${translateKey} in lang ${lang}: ${data}`)
+            // Logger.debug(`Get translate of ${translateKey} in lang ${lang}: ${data}`)
             translatedString.value = data
             translatedLang.value = lang
         })
@@ -75,7 +75,7 @@ const text = computed<string>(() => {
 
     const actualText: string = translatedString.value || translateKey || rawText
 
-    Logger.debug(`Chosen: '${actualText}' , from: ['${translatedString.value}', ' ${translateKey}', '${rawText}']`)
+    // Logger.debug(`Chosen: '${actualText}' , from: ['${translatedString.value}', ' ${translateKey}', '${rawText}']`)
 
     try {
         if (props.jsonText.with) {
