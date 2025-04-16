@@ -5,6 +5,7 @@ import type jsonText from "~/core/data/minecraft/JsonText";
 import {computed, ref} from "vue";
 import {stringOf} from "~/core/I18nService";
 import Logger from "~/utils/Logger";
+import {formatNumber} from "~/core/NumberUtil";
 
 const props = defineProps<{
     entry: CraftingPlanSummaryEntry
@@ -49,22 +50,30 @@ const tooltipStyle = computed<string>(() => {
     return `position: absolute; left: ${mousePosition.value.x - 10}px; top: ${mousePosition.value.y - 10}px;`
 })
 
-const tooltips: string[] = new Array<string>()
-if (props.entry.missingAmount) {
-    tooltips.push(`${stringOf('ae.crafting.statue.missing')} ${props.entry.missingAmount}`)
-}
-if (props.entry.storedAmount) {
-    tooltips.push(`${stringOf('ae.crafting.statue.available')} ${props.entry.storedAmount}`)
-}
-if (props.entry.craftAmount) {
-    tooltips.push(`${stringOf('ae.crafting.statue.to_craft')} ${props.entry.craftAmount}`)
-}
+const tooltips = computed(() => {
+    const result = new Array<string>()
+    if (props.entry.missingAmount) {
+        result.push(`${stringOf('ae.crafting.statue.missing')} ${formatNumber(props.entry.missingAmount)}`)
+    }
+    if (props.entry.storedAmount) {
+        result.push(`${stringOf('ae.crafting.statue.available')} ${formatNumber(props.entry.storedAmount)}`)
+    }
+    if (props.entry.craftAmount) {
+        result.push(`${stringOf('ae.crafting.statue.to_craft')} ${formatNumber(props.entry.craftAmount)}`)
+    }
+    return result
+})
+
+
+const keyImageUrl = computed(() => {
+    return `/aeResource/${props.entry.what.type}/${props.entry.what.id}`
+})
 </script>
 
 <template>
     <el-card
         :class="classed"
-        class="w-200px"
+        class="w-220px m-2"
         @mouseover="showTooltip = true"
         @mouseleave="showTooltip = false"
         @mousemove="onMouseMove"
@@ -76,27 +85,29 @@ if (props.entry.craftAmount) {
                     size="small"
                     class="my-1 block"
                 >
-                    {{ stringOf('ae.crafting.statue.missing') }} {{ props.entry.missingAmount }}
+                    {{ stringOf('ae.crafting.statue.missing') }} {{ formatNumber(props.entry.missingAmount) }}
                 </el-text>
                 <el-text
                     v-if="props.entry.storedAmount"
                     size="small"
                     class="my-1 block"
                 >
-                    {{ stringOf('ae.crafting.statue.available') }} {{ props.entry.storedAmount }}
+                    {{ stringOf('ae.crafting.statue.available') }} {{ formatNumber(props.entry.storedAmount) }}
                 </el-text>
                 <el-text
                     v-if="props.entry.craftAmount"
                     size="small"
                     class="my-1 block"
                 >
-                    {{ stringOf('ae.crafting.statue.crafting') }} {{ props.entry.craftAmount }}
+                    {{ stringOf('ae.crafting.statue.crafting') }} {{ formatNumber(props.entry.craftAmount) }}
                 </el-text>
             </div>
             <!-- height: 32px -->
-            <span class="material-symbols-outlined my-a ml-20px block font-size-8">
-                deployed_code
-            </span>
+            <img
+                class="my-a ml-1 block font-size-8 h-50px w-50px"
+                :alt="props.entry.what.id"
+                :src="keyImageUrl"
+            >
         </div>
     </el-card>
     <ItemTooltip

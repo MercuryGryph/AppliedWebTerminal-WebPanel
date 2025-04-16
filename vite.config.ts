@@ -108,6 +108,7 @@ export default defineConfig({
 
             '/storage': proxyRedirectConfigDefault,
             '/crafting': proxyRedirectConfigDefault,
+            '/aeResource': proxyRedirectConfigDefault,
         }
     },
 })
