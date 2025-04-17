@@ -8,10 +8,13 @@ export async function fetchAeStoragePaged(
     pageIndex: number,
     limitPerPage: number,
     sort: TerminalSort,
+    decrease: boolean,
+    searchText: string,
+    language: string,
     bearerToken: string,
 ): Promise<StorageData | undefined> {
     const response =
-        await fetch(`/storage?page=${pageIndex}&limit=${limitPerPage}&sort=${sort}`, {
+        await fetch(`/storage?page=${pageIndex}&limit=${limitPerPage}&sort=${sort}&decrease=${decrease}&search=${searchText}&lang=${language}`, {
             headers: {
                 "Authorization": `Bearer ${bearerToken}`,
             }

@@ -7,12 +7,9 @@ import {tr} from "~/core/I18nService";
 import {formatNumber} from "~/core/NumberUtil";
 import Logger from "~/utils/Logger";
 
-const props = withDefaults(defineProps<{
+const props = defineProps<{
     stack: MEStack
-    craftable?: boolean
-}>(), {
-    craftable: false
-})
+}>()
 
 const displayName = computed<jsonText | undefined>(() => {
     const raw = props.stack.what.displayName
@@ -57,7 +54,7 @@ const tooltips = computed(() => {
     if (props.stack.amount) {
         result.push(`${tr('ae.tooltip.stored')} ${props.stack.amount.toLocaleString()}`)
     }
-    if (props.craftable) {
+    if (props.stack.craftable) {
         result.push(`${tr('ae.tooltip.craftable')}`)
     }
     return result
@@ -83,9 +80,9 @@ const keyImageUrl = computed(() => {
             :src="keyImageUrl"
         >
         <el-text class="absolute pos-bottom-2px pos-right-2px" size="small">
-            {{ formatNumber(props.stack.amount) }}
+            {{ (!props.stack.amount && props.stack.craftable) ? tr("ae.tooltip.craft") : formatNumber(props.stack.amount) }}
         </el-text>
-        <el-text v-if="props.craftable" class="absolute pos-left-2px pos-top-0px">
+        <el-text v-if="props.stack.craftable" class="absolute pos-left-2px pos-top-0px">
             +
         </el-text>
     </div>

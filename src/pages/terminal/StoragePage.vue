@@ -3,22 +3,33 @@ import type {TerminalSort} from "~/core/AeUtils";
 import type MEStack from "~/core/data/ae/core/MEStack";
 
 import type PageMeta from "~/core/data/PageMeta";
-import {onMounted, onUnmounted, ref} from "vue"
+import {nextTick, onMounted, onUnmounted, ref} from "vue"
 import {fetchAeStoragePaged} from "~/core/AeUtils";
 import {useAppStorage} from "~/data/AppStorage";
 import Logger from "~/utils/Logger";
+import {useConfig} from "~/data/Config";
+import {tr} from "~/core/I18nService";
+import {Search} from "@element-plus/icons-vue";
 
 const appStorage = useAppStorage()
+const config = useConfig()
 
 const STACK_PER_PAGE = 15 * 5
 
 const sort = ref<TerminalSort>('BY_NAME')
-const stacks = ref<Array<MEStack>>([])
+const decrease = ref(false)
 
+const showStorage = ref(true)
+
+const stacks = ref<Array<MEStack>>([])
 const loadedPage = ref<number>(0)
 const pageMeta = ref<PageMeta | undefined>(undefined)
 const isLoading = ref<boolean>(false);
+
 const containerRef = ref<any>(null);
+const scrollContainer = ref<any>(null);
+
+const search = ref("")
 
 function loadMore() {
     if (pageMeta.value !== undefined) {
@@ -36,6 +47,9 @@ function loadMore() {
         loadedPage.value,
         STACK_PER_PAGE,
         sort.value,
+        decrease.value,
+        search.value,
+        config.localConfig.language,
         appStorage.token!,
     ).then((data) => {
         if (data) {
@@ -49,39 +63,59 @@ function loadMore() {
 
 loadMore()
 
-const scrollStyle = ref<string>('')
-
-function onResize() {
-    calcPadding()
-}
+const paddingStyle = ref<string>('')
 
 function calcPadding() {
     if (containerRef.value) {
         const rect = containerRef.value.getBoundingClientRect() as DOMRect
         const lineElements = Math.floor(rect.width / 64)
         const padding = (rect.width - (lineElements * 64)) / 2
-        scrollStyle.value = `padding-left: ${padding}px;`
+        paddingStyle.value = `padding-left: ${padding}px;`
     }
 }
 
 onMounted(() => {
     calcPadding()
-    window.addEventListener("resize", onResize)
+    window.addEventListener("resize", calcPadding)
 })
 
 onUnmounted(() => {
-    window.removeEventListener("resize", onResize)
+    window.removeEventListener("resize", calcPadding)
 })
+
+function onInputEnter() {
+    loadedPage.value = 0
+    pageMeta.value = undefined
+    stacks.value = []
+    isLoading.value = false
+
+    loadMore()
+
+    showStorage.value = false
+    nextTick(() => showStorage.value = true)
+}
+
 
 </script>
 
 <template>
     <div ref="containerRef">
+        <el-input
+            class="my-2"
+            clearable
+            v-model="search"
+            :prefix-icon="Search"
+            :placeholder="tr('terminal.input.search')"
+            @keyup.enter="onInputEnter"
+        />
         <div
+            ref="scrollContainer"
             v-infinite-scroll="loadMore"
             :infinite-scroll-distance="50"
+            :infinite-scroll-disabled="isLoading"
+            v-if="showStorage"
             class="max-h-80vh flex flex-wrap justify-start overflow-y-scroll"
-            :style="scrollStyle"
+            :style="paddingStyle"
         >
             <MEStackComponent
                 v-for="stack in stacks"
