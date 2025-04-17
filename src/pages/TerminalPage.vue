@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {ref} from "vue";
+import {onUnmounted, ref} from "vue";
 import {fetchCpuStatus} from "~/core/AeUtils";
 import {tr} from "~/core/I18nService";
 import {useAppStorage} from "~/data/AppStorage";
@@ -25,7 +25,11 @@ function refreshCpuStatus() {
     })
 }
 
-setInterval(refreshCpuStatus, 1000)
+const intervalID = setInterval(refreshCpuStatus, 1000)
+
+onUnmounted(() => {
+    clearInterval(intervalID)
+})
 
 </script>
 

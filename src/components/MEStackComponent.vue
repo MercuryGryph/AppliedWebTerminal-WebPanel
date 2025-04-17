@@ -73,6 +73,7 @@ const keyImageUrl = computed(() => {
     <div
         ref="hoverElement"
         class="stack-container relative h-64px w-64px"
+        v-bind="$attrs"
         @mouseleave="showTooltip = false"
         @mousemove="onMouseMove"
     >

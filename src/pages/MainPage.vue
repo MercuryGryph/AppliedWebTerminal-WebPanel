@@ -39,7 +39,7 @@ function onSelectTerminal(
     <div v-if="appStorage.currentTerminal">
         <DialogTerminalLogin/>
     </div>
-    <div class="mx-a h-full max-w-2000px min-w-300px w-70%">
+    <div v-bind="$attrs" class="mx-a h-full max-w-2000px min-w-300px w-70%">
         <el-row class="mx-4 my-2" justify="space-between">
             <el-text size="large" class="font-bold">
                 {{ tr('main.terminals.title') }}

@@ -84,8 +84,9 @@ const keyImageUrl = computed(() => {
 <template>
     <el-card
         ref="hoverElement"
-        :class="classed"
         class="relative m-2 max-w-220px min-w-220px"
+        :class="classed"
+        v-bind="$attrs"
         @mousemove="onMouseMove"
         @mouseleave="()=>{showTooltip = false}"
     >
@@ -119,13 +120,13 @@ const keyImageUrl = computed(() => {
                 :src="keyImageUrl"
             >
         </div>
+        <ItemTooltip
+            v-if="displayName"
+            v-show="showTooltip"
+            class="z-10000"
+            :tooltips="tooltips"
+            :style="tooltipStyle"
+            :text="displayName"
+        />
     </el-card>
-    <ItemTooltip
-        v-if="displayName"
-        v-show="showTooltip"
-        class="z-10000"
-        :tooltips="tooltips"
-        :style="tooltipStyle"
-        :text="displayName"
-    />
 </template>
