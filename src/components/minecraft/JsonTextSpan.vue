@@ -72,7 +72,7 @@ const text = computed<string>(() => {
         })
     }
 
-    const actualText: string = translatedString.value || translateKey || rawText
+    const actualText: string = rawText || translatedString.value || translateKey
 
     // Logger.debug(`Chosen: '${actualText}' , from: ['${translatedString.value}', ' ${translateKey}', '${rawText}']`)
 

@@ -2,6 +2,14 @@
 import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
 import type JsonText from "~/core/data/minecraft/JsonText";
 import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
+import MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
+import {JsonTextFrom} from "~/core/JsonTextUtils";
+import {computed, ref} from "vue";
+import type jsonText from "~/core/data/minecraft/JsonText";
+import Logger from "~/utils/Logger";
+import {useThrottleFn} from "@vueuse/core";
+import {tr} from "~/core/I18nService";
+import {formatNumber} from "~/core/NumberUtil";
 
 const tooltip1text: JsonText = {
     translate: 'block.ae2.sky_stone_block'
@@ -48,8 +56,8 @@ const statusEntry1: MECraftingStatusEntry = {
     activeAmount: 1000,
     pendingAmount: 2000,
     storedAmount: 1,
-    serial:0,
-    displayName:"{\"translate\": \"block.ae2.quartz_glass\"}",
+    serial: 0,
+    displayName: "{\"translate\": \"block.ae2.quartz_glass\"}",
     what: {
         id: "ae2:quartz_glass",
         displayName: "{\"translate\": \"block.ae2.quartz_glass\"}",
@@ -61,8 +69,8 @@ const statusEntry2: MECraftingStatusEntry = {
     activeAmount: 0,
     pendingAmount: 50000000,
     storedAmount: 0,
-    serial:0,
-    displayName:"{\"translate\": \"block.ae2.quartz_glass\"}",
+    serial: 0,
+    displayName: "{\"translate\": \"block.ae2.quartz_glass\"}",
     what: {
         id: "ae2:quartz_glass",
         displayName: "{\"translate\": \"block.ae2.quartz_glass\"}",
@@ -74,14 +82,60 @@ const statusEntry3: MECraftingStatusEntry = {
     activeAmount: 0,
     pendingAmount: 0,
     storedAmount: 114514,
-    serial:0,
-    displayName:"{\"translate\": \"block.ae2.quartz_glass\"}",
+    serial: 0,
+    displayName: "{\"translate\": \"block.ae2.quartz_glass\"}",
     what: {
         id: "ae2:quartz_glass",
         displayName: "{\"translate\": \"block.ae2.quartz_glass\"}",
         type: "ae2:i"
     }
 }
+
+const cpuStatus1: MECpuStatusBundle = {
+    busy: false,
+    coProcessorCount: 16,
+    craftingStatus: undefined,
+    id: 0,
+    name: undefined,
+    storageSize: 3932160
+}
+
+const cpuStatus2: MECpuStatusBundle = {
+    busy: false,
+    coProcessorCount: 2048,
+    craftingStatus: undefined,
+    id: 1,
+    name: JSON.stringify({
+        text: "Not A Cpu"
+    }),
+    storageSize: 536608768
+}
+
+const cpuStatus3: MECpuStatusBundle = {
+    busy: true,
+    coProcessorCount: 2048,
+    craftingStatus: {
+        crafting: {
+            amount: 1000,
+            what: {
+                displayName: "\"{\"translate\":\"block.ae2.256k_crafting_storage\"}\"",
+                id: "ae2:256k_crafting_storage",
+                type: "ae2:i"
+            },
+            craftable: true
+        },
+        totalItems: 114514,
+        progress: 807445418500,
+        elapsedTimeNanos: 1919810000
+    },
+    id: 2,
+    name: undefined,
+    storageSize: 536608768
+}
+
+
+
+const testClick = (it: MECpuStatusBundle) => console.log(it)
 </script>
 
 <template>
@@ -94,5 +148,9 @@ const statusEntry3: MECraftingStatusEntry = {
         <CraftingStatusEntryCard :entry="statusEntry1"/>
         <CraftingStatusEntryCard :entry="statusEntry2"/>
         <CraftingStatusEntryCard :entry="statusEntry3"/>
+        <CpuSelectionCard :status="cpuStatus1" :clicked="testClick"/>
+        <CpuSelectionCard :status="cpuStatus2"/>
+        <CpuSelectionCard :status="cpuStatus3"/>
+
     </div>
 </template>

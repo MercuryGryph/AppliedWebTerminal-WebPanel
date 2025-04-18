@@ -28,6 +28,7 @@
   "ae.tooltip.stored": "Stored: ",
   "ae.tooltip.craftable": "Craftable",
   "ae.tooltip.craft": "Craft",
+  "ae.crafting.cpu": "CPU #%d",
 
   "ae.crafting.status.stored": "Stored: %s",
   "ae.crafting.status.active": "Crafting: %s",
