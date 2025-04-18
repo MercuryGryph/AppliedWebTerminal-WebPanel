@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
 import type CraftingPlanSummary from "~/core/data/ae/craft/plan/CraftingPlanSummary";
-import {onMounted, ref} from "vue";
-import {createCraftPlan} from "~/core/AeUtils";
+import {nextTick, onMounted, onUnmounted, ref} from "vue";
+import {createCraftPlan, submitCraftingPlan} from "~/core/AeUtils";
 import {useAppStorage} from "~/data/AppStorage";
+import {ElNotification} from "element-plus";
 
 const props = defineProps<{
     what: AeKeyObject
@@ -12,8 +13,21 @@ const props = defineProps<{
 
 const appStorage = useAppStorage()
 
+
 const model = defineModel<boolean>()
 const summary = ref<CraftingPlanSummary | undefined>(undefined)
+
+const containerRef = ref<any>(null)
+const paddingStyle = ref<string>('')
+
+function calcPadding() {
+    if (containerRef.value) {
+        const rect = containerRef.value.getBoundingClientRect() as DOMRect
+        const lineElements = Math.floor(rect.width / 228)
+        const padding = (rect.width - (lineElements * 228)) / 2
+        paddingStyle.value = `padding-left: ${padding}px;`
+    }
+}
 
 onMounted(() => {
     createCraftPlan(
@@ -27,7 +41,35 @@ onMounted(() => {
             summary.value = data
         }
     })
+    nextTick(calcPadding)
+    window.addEventListener("resize", calcPadding)
 })
+
+onUnmounted(() => {
+    window.removeEventListener("resize", calcPadding)
+})
+
+function onSubmit() {
+    if (summary.value) {
+        submitCraftingPlan(summary.value.id, appStorage.token!).then((data) => {
+            if (data) {
+                if (data.success) {
+                    ElNotification({
+                        title: "Craft Plan Submit Successfully",
+                        type: "success",
+                    })
+                } else {
+                    ElNotification({
+                        title: "Craft Plan Submit Failure",
+                        message: `Craft Plan Submit failed by ${data.errorCode}`,
+                        type: "error",
+                    })
+                }
+            }
+        })
+        model.value = false
+    }
+}
 
 </script>
 
@@ -38,26 +80,25 @@ onMounted(() => {
                 Crafting Plan {{ summary ? `- ${summary.usedBytes.toLocaleString()} Bytes Used` : "" }}
             </el-text>
         </template>
-        <div class="flex flex-col">
-            <div class="content-container h-full w-full flex items-center justify-center">
-                <div v-if="summary" class="max-h-90% w-full flex flex-wrap justify-start overflow-y-scroll">
-                    <CraftingPlanEntryCard
-                        v-for="entry in summary.entries"
-                        :key="entry.what.type + entry.what.id"
-                        :entry="entry"
-                    />
-                </div>
-                <p v-if="!summary" class="adaptive-text">
-                    Calculating Please Wait...
-                </p>
+        <div ref="containerRef" class="content-container h-full w-full flex items-center justify-center">
+            <div v-if="summary" class="max-h-90% w-full flex flex-wrap justify-start overflow-y-scroll"
+                 :style="paddingStyle">
+                <CraftingPlanEntryCard
+                    v-for="entry in summary.entries"
+                    :key="entry.what.type + entry.what.id"
+                    :entry="entry"
+                />
             </div>
+            <p v-if="!summary" class="adaptive-text">
+                Calculating Please Wait...
+            </p>
         </div>
         <template #footer>
-            <el-row justify="space-around">
+            <el-row justify="space-between" class="px-2">
                 <el-button class="w-28" size="large" @click="model = false">
                     Cancel
                 </el-button>
-                <el-button type="primary" class="w-28" size="large" :disabled="!summary || summary.simulation">
+                <el-button type="primary" class="w-28" size="large" @click="onSubmit" :disabled="!summary || summary.simulation">
                     Start
                 </el-button>
             </el-row>
@@ -72,6 +113,7 @@ onMounted(() => {
     width: 100%;
     margin: 0 auto;
 }
+
 .adaptive-text {
     will-change: font-size;
     font-size: clamp(14px, calc(0.5rem + 2cqw), 24px);
@@ -90,7 +132,6 @@ onMounted(() => {
 .dialog_crafting_plan {
     .el-dialog__body {
         height: 82% !important;
-        overflow-y: scroll;
     }
 }
 </style>

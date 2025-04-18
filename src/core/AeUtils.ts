@@ -4,6 +4,8 @@ import type StorageData from "~/core/data/ae/StorageData";
 import CalculationStrategy from "~/core/data/ae/craft/CalculationStrategy";
 import CraftingPlanSummary from "~/core/data/ae/craft/plan/CraftingPlanSummary";
 import CraftingRequest from "~/core/data/ae/craft/CraftingRequest";
+import CraftingPlanSubmitResult from "~/core/data/ae/craft/plan/CraftingPlanSubmitResult";
+import CraftingPlanSubmitRequest from "~/core/data/ae/craft/plan/CraftingPlanSubmitRequest";
 
 export type TerminalSort = 'BY_COUNT' | 'BY_NAME' | 'BY_ID'
 
@@ -34,7 +36,7 @@ export async function fetchCpuStatus(bearerToken: string): Promise<Array<MECpuSt
             "Authorization": `Bearer ${bearerToken}`,
         }
     })
-    if (response.ok){
+    if (response.ok) {
         return await response.json() as Array<MECpuStatusBundle>
     }
 }
@@ -77,5 +79,28 @@ export async function createCraftPlan(
 
     if (response.ok) {
         return await response.json() as CraftingPlanSummary;
+    }
+}
+
+export async function submitCraftingPlan(
+    id: number,
+    bearerToken: string
+): Promise<CraftingPlanSubmitResult | undefined> {
+    const submitRequest: CraftingPlanSubmitRequest = {
+        id: id
+    }
+
+    const response = await fetch('/crafting/submitCraftingPlan', {
+        cache: 'no-cache',
+        headers: {
+            'Authorization': `Bearer ${bearerToken}`,
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(submitRequest)
+    })
+
+    if (response.ok) {
+        return await response.json() as CraftingPlanSubmitResult;
     }
 }

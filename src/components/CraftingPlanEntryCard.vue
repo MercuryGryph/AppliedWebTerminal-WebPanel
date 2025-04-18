@@ -84,7 +84,7 @@ const keyImageUrl = computed(() => {
 <template>
     <el-card
         ref="hoverElement"
-        class="relative m-2 max-w-220px min-w-220px"
+        class="relative m-1 max-w-220px min-w-220px"
         :class="classed"
         v-bind="$attrs"
         @mousemove="onMouseMove"

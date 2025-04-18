@@ -33,6 +33,7 @@ const scrollContainer = ref<any>(null);
 
 const search = ref("")
 
+const showAmountSelect = ref(false);
 const showCraftPlan = ref(false)
 const requestKey = ref<AeKeyObject | undefined>(undefined)
 const requestAmount = ref(0)
@@ -81,7 +82,7 @@ function calcPadding() {
 }
 
 onMounted(() => {
-    calcPadding()
+    nextTick(calcPadding)
     window.addEventListener("resize", calcPadding)
 })
 
@@ -105,16 +106,21 @@ function refreshStorage() {
 const debounceRefreshStorage = useDebounceFn(refreshStorage, 500, {rejectOnCancel: true})
 
 function onInput(value: any) {
-    debounceRefreshStorage().catch(() => {})
+    debounceRefreshStorage().catch(() => {
+    })
 }
 
 function onStackClick(stack: MEStack) {
-    console.log(stack)
     if (stack.craftable) {
         requestKey.value = stack.what
-        requestAmount.value = 50
-        showCraftPlan.value = true
+        requestAmount.value = 0
+        showAmountSelect.value = true
     }
+}
+
+function onSelectClick() {
+    showAmountSelect.value = false
+    showCraftPlan.value = true
 }
 
 </script>
@@ -127,6 +133,20 @@ function onStackClick(stack: MEStack) {
         :amount="requestAmount"
         class="h-80% w-80%"
     />
+    <el-dialog v-if="showAmountSelect" v-model="showAmountSelect" align-center>
+        <template #header>
+            <el-text>
+                Select Amount
+            </el-text>
+        </template>
+        <el-row>
+            <MEStackComponent :stack="{what: requestKey, amount: 0, craftable: false}"/>
+            <el-input type="number" class="w-80 px-4" v-model="requestAmount"/>
+            <el-button class="h-64px w-20" size="large" :disabled="!requestAmount" @click="onSelectClick">
+                Next
+            </el-button>
+        </el-row>
+    </el-dialog>
     <div ref="containerRef" v-bind="$attrs">
         <el-input
             class="my-2"

@@ -46,7 +46,7 @@ const onMouseMove = useThrottleFn((e: MouseEvent) => {
 }, 100)
 
 const tooltipStyle = computed<string>(() => {
-    return `position: absolute; left: ${mousePosition.value.x + 10}px; top: ${mousePosition.value.y + 10}px;`
+    return `position: fixed; left: ${mousePosition.value.x + 10}px; top: ${mousePosition.value.y + 10}px;`
 })
 
 const tooltips = computed(() => {
