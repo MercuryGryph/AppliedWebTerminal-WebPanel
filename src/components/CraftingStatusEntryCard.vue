@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import type jsonText from "~/core/data/minecraft/JsonText";
+import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
 
+import type jsonText from "~/core/data/minecraft/JsonText";
 import {useThrottleFn} from "@vueuse/core";
 import {computed, ref} from "vue";
 import {tr} from "~/core/I18nService";
 import {formatNumber} from "~/core/NumberUtil";
 import Logger from "~/utils/Logger";
-import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
 
 const props = defineProps<{
     entry: MECraftingStatusEntry
 }>()
 
 const classed = computed<string>(() => {
-    let entry = props.entry
-    if (entry.activeAmount != 0) {
+    const entry = props.entry
+    if (entry.activeAmount !== 0) {
         return 'card_bg_crafting'
     }
-    if (entry.pendingAmount != 0) {
+    if (entry.pendingAmount !== 0) {
         return 'card_bg_pending'
     }
     return ""

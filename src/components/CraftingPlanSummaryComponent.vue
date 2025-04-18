@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
 import type CraftingPlanSummary from "~/core/data/ae/craft/plan/CraftingPlanSummary";
+import {ElNotification} from "element-plus";
 import {nextTick, onMounted, onUnmounted, ref} from "vue";
 import {createCraftPlan, submitCraftingPlan} from "~/core/AeUtils";
 import {useAppStorage} from "~/data/AppStorage";
-import {ElNotification} from "element-plus";
 
 const props = defineProps<{
     what: AeKeyObject
@@ -81,8 +81,10 @@ function onSubmit() {
             </el-text>
         </template>
         <div ref="containerRef" class="content-container h-full w-full flex items-center justify-center">
-            <div v-if="summary" class="max-h-90% w-full flex flex-wrap justify-start overflow-y-scroll"
-                 :style="paddingStyle">
+            <div
+                v-if="summary" class="max-h-90% w-full flex flex-wrap justify-start overflow-y-scroll"
+                :style="paddingStyle"
+            >
                 <CraftingPlanEntryCard
                     v-for="entry in summary.entries"
                     :key="entry.what.type + entry.what.id"
@@ -98,7 +100,7 @@ function onSubmit() {
                 <el-button class="w-28" size="large" @click="model = false">
                     Cancel
                 </el-button>
-                <el-button type="primary" class="w-28" size="large" @click="onSubmit" :disabled="!summary || summary.simulation">
+                <el-button type="primary" class="w-28" size="large" :disabled="!summary || summary.simulation" @click="onSubmit">
                     Start
                 </el-button>
             </el-row>

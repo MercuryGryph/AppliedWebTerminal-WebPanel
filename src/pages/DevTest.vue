@@ -1,15 +1,8 @@
 <script setup lang="ts">
+import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
+import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
 import type JsonText from "~/core/data/minecraft/JsonText";
-import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
-import MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
-import {JsonTextFrom} from "~/core/JsonTextUtils";
-import {computed, ref} from "vue";
-import type jsonText from "~/core/data/minecraft/JsonText";
-import Logger from "~/utils/Logger";
-import {useThrottleFn} from "@vueuse/core";
-import {tr} from "~/core/I18nService";
-import {formatNumber} from "~/core/NumberUtil";
 
 const tooltip1text: JsonText = {
     translate: 'block.ae2.sky_stone_block'
@@ -118,14 +111,14 @@ const cpuStatus3: MECpuStatusBundle = {
         crafting: {
             amount: 1000,
             what: {
-                displayName: "\"{\"translate\":\"block.ae2.256k_crafting_storage\"}\"",
+                displayName: "{\"translate\":\"block.ae2.256k_crafting_storage\"}",
                 id: "ae2:256k_crafting_storage",
                 type: "ae2:i"
             },
             craftable: true
         },
-        totalItems: 114514,
-        progress: 807445418500,
+        totalItems: 2147483647,
+        progress: 10717740,
         elapsedTimeNanos: 1919810000
     },
     id: 2,
@@ -151,6 +144,5 @@ const testClick = (it: MECpuStatusBundle) => console.log(it)
         <CpuSelectionCard :status="cpuStatus1" :clicked="testClick"/>
         <CpuSelectionCard :status="cpuStatus2"/>
         <CpuSelectionCard :status="cpuStatus3"/>
-
     </div>
 </template>

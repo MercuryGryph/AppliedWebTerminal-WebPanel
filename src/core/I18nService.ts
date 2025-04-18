@@ -1,4 +1,4 @@
-import {sprintf, vsprintf} from "sprintf-js";
+import { vsprintf} from "sprintf-js";
 import {useConfig} from "~/data/Config";
 
 const fetchedTranslate: Map<string, Map<string, string>> = new Map();

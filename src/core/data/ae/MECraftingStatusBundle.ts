@@ -1,5 +1,5 @@
 import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
-import MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
+import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 
 export interface MECraftingServiceStatusBundle {
     cpus: Array<MECpuStatusBundle>,

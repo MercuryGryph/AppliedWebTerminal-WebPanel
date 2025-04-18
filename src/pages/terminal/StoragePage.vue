@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import type {TerminalSort} from "~/core/AeUtils";
-import type MEStack from "~/core/data/ae/core/MEStack";
+import type AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
 
+import type MEStack from "~/core/data/ae/core/MEStack";
 import type PageMeta from "~/core/data/PageMeta";
-import {nextTick, onMounted, onUnmounted, ref} from "vue"
-import {fetchAeStoragePaged} from "~/core/AeUtils";
-import {useAppStorage} from "~/data/AppStorage";
-import Logger from "~/utils/Logger";
-import {useConfig} from "~/data/Config";
-import {tr} from "~/core/I18nService";
 import {Search} from "@element-plus/icons-vue";
 import {useDebounceFn} from "@vueuse/core";
-import AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
+import {nextTick, onMounted, onUnmounted, ref} from "vue"
+import {fetchAeStoragePaged} from "~/core/AeUtils";
+import {tr} from "~/core/I18nService";
+import {useAppStorage} from "~/data/AppStorage";
+import {useConfig} from "~/data/Config";
+import Logger from "~/utils/Logger";
 
 const appStorage = useAppStorage()
 const config = useConfig()
@@ -105,7 +105,7 @@ function refreshStorage() {
 
 const debounceRefreshStorage = useDebounceFn(refreshStorage, 500, {rejectOnCancel: true})
 
-function onInput(value: any) {
+function onInput(_value: any) {
     debounceRefreshStorage().catch(() => {
     })
 }
@@ -141,7 +141,7 @@ function onSelectClick() {
         </template>
         <el-row>
             <MEStackComponent :stack="{what: requestKey, amount: 0, craftable: false}"/>
-            <el-input type="number" class="w-80 px-4" v-model="requestAmount"/>
+            <el-input v-model="requestAmount" type="number" class="w-80 px-4"/>
             <el-button class="h-64px w-20" size="large" :disabled="!requestAmount" @click="onSelectClick">
                 Next
             </el-button>
@@ -149,20 +149,20 @@ function onSelectClick() {
     </el-dialog>
     <div ref="containerRef" v-bind="$attrs">
         <el-input
+            v-model="search"
             class="my-2"
             clearable
-            v-model="search"
             :prefix-icon="Search"
             :placeholder="tr('terminal.input.search')"
             @keyup.enter="refreshStorage"
             @input="onInput"
         />
         <div
+            v-if="showStorage"
             ref="scrollContainer"
             v-infinite-scroll="loadMore"
             :infinite-scroll-distance="50"
             :infinite-scroll-disabled="isLoading"
-            v-if="showStorage"
             class="max-h-80vh flex flex-wrap justify-start overflow-y-scroll"
             :style="paddingStyle"
         >

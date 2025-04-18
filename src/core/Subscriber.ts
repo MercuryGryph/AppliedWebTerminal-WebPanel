@@ -1,7 +1,7 @@
 export type Consumer<T> = ((it: T) => void)
 
 export class Subscriber<T> {
-    private listeners = Array<Consumer<T>>()
+    private listeners = new Array<Consumer<T>>()
 
     constructor() {
     }

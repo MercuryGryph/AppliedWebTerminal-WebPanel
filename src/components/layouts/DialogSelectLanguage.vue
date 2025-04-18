@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {ref, watch} from "vue";
-import {tr, trLanguageName, trSpecial} from "~/core/I18nService";
+import {tr, trLanguageName} from "~/core/I18nService";
 import {fetchTranslation} from "~/core/JsonTextUtils";
 import {useAppStorage} from "~/data/AppStorage";
 import {useConfig} from "~/data/Config";

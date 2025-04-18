@@ -1,11 +1,11 @@
 import type AeKeyTypeInfo from "~/core/data/ae/core/aekey/AeKeyTypeInfo";
 import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
+import type CalculationStrategy from "~/core/data/ae/craft/CalculationStrategy";
+import type CraftingRequest from "~/core/data/ae/craft/CraftingRequest";
+import type CraftingPlanSubmitRequest from "~/core/data/ae/craft/plan/CraftingPlanSubmitRequest";
+import type CraftingPlanSubmitResult from "~/core/data/ae/craft/plan/CraftingPlanSubmitResult";
+import type CraftingPlanSummary from "~/core/data/ae/craft/plan/CraftingPlanSummary";
 import type StorageData from "~/core/data/ae/StorageData";
-import CalculationStrategy from "~/core/data/ae/craft/CalculationStrategy";
-import CraftingPlanSummary from "~/core/data/ae/craft/plan/CraftingPlanSummary";
-import CraftingRequest from "~/core/data/ae/craft/CraftingRequest";
-import CraftingPlanSubmitResult from "~/core/data/ae/craft/plan/CraftingPlanSubmitResult";
-import CraftingPlanSubmitRequest from "~/core/data/ae/craft/plan/CraftingPlanSubmitRequest";
 
 export type TerminalSort = 'BY_COUNT' | 'BY_NAME' | 'BY_ID'
 
@@ -87,7 +87,7 @@ export async function submitCraftingPlan(
     bearerToken: string
 ): Promise<CraftingPlanSubmitResult | undefined> {
     const submitRequest: CraftingPlanSubmitRequest = {
-        id: id
+        id
     }
 
     const response = await fetch('/crafting/submitCraftingPlan', {

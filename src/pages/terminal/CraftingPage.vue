@@ -1,20 +1,18 @@
 <script setup lang="ts">
 
+import type {MECraftingServiceStatusBundle} from "~/core/data/ae/MECraftingStatusBundle";
+import type {Consumer, Subscriber} from "~/core/Subscriber";
 import {useAppStorage} from "~/data/AppStorage";
-import {Consumer, Subscriber} from "~/core/Subscriber";
-import {MECraftingServiceStatusBundle} from "~/core/data/ae/MECraftingStatusBundle";
 
 const props = defineProps<{
     sender: Consumer<any>,
     messageSubscriber: Subscriber<MECraftingServiceStatusBundle>
 }>()
 
-const appStorage = useAppStorage()
-
 </script>
 
 <template>
-
+    //make lint happy
 </template>
 
 <style scoped>

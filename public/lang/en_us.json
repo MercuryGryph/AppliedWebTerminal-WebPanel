@@ -36,5 +36,9 @@
 
   "websocket.connection.error": "Connection Failed",
   "websocket.connection.established": "Connection Established",
-  "websocket.connection.disconnected": "Disconnected from server"
+  "websocket.connection.disconnected": "Disconnected from server",
+  "ae.cpu.storage": "%s Storage",
+  "ae.cpu.coprocessors": "%d Co-Processors",
+  "ae.cpu.crafting": "Crafting %d %s",
+  "ae.cpu.crafting_progress": "Crafted %.2f%% in %s"
 }

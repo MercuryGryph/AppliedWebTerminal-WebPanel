@@ -7,8 +7,9 @@ export default antfu({
     stylistic: false
 }, {
     rules: {
-        'indent': ["error", 4, { "SwitchCase": 1 }],
+        'indent': ["error", 4, {"SwitchCase": 1}],
         'vue/html-indent': ["error", 4],
-        'vue/html-closing-bracket-spacing': "off"
+        'vue/html-closing-bracket-spacing': "off",
+        "no-console": "off"
     }
 })
