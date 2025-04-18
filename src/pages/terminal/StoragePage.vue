@@ -10,6 +10,7 @@ import Logger from "~/utils/Logger";
 import {useConfig} from "~/data/Config";
 import {tr} from "~/core/I18nService";
 import {Search} from "@element-plus/icons-vue";
+import {useDebounceFn} from "@vueuse/core";
 
 const appStorage = useAppStorage()
 const config = useConfig()
@@ -83,18 +84,24 @@ onUnmounted(() => {
     window.removeEventListener("resize", calcPadding)
 })
 
-function onInputEnter() {
+function refreshStorage() {
     loadedPage.value = 0
     pageMeta.value = undefined
     stacks.value = []
     isLoading.value = false
 
-    loadMore()
-
     showStorage.value = false
-    nextTick(() => showStorage.value = true)
+    nextTick(() => {
+        showStorage.value = true
+        loadMore()
+    })
 }
 
+const debounceRefreshStorage = useDebounceFn(refreshStorage, 500, {rejectOnCancel: true})
+
+function onInput(value: any) {
+    debounceRefreshStorage().catch(() => {})
+}
 
 </script>
 
@@ -106,7 +113,8 @@ function onInputEnter() {
             v-model="search"
             :prefix-icon="Search"
             :placeholder="tr('terminal.input.search')"
-            @keyup.enter="onInputEnter"
+            @keyup.enter="refreshStorage"
+            @input="onInput"
         />
         <div
             ref="scrollContainer"
