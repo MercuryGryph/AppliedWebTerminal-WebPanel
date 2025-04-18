@@ -11,6 +11,7 @@ import {useConfig} from "~/data/Config";
 import {tr} from "~/core/I18nService";
 import {Search} from "@element-plus/icons-vue";
 import {useDebounceFn} from "@vueuse/core";
+import AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
 
 const appStorage = useAppStorage()
 const config = useConfig()
@@ -31,6 +32,10 @@ const containerRef = ref<any>(null);
 const scrollContainer = ref<any>(null);
 
 const search = ref("")
+
+const showCraftPlan = ref(false)
+const requestKey = ref<AeKeyObject | undefined>(undefined)
+const requestAmount = ref(0)
 
 function loadMore() {
     if (pageMeta.value !== undefined) {
@@ -103,10 +108,26 @@ function onInput(value: any) {
     debounceRefreshStorage().catch(() => {})
 }
 
+function onStackClick(stack: MEStack) {
+    console.log(stack)
+    if (stack.craftable) {
+        requestKey.value = stack.what
+        requestAmount.value = 50
+        showCraftPlan.value = true
+    }
+}
+
 </script>
 
 <template>
-    <div ref="containerRef">
+    <CraftingPlanSummaryComponent
+        v-if="showCraftPlan"
+        v-model="showCraftPlan"
+        :what="requestKey"
+        :amount="requestAmount"
+        class="h-80% w-80%"
+    />
+    <div ref="containerRef" v-bind="$attrs">
         <el-input
             class="my-2"
             clearable
@@ -127,8 +148,9 @@ function onInput(value: any) {
         >
             <MEStackComponent
                 v-for="stack in stacks"
-                :key="stack.what.id"
+                :key="stack.what.type + stack.what.id"
                 :stack="stack"
+                @click="() => onStackClick(stack)"
             />
         </div>
         <el-text v-if="isLoading" size="large">
