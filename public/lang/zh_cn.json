@@ -28,11 +28,9 @@
   "ae.tooltip.stored": "已存储：",
   "ae.tooltip.craftable": "可合成",
   "ae.tooltip.craft": "合成",
-
   "ae.crafting.status.stored": "可用数量: %s",
   "ae.crafting.status.active": "正在合成: %s",
   "ae.crafting.status.pending": "计划合成: %s",
-
   "websocket.connection.error": "连接失败",
   "websocket.connection.established": "已连接",
   "websocket.connection.disconnected": "连接已断开",

@@ -1,3 +1,6 @@
+import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
+
 plugins {
     id 'java-library'
     id("com.github.node-gradle.node") version "7.1.0"
@@ -23,4 +26,114 @@ tasks.register("runNpmDev", NpmTask) {
 tasks.register("clearDist", Delete) {
     group = 'npm'
     delete 'dist/'
+}
+def prettyJson = { Object json ->
+    def rawJson = new JsonBuilder(json).toPrettyString()
+    def decodedJson = rawJson.replaceAll(/\\u([0-9a-fA-F]{4})/) {
+        new String(Character.toChars(Integer.parseInt(it[1], 16)))
+    }
+    return decodedJson.replace("    ", "  ")
+}
+
+tasks.register("syncLangFiles") {
+    def langDir = project.file("public/lang")
+    doLast {
+
+
+        def enUSFile = new File(langDir, "en_us.json")
+        def enUSContent = new JsonSlurper().parseText(enUSFile.text)
+
+        def jsonFiles = langDir.listFiles({ dir, name -> name.endsWith('.json') && !name.contains("all") } as FilenameFilter)
+
+        jsonFiles.each {
+            if (it.name == 'en_us.json' || it.name == 'en_ud.json') return
+
+            def langContent = new JsonSlurper().parseText(it.text)
+            boolean modified = false
+
+            def enKeys = enUSContent.keySet()
+            def langKeys = langContent.keySet()
+
+            (enKeys - langKeys).each { key ->
+                langContent[key] = enUSContent[key]
+                modified = true
+                println "  [added key] ${it.name} -> $key"
+            }
+
+            (langKeys - enKeys).each { key ->
+                langContent.remove(key)
+                modified = true
+                println "  [removed key] ${it.name} -> $key"
+            }
+
+            if (modified) {
+                def updatedContent = prettyJson(langContent)
+
+                it.write(updatedContent, 'UTF-8')
+                println "Updated ${it.name}"
+            }
+        }
+    }
+}
+
+def toUpsideDown = { String normal ->
+    char[] ud = new char[normal.length()];
+
+    for(int i = 0; i < normal.length(); ++i) {
+        char c = normal.charAt(i);
+        if (c != '%') {
+            int lookup = "abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_,;.?!/\\'".indexOf(c as int);
+            if (lookup >= 0) {
+                c = "ɐqɔpǝɟbɥıظʞןɯuuodbɹsʇnʌʍxʎzⱯᗺƆᗡƎℲ⅁HIſʞꞀWNOԀὉᴚS⟘∩ΛMXʎZ0ƖᄅƐㄣϛ9ㄥ86‾'؛˙¿¡/\\,".charAt(lookup);
+            }
+
+            ud[normal.length() - 1 - i] = c;
+        } else {
+            String fmtArg;
+            for(fmtArg = ""; Character.isDigit(c) || c == '%' || c == '$' || c == 's' || c == 'd'; c = i == normal.length() ? 0 : normal.charAt(i)) {
+                fmtArg = fmtArg + c;
+                ++i;
+            }
+
+            --i;
+
+            for(int j = 0; j < fmtArg.length(); ++j) {
+                ud[normal.length() - 1 - i + j] = fmtArg.charAt(j);
+            }
+        }
+    }
+
+    def rt = new StringBuilder()
+
+    ud.eachWithIndex { char c, int i ->
+        if ( c == '(') {
+            rt.append(')')
+        } else if (c == ')') {
+            rt.append('(')
+        } else {
+            rt.append(c)
+        }
+
+    }
+
+    return rt.toString()
+}
+
+tasks.register("generateUpsideDown") {
+    def langDir = project.layout.projectDirectory.dir("public/lang")
+    def sourceFile = langDir.file("en_us.json").asFile
+    def targetFile = langDir.file("en_ud.json").asFile
+
+    doLast {
+        def enUSContent = new JsonSlurper().parseText(sourceFile.text)
+
+        def enUDContent = enUSContent.collectEntries { key, value ->
+            [
+                    key, toUpsideDown(value)
+            ]
+        }
+
+        def jsonString = prettyJson(enUDContent)
+        targetFile.write(jsonString, "UTF-8")
+    }
 }
