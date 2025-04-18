@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
 import type JsonText from "~/core/data/minecraft/JsonText";
+import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
 
 const tooltip1text: JsonText = {
     translate: 'block.ae2.sky_stone_block'
@@ -42,6 +43,45 @@ const entryLooooooooong: CraftingPlanSummaryEntry = {
     },
     storedAmount: 800_000_000,
 }
+
+const statusEntry1: MECraftingStatusEntry = {
+    activeAmount: 1000,
+    pendingAmount: 2000,
+    storedAmount: 1,
+    serial:0,
+    displayName:"{\"translate\": \"block.ae2.quartz_glass\"}",
+    what: {
+        id: "ae2:quartz_glass",
+        displayName: "{\"translate\": \"block.ae2.quartz_glass\"}",
+        type: "ae2:i"
+    }
+}
+
+const statusEntry2: MECraftingStatusEntry = {
+    activeAmount: 0,
+    pendingAmount: 50000000,
+    storedAmount: 0,
+    serial:0,
+    displayName:"{\"translate\": \"block.ae2.quartz_glass\"}",
+    what: {
+        id: "ae2:quartz_glass",
+        displayName: "{\"translate\": \"block.ae2.quartz_glass\"}",
+        type: "ae2:i"
+    }
+}
+
+const statusEntry3: MECraftingStatusEntry = {
+    activeAmount: 0,
+    pendingAmount: 0,
+    storedAmount: 114514,
+    serial:0,
+    displayName:"{\"translate\": \"block.ae2.quartz_glass\"}",
+    what: {
+        id: "ae2:quartz_glass",
+        displayName: "{\"translate\": \"block.ae2.quartz_glass\"}",
+        type: "ae2:i"
+    }
+}
 </script>
 
 <template>
@@ -51,5 +91,8 @@ const entryLooooooooong: CraftingPlanSummaryEntry = {
         <CraftingPlanEntryCard :entry="entry2"/>
         <CraftingPlanEntryCard :entry="entry3"/>
         <CraftingPlanEntryCard :entry="entryLooooooooong"/>
+        <CraftingStatusEntryCard :entry="statusEntry1"/>
+        <CraftingStatusEntryCard :entry="statusEntry2"/>
+        <CraftingStatusEntryCard :entry="statusEntry3"/>
     </div>
 </template>

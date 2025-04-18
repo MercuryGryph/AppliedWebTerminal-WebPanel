@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
 import type jsonText from "~/core/data/minecraft/JsonText";
 
 import {useThrottleFn} from "@vueuse/core";
@@ -7,21 +6,25 @@ import {computed, ref} from "vue";
 import {tr} from "~/core/I18nService";
 import {formatNumber} from "~/core/NumberUtil";
 import Logger from "~/utils/Logger";
+import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
 
 const props = defineProps<{
-    entry: CraftingPlanSummaryEntry
+    entry: MECraftingStatusEntry
 }>()
 
 const classed = computed<string>(() => {
-    let res: string = ''
-    if (props.entry.missingAmount) {
-        res += 'card_bg_warn'
+    let entry = props.entry
+    if (entry.activeAmount != 0) {
+        return 'card_bg_crafting'
     }
-    return res
+    if (entry.pendingAmount != 0) {
+        return 'card_bg_pending'
+    }
+    return ""
 })
 
 const displayName = computed<jsonText | undefined>(() => {
-    const raw = props.entry.what.displayName
+    const raw = props.entry.what!.displayName
     try {
         const jsonText = JSON.parse(raw)
         if (jsonText) {
@@ -63,21 +66,21 @@ const tooltipStyle = computed<string>(() => {
 
 const tooltips = computed(() => {
     const result = new Array<string>()
-    if (props.entry.missingAmount) {
-        result.push(`${tr('ae.crafting.status.missing')}${formatNumber(props.entry.missingAmount)}`)
-    }
     if (props.entry.storedAmount) {
-        result.push(`${tr('ae.crafting.status.available')}${formatNumber(props.entry.storedAmount)}`)
+        result.push(tr('ae.crafting.status.stored', formatNumber(props.entry.storedAmount)))
     }
-    if (props.entry.craftAmount) {
-        result.push(`${tr('ae.crafting.status.to_craft')}${formatNumber(props.entry.craftAmount)}`)
+    if (props.entry.activeAmount) {
+        result.push(tr('ae.crafting.status.active', formatNumber(props.entry.storedAmount)))
+    }
+    if (props.entry.pendingAmount) {
+        result.push(tr('ae.crafting.status.pending', formatNumber(props.entry.pendingAmount)))
     }
     return result
 })
 
 
 const keyImageUrl = computed(() => {
-    return `/aeResource/${props.entry.what.type}/${props.entry.what.id}`
+    return `/aeResource/${props.entry.what!.type}/${props.entry.what!.id}`
 })
 </script>
 
@@ -93,30 +96,30 @@ const keyImageUrl = computed(() => {
         <div class="h-58px flex flex-wrap justify-end text-right">
             <div class="mx-a my-a grow">
                 <el-text
-                    v-if="props.entry.missingAmount"
-                    size="small"
-                    class="my-1 block"
-                >
-                    {{ tr('ae.crafting.status.missing') }}{{ formatNumber(props.entry.missingAmount) }}
-                </el-text>
-                <el-text
                     v-if="props.entry.storedAmount"
                     size="small"
                     class="my-1 block"
                 >
-                    {{ tr('ae.crafting.status.available') }}{{ formatNumber(props.entry.storedAmount) }}
+                    {{ tr('ae.crafting.status.stored', formatNumber(props.entry.storedAmount)) }}
                 </el-text>
                 <el-text
-                    v-if="props.entry.craftAmount"
+                    v-if="props.entry.activeAmount"
                     size="small"
                     class="my-1 block"
                 >
-                    {{ tr('ae.crafting.status.to_craft') }}{{ formatNumber(props.entry.craftAmount) }}
+                    {{ tr('ae.crafting.status.active', formatNumber(props.entry.storedAmount)) }}
+                </el-text>
+                <el-text
+                    v-if="props.entry.pendingAmount"
+                    size="small"
+                    class="my-1 block"
+                >
+                    {{ tr('ae.crafting.status.pending', formatNumber(props.entry.pendingAmount)) }}
                 </el-text>
             </div>
             <img
                 class="my-a ml-1 block h-50px w-50px font-size-8"
-                :alt="props.entry.what.id"
+                :alt="props.entry.what!.id"
                 :src="keyImageUrl"
             >
         </div>

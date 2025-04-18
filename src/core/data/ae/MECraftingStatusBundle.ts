@@ -1,14 +1,18 @@
 import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
+import MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 
-interface MECraftingStatusBundle {
+export interface MECraftingServiceStatusBundle {
+    cpus: Array<MECpuStatusBundle>,
+    craftingStatus: MECraftingStatusBundle
+}
+
+export interface MECraftingStatusBundle {
     fullStatus: boolean
     elapsedTime: number
     remainingItemCount: number
     startItemCount: number
     entries: Array<MECraftingStatusEntry>
 }
-
-export default MECraftingStatusBundle
 
 export function updateMECraftingStatusBundle(
     old: MECraftingStatusBundle | undefined,

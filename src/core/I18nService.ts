@@ -1,7 +1,17 @@
-import {vsprintf} from "sprintf-js";
+import {sprintf, vsprintf} from "sprintf-js";
 import {useConfig} from "~/data/Config";
 
 const fetchedTranslate: Map<string, Map<string, string>> = new Map();
+
+export function trLanguageName(
+    language: string
+) : string{
+    const res = fetchedTranslate.get(language)?.get("lang.name")
+    if (res !== undefined) {
+        return res
+    }
+    return language
+}
 
 export function tr(
     key: string,

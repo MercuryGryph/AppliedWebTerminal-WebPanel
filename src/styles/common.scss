@@ -1,18 +1,31 @@
 html.dark {
   --app-card-bg-warn: #993c3c;
   --app-divider-border: white;
+  --app-card-bg-crafting: #43A047;
+  --app-card-bg-pending: #bd990f;
   --app-tooltip-color: rgba(0, 0, 0, 0.8);
   --app-mestack-color: rgba(255, 255, 255, 0.2);
 }
+
 html:not(.dark) {
   --app-card-bg-warn: #fba0a0;
   --app-divider-border: #787575;
+  --app-card-bg-crafting: #94de87;
+  --app-card-bg-pending: #ffef99;
   --app-tooltip-color: rgba(255, 255, 255, 0.8);
   --app-mestack-color: rgba(0, 0, 0, 0.2);
 }
 
 .card_bg_warn {
   background: var(--app-card-bg-warn);
+}
+
+.card_bg_crafting {
+  background: var(--app-card-bg-crafting);
+}
+
+.card_bg_pending {
+  background: var(--app-card-bg-pending);
 }
 
 .border_color_el {
