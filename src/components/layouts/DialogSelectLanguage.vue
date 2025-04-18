@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {ref, watch} from "vue";
-import {tr} from "~/core/I18nService";
+import {tr, trLanguageName, trSpecial} from "~/core/I18nService";
 import {fetchTranslation} from "~/core/JsonTextUtils";
 import {useAppStorage} from "~/data/AppStorage";
 import {useConfig} from "~/data/Config";
@@ -102,19 +102,18 @@ function removeLanguage(
 <template>
     <el-dialog
         v-model="model"
-        width="210px"
         :title="tr('language.selector.title')"
-        class="language-selector"
+        class="language-selector w-fit"
     >
         <el-radio-group v-model="selectedLanguage" class="max-h-60vh w-full flex-col items-stretch">
             <el-card class="my-0.5">
                 <el-radio value="zh_cn" class="w-full ps-4 m-0!">
-                    zh_cn
+                    {{ trLanguageName("zh_cn") }}
                 </el-radio>
             </el-card>
             <el-card class="my-0.5">
                 <el-radio value="en_us" class="w-full ps-4 m-0!">
-                    en_us
+                    {{ trLanguageName("en_us") }}
                 </el-radio>
             </el-card>
             <div
@@ -123,9 +122,9 @@ function removeLanguage(
                 class="h-48px grow m-0!"
             >
                 <el-card class="my-0.5 w-full">
-                    <el-row>
+                    <el-row class="gap-2">
                         <el-radio :value="lang" class="grow ps-4 m-0!">
-                            {{ lang }}
+                            {{ trLanguageName(lang) }}
                         </el-radio>
                         <el-button circle class="my-a b-0" @click="()=>{removeLanguage(lang)}">
                             <span class="material-symbols-outlined text-5">

@@ -1,6 +1,8 @@
+import AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
+
 interface MECraftingStatusEntry {
     readonly serial: number
-    readonly what?: string
+    readonly what?: AeKeyObject
     readonly displayName: string
     readonly storedAmount: number
     readonly activeAmount: number

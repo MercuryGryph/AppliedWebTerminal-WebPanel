@@ -17,7 +17,7 @@ class WebSocketService {
     private _onMessageListeners: Map<string, (e: MessageEvent) => void> = new Map();
 
     private _onMessage(event: MessageEvent): void {
-        this._onOpenListeners.forEach((listener, _) => {
+        this._onMessageListeners.forEach((listener, _) => {
             listener(event);
         })
     }
@@ -37,7 +37,6 @@ class WebSocketService {
             listener(event);
         })
     }
-
 
     public addOnOpenListener(
         key: string,
@@ -111,8 +110,13 @@ class WebSocketService {
         const config = useConfig()
 
         const configUrl = config.serverConfig.webSocketUrl
-
-        const baseUrl = `${configUrl}/${endPoint}` || `ws://${location.host}/${endPoint}`
+        let baseUrl: string
+        if (configUrl === "~") {
+            baseUrl = `ws://${location.host}/${endPoint}`
+        } else {
+            baseUrl = `${configUrl}/${endPoint}`
+        }
+        console.log(baseUrl)
 
         this._webSocket = new WebSocket(`${baseUrl}?token=${token}`)
 
@@ -120,6 +124,7 @@ class WebSocketService {
         this._webSocket.addEventListener("message", this._onMessage.bind(this))
         this._webSocket.addEventListener("close", this._onClose.bind(this))
         this._webSocket.addEventListener("error", this._onError.bind(this))
+        console.log("?")
     }
 
     public send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void {
