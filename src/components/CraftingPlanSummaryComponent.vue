@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
+import type AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
+import type CraftingPlanSummary from "~/core/data/ae/craft/plan/CraftingPlanSummary";
 import {onMounted, ref} from "vue";
-import CraftingPlanSummary from "~/core/data/ae/craft/plan/CraftingPlanSummary";
 import {createCraftPlan} from "~/core/AeUtils";
 import {useAppStorage} from "~/data/AppStorage";
 
-const appStorage = useAppStorage()
-
-const model = defineModel()
 const props = defineProps<{
     what: AeKeyObject
     amount: number
 }>()
 
+const appStorage = useAppStorage()
+
+const model = defineModel<boolean>()
 const summary = ref<CraftingPlanSummary | undefined>(undefined)
 
 onMounted(() => {
@@ -32,17 +32,16 @@ onMounted(() => {
 </script>
 
 <template>
-    <el-dialog v-bind="$attrs" v-model="model">
+    <el-dialog v-bind="$attrs" v-model="model" class="dialog_crafting_plan">
         <template #header>
-            <el-text class="text-6">
+            <el-text line-clamp="1" class="text-6">
                 Crafting Plan {{ summary ? `- ${summary.usedBytes.toLocaleString()} Bytes Used` : "" }}
             </el-text>
         </template>
-        <div class="flex flex-col h-70vh">
-            <div class="flex items-center justify-center content-container h-full w-full">
-                <div class="flex flex-wrap justify-start overflow-y-scroll max-h-90% w-full">
+        <div class="flex flex-col">
+            <div class="content-container h-full w-full flex items-center justify-center">
+                <div v-if="summary" class="max-h-90% w-full flex flex-wrap justify-start overflow-y-scroll">
                     <CraftingPlanEntryCard
-                        v-if="summary"
                         v-for="entry in summary.entries"
                         :key="entry.what.type + entry.what.id"
                         :entry="entry"
@@ -52,15 +51,17 @@ onMounted(() => {
                     Calculating Please Wait...
                 </p>
             </div>
-            <el-row type="flex" justify="space-between">
-                <el-button class="w-32" size="large" @click="model=false">
+        </div>
+        <template #footer>
+            <el-row justify="space-around">
+                <el-button class="w-28" size="large" @click="model = false">
                     Cancel
                 </el-button>
-                <el-button class="w-32" size="large" :disabled="!summary || summary.simulation">
+                <el-button type="primary" class="w-28" size="large" :disabled="!summary || summary.simulation">
                     Start
                 </el-button>
             </el-row>
-        </div>
+        </template>
     </el-dialog>
 </template>
 
@@ -84,5 +85,12 @@ onMounted(() => {
     word-break: break-word;
     hyphens: auto;
 }
-
+</style>
+<style>
+.dialog_crafting_plan {
+    .el-dialog__body {
+        height: 82% !important;
+        overflow-y: scroll;
+    }
+}
 </style>
