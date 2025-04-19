@@ -76,33 +76,44 @@ tasks.register("syncLangFiles") {
     }
 }
 
+def (normalChars, upsideDownChars) = [
+        "abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()_,;.?!/\\'",
+        "ɐqɔpǝɟbɥıظʞןɯuuodbɹsʇnʌʍxʎzⱯᗺƆᗡƎℲ⅁HIſʞꞀWNOԀὉᴚS⟘∩ΛMXʎZ0ƖᄅƐㄣϛ9ㄥ86)(‾'؛˙¿¡/\\,"
+]
+def charMap = [:]
+normalChars.eachWithIndex { c, i -> charMap[c] = upsideDownChars[i] }
+
 def toUpsideDown = { String normal ->
-    char[] ud = new char[normal.length()];
+    def ud = new char[normal.length()]
+    int i = 0
 
-    for(int i = 0; i < normal.length(); ++i) {
-        char c = normal.charAt(i);
+    while (i < normal.length()) {
+        def c = normal[i]
         if (c != '%') {
-            int lookup = "abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()_,;.?!/\\'".indexOf(c as int);
-            if (lookup >= 0) {
-                c = "ɐqɔpǝɟbɥıظʞןɯuuodbɹsʇnʌʍxʎzⱯᗺƆᗡƎℲ⅁HIſʞꞀWNOԀὉᴚS⟘∩ΛMXʎZ0ƖᄅƐㄣϛ9ㄥ86)(‾'؛˙¿¡/\\,".charAt(lookup);
-            }
-
-            ud[normal.length() - 1 - i] = c;
+            def replacement = charMap[c] ?: c
+            ud[normal.length() - 1 - i] = replacement
+            i++
         } else {
-            String fmtArg;
-            for(fmtArg = ""; Character.isDigit(c) || c == '%' || c == '$' || c == 's' || c == 'd'; c = i == normal.length() ? 0 : normal.charAt(i)) {
-                fmtArg = fmtArg + c;
-                ++i;
+            def fmtArg = new StringBuilder().append(c)
+            i++
+
+            while (i < normal.length()) {
+                c = normal[i]
+                if (Character.isDigit(c as char) || c in ['%', '$', 's', 'd']) {
+                    fmtArg.append(c)
+                    i++
+                } else {
+                    break
+                }
             }
 
-            --i;
-
-            for(int j = 0; j < fmtArg.length(); ++j) {
-                ud[normal.length() - 1 - i + j] = fmtArg.charAt(j);
+            def argStr = fmtArg.toString()
+            (0..<argStr.length()).each { j ->
+                ud[normal.length() - i + j] = argStr[j]
             }
         }
     }
-    return new String(ud)
+    new String(ud)
 }
 
 tasks.register("generateUpsideDown") {
