@@ -3,7 +3,7 @@
 import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 import Component from "~/core/data/minecraft/Component";
 import {useThrottleFn} from "@vueuse/core";
-import {vsprintf} from "sprintf-js";
+import {sprintf, vsprintf} from "sprintf-js";
 import {computed, ref, watch} from "vue";
 import {tr} from "~/core/I18nService";
 import {fetchTranslation, decodeComponent} from "~/core/JsonTextUtils";
@@ -78,13 +78,11 @@ if (props.status.craftingStatus) {
 }
 
 const formatNanoseconds = (ns: number) => {
-    const hours = Math.floor(ns / (3600 * 1e9)); 
-    const remainingNsAfterHours = ns % (3600 * 1e9); 
-    const minutes = Math.floor(remainingNsAfterHours / (60 * 1e9)); 
-    const remainingNsAfterMinutes = remainingNsAfterHours % (60 * 1e9); 
-    const seconds = Math.floor(remainingNsAfterMinutes / 1e9); 
-    const remainingNsAfterSeconds = remainingNsAfterMinutes % 1e9; 
-    const milliseconds = Math.floor(remainingNsAfterSeconds / 1e6);
+    const hours = Math.floor(ns / (3600 * 1e9));
+    const remainingNsAfterHours = ns % (3600 * 1e9);
+    const minutes = Math.floor(remainingNsAfterHours / (60 * 1e9));
+    const remainingNsAfterMinutes = remainingNsAfterHours % (60 * 1e9);
+    const seconds = Math.floor(remainingNsAfterMinutes / 1e9);
     let result = '';
     if (hours > 0) {
         result += `${hours}h`;
@@ -95,28 +93,50 @@ const formatNanoseconds = (ns: number) => {
     if (seconds > 0) {
         result += `${seconds}s`;
     }
-    if (milliseconds > 0) {
-        result += `${milliseconds}ms`;
-    }
-    return result.trim(); 
+    return result.trim();
 }
 
+const precentColor = computed(() => {
+    if (props.status.craftingStatus) {
+        let p = props.status.craftingStatus.progress / props.status.craftingStatus.totalItems
+        const r = Math.floor(255.0 * Math.max(0.0, Math.min(2.0 - 2.0 * p, 1.0)));
+        const g = Math.floor(255.0 * Math.max(0.0, Math.min(2.0 * p, 1.0)));
+        const rgb = (r << 16) + (g << 8);
+        return sprintf("#%06X", rgb)
+    }
+    return ""
+})
+
+console.log(precentColor.value)
+
+const numberComponent = (it: number) => {
+    return Component.literal(formatNumber(it)).withColor("#886eff")
+}
 
 const tooltips = computed(() => {
     const result = new Array<Component>()
-    result.push(Component.literal(tr("ae.cpu.storage", formatNumber(props.status.storageSize))))
-    result.push(Component.literal(tr("ae.cpu.coprocessors", props.status.coProcessorCount)))
+    result.push(
+        numberComponent(props.status.storageSize)
+            .append(Component.literal(tr("ae.cpu.storage")))
+    )
+    result.push(
+        numberComponent(props.status.coProcessorCount)
+            .append(Component.literal(tr("ae.cpu.coprocessors")))
+    )
+
     if (props.status.craftingStatus) {
-        result.push(Component.literal(tr(
-            "ae.cpu.crafting",
-            props.status.craftingStatus!.crafting.amount,
-            itemNameText.value
-        )))
-        result.push(Component.literal(tr(
-            "ae.cpu.crafting_progress",
-            ((props.status.craftingStatus!.progress / props.status.craftingStatus.totalItems) * 100.0).toFixed(2),
-            formatNanoseconds(props.status.craftingStatus.elapsedTimeNanos)
-        )))
+        result.push(Component.literal(tr("ae.cpu.crafting"))
+            .append(numberComponent(props.status.craftingStatus!.crafting.amount))
+            .append(Component.literal(` ${itemNameText.value}`))
+        )
+        let progress = ((props.status.craftingStatus!.progress / props.status.craftingStatus.totalItems) * 100.0)
+            .toFixed(2)
+        let time = formatNanoseconds(props.status.craftingStatus.elapsedTimeNanos)
+        result.push(Component.literal(tr("ae.cpu.crafting_progress"))
+            .append(Component.literal(`${progress}%`).withColor(precentColor.value))
+            .append(Component.literal(tr("ae.cpu.crafting_progress.in")))
+            .append(Component.literal(time).withColor("#886eff"))
+        )
         return result
     }
     return result
@@ -130,7 +150,8 @@ const onMouseLeave = () => {
 
 <template>
     <el-card
-        ref="hoverElement" class="h-23 h-full w-50 flex flex-col justify-end" @mousemove="onMouseMove" @mouseleave="onMouseLeave"
+        ref="hoverElement" class="h-23 h-full w-50 flex flex-col justify-end" @mousemove="onMouseMove"
+        @mouseleave="onMouseLeave"
         @click="clickEventWrapper"
     >
         <ComponentView :component="name"/>

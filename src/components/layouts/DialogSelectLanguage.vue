@@ -15,7 +15,7 @@ const appStorage = useAppStorage()
 
 const selectedLanguage = ref<string>(config.localConfig.language)
 
-watch(selectedLanguage, ()=>{
+watch(selectedLanguage, () => {
     setLanguage(false)
 })
 
@@ -45,7 +45,7 @@ function test() {
     })
 }
 
-watch(keyToTest, ()=>{
+watch(keyToTest, () => {
     testResult.value = ''
 })
 
@@ -90,7 +90,7 @@ function removeLanguage(
         return
     }
     config.localConfig.customLanguages =
-        config.localConfig.customLanguages.filter((it)=>{
+        config.localConfig.customLanguages.filter((it) => {
             Logger.info(`remove language: ${lang}`)
             return it !== lang
         })
@@ -151,7 +151,7 @@ function removeLanguage(
         width="300px"
         :title="tr('language.add.title')"
     >
-        <el-input v-model="languageToAdd" :placeholder="tr('language.add.placeholder.lang')" />
+        <el-input v-model="languageToAdd" :placeholder="tr('language.add.placeholder.lang')"/>
 
         <el-divider content-position="left">
             <el-text type="info" size="small">
@@ -159,12 +159,12 @@ function removeLanguage(
             </el-text>
         </el-divider>
         <div class="flex justify-between gap-2">
-            <el-input v-model="keyToTest" :placeholder="tr('language.add.placeholder.test_key')" />
+            <el-input v-model="keyToTest" :placeholder="tr('language.add.placeholder.test_key')"/>
             <el-button type="info" @click="test">
                 {{ tr('language.add.button.test') }}
             </el-button>
         </div>
-        <el-input v-model="testResult" :placeholder="tr('language.add.placeholder.result')" disabled class="mt-2" />
+        <el-input v-model="testResult" :placeholder="tr('language.add.placeholder.result')" disabled class="mt-2"/>
 
         <template #footer>
             <el-row justify="space-evenly">

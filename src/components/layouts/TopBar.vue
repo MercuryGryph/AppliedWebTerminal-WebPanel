@@ -12,7 +12,7 @@ function pageBackToRoot(): void {
     appStorage.currentTerminal = undefined
 }
 
-const showDialogSelectLanguage = ref<boolean>(false);
+const showSettingsDialog = ref<boolean>(false);
 
 const isDevMode = import.meta.env.DEV
 
@@ -21,7 +21,7 @@ const showDevTest = ref<boolean>(false);
 </script>
 
 <template>
-    <DialogSelectLanguage v-model="showDialogSelectLanguage" />
+    <SettingsDialog v-model="showSettingsDialog" />
     <el-dialog v-model="showDevTest" class="h-80vh w-90vw">
         <DevTest />
     </el-dialog>
@@ -55,10 +55,10 @@ const showDevTest = ref<boolean>(false);
             <el-button
                 circle
                 class="float-right my-a"
-                @click="()=>{showDialogSelectLanguage = true}"
+                @click="() => { showSettingsDialog = true }"
             >
                 <span class="material-symbols-outlined">
-                    language
+                    settings
                 </span>
             </el-button>
             <el-button
