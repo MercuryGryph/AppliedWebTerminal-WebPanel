@@ -49,5 +49,13 @@
   "ae.crafting.plan.next": "下一步",
   "ae.crafting.plan.submit_successes": "合成计划提交成功",
   "ae.crafting.plan.submit_failure": "合成计划提交失败",
-  "ae.crafting.plan.submit_failed_by": "由于 %s，合成计划提交失败"
+  "ae.crafting.plan.submit_failed_by": "由于 %s，合成计划提交失败",
+  "settings.title": "设置",
+  "settings.item.terminal": "终端",
+  "settings.item.terminal.refresh_interval": "更新间隔",
+  "settings.item.status": "状态",
+  "settings.item.language": "语言",
+  "settings.item.language.configure": "配置",
+  "ae.crafting.sidebar.open": "展开侧边栏",
+  "ae.crafting.sidebar.close": "折叠侧边栏"
 }

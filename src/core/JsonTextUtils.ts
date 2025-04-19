@@ -1,5 +1,4 @@
 import type Component from "~/core/data/minecraft/Component";
-import type JsonTextString from "~/core/data/minecraft/JsonTextString";
 import {useTranslateStore} from "~/data/TranslateStore";
 
 export async function fetchTranslation(key: string, language: string): Promise<string> {

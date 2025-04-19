@@ -6,12 +6,13 @@ import type MEStack from "~/core/data/ae/core/MEStack";
 import type PageMeta from "~/core/data/PageMeta";
 import {Search} from "@element-plus/icons-vue";
 import {useDebounceFn} from "@vueuse/core";
-import {nextTick, onMounted, onUnmounted, ref} from "vue"
+import {computed, nextTick, onMounted, onUnmounted, ref} from "vue"
 import {fetchAeStoragePaged} from "~/core/AeUtils";
 import {tr} from "~/core/I18nService";
 import {useAppStorage} from "~/data/AppStorage";
 import {useConfig} from "~/data/Config";
 import Logger from "~/utils/Logger";
+import {clamp} from "~/utils/utils";
 
 const appStorage = useAppStorage()
 const config = useConfig()
@@ -124,6 +125,18 @@ function onSelectClick() {
     showCraftPlan.value = true
 }
 
+const dialogWidth = computed<number>(() => {
+    const width = document.getElementsByTagName('html')[0].clientWidth
+
+    const min = 300
+    const max = 350
+    const relativeFactor = 0.6
+
+    const res = clamp(relativeFactor * width, min, max)
+    Logger.debug(`dialog width: ${res}`)
+    return res
+})
+
 </script>
 
 <template>
@@ -134,17 +147,22 @@ function onSelectClick() {
         :amount="requestAmount"
         class="h-80% w-80%"
     />
-    <el-dialog v-if="showAmountSelect" v-model="showAmountSelect" align-center style="width: 30%">
+    <el-dialog
+        v-if="showAmountSelect"
+        v-model="showAmountSelect"
+        align-center
+        :width="dialogWidth"
+    >
         <template #header>
             <el-text>
                 {{ tr("ae.crafting.plan.select_amount") }}
             </el-text>
         </template>
-        <el-row class="justify-between items-center">
+        <el-row class="items-center justify-between">
             <MEStackComponent :stack="{what: requestKey!, amount: 0, craftable: false}"/>
             <el-input-number
-                class="w-40 h-32px px-4 font-size-16"
                 v-model="requestAmount"
+                class="h-32px w-40 px-4 font-size-16"
                 size="large"
                 :controls="false"
                 :precision="0"

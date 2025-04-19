@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
-import Component from "~/core/data/minecraft/Component";
-
 import {useThrottleFn} from "@vueuse/core";
 import {computed, ref} from "vue";
+import Component from "~/core/data/minecraft/Component";
 import {tr} from "~/core/I18nService";
 import {formatNumber} from "~/core/NumberUtil";
 import Logger from "~/utils/Logger";

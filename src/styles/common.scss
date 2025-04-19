@@ -5,6 +5,7 @@ html.dark {
   --app-card-bg-pending: #bd990f;
   --app-tooltip-color: rgba(0, 0, 0, 0.8);
   --app-mestack-hover-color: rgba(255, 255, 255, 0.2);
+  --app-crafting-sidebar-wapper-bg: #304156;
 }
 
 html:not(.dark) {
@@ -14,6 +15,7 @@ html:not(.dark) {
   --app-card-bg-pending: #ffef99;
   --app-tooltip-color: rgba(255, 255, 255, 0.8);
   --app-mestack-hover-color: rgba(0, 0, 0, 0.2);
+  --app-crafting-sidebar-wapper-bg: #9abeef;
 }
 
 .card_bg_warn {

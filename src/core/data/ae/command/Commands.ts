@@ -8,13 +8,13 @@ export function createSetUpdateIntervalCommand(interval: number) {
 export function createSelectCpuCommand(cpuId: number) {
     return {
         type: "select_cpu",
-        cpuId: cpuId
+        cpuId
     }
 }
 
 export function createCancelCpuJobCommand(cpuId: number) {
     return {
         type: "cancel_job",
-        cpuId: cpuId
+        cpuId
     }
 }

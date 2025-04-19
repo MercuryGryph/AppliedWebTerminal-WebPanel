@@ -55,5 +55,7 @@
   "settings.item.terminal.refresh_interval": "Refresh Interval",
   "settings.item.status": "Status",
   "settings.item.language": "Language",
-  "settings.item.language.configure": "Configure"
+  "settings.item.language.configure": "Configure",
+  "ae.crafting.sidebar.open": "Open Sidebar",
+  "ae.crafting.sidebar.close": "Collapse Sidebar"
 }

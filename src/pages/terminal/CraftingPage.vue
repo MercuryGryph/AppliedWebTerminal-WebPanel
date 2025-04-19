@@ -1,11 +1,12 @@
 <script setup lang="ts">
 
-import {MECraftingServiceStatusBundle, MECraftingStatusBundle} from "~/core/data/ae/MECraftingStatusBundle";
-import type {Consumer, Subscriber} from "~/core/Subscriber";
 import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import type {MECraftingServiceStatusBundle, MECraftingStatusBundle} from "~/core/data/ae/MECraftingStatusBundle";
+import type {Consumer, Subscriber} from "~/core/Subscriber";
 import {Expand, Fold} from "@element-plus/icons-vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {createCancelCpuJobCommand, createSelectCpuCommand} from "~/core/data/ae/command/Commands";
+import {tr} from "~/core/I18nService";
 import {sortByConditions} from "~/core/SortUtil";
 
 const props = defineProps<{
@@ -18,7 +19,7 @@ const isCollapsed = ref(false)
 const isMobile = ref(false)
 const showMobileSidebar = ref(false)
 const asideWidth = computed(() => {
-    return isCollapsed.value ? '32px' : '208px'
+    return isCollapsed.value ? '32px' : '213px'
 })
 
 const cpus = ref<MECpuStatusBundle[]>([])
@@ -55,47 +56,46 @@ const cancelSelectCpuJob = () => {
 }
 
 props.messageSubscriber.subscribe(s => {
-        cpus.value = s.cpus
-        const status = s.craftingStatus
-        if (status) {
-            if (status.fullStatus) {
-                status.entries = sortByConditions(status.entries, [
+    cpus.value = s.cpus
+    const status = s.craftingStatus
+    if (status) {
+        if (status.fullStatus) {
+            status.entries = sortByConditions(status.entries, [
+                {key: 'pendingAmount', order: 'desc'},
+                {key: 'activeAmount', order: 'desc'},
+                {key: 'storedAmount', order: 'desc'}
+            ])
+            craftingStatus.value = status
+        } else {
+            const oldStatus = craftingStatus.value
+            if (oldStatus) {
+                oldStatus.startItemCount = status.startItemCount
+                oldStatus.remainingItemCount = status.remainingItemCount
+                oldStatus.elapsedTime = status.elapsedTime
+                const entryMap = new Map(oldStatus.entries.map(entry => [entry.serial, entry]))
+                for (const entry of status.entries) {
+                    const oltEntry = entryMap.get(entry.serial)
+                    if (oltEntry) {
+                        oltEntry.pendingAmount = entry.pendingAmount
+                        oltEntry.activeAmount = entry.activeAmount
+                        oltEntry.storedAmount = entry.storedAmount
+                    }
+                }
+                oldStatus.entries = oldStatus.entries.filter(
+                    entry => !(entry.pendingAmount <= 0 && entry.activeAmount <= 0 && entry.storedAmount <= 0)
+                )
+                oldStatus.entries = sortByConditions(oldStatus.entries, [
                     {key: 'pendingAmount', order: 'desc'},
                     {key: 'activeAmount', order: 'desc'},
                     {key: 'storedAmount', order: 'desc'}
                 ])
-                craftingStatus.value = status
-            } else {
-                const oldStatus = craftingStatus.value
-                if (oldStatus) {
-                    oldStatus.startItemCount = status.startItemCount
-                    oldStatus.remainingItemCount = status.remainingItemCount
-                    oldStatus.elapsedTime = status.elapsedTime
-                    const entryMap = new Map(oldStatus.entries.map(entry => [entry.serial, entry]))
-                    for (const entry of status.entries) {
-                        const oltEntry = entryMap.get(entry.serial)
-                        if (oltEntry) {
-                            oltEntry.pendingAmount = entry.pendingAmount
-                            oltEntry.activeAmount = entry.activeAmount
-                            oltEntry.storedAmount = entry.storedAmount
-                        }
-                    }
-                    oldStatus.entries = oldStatus.entries.filter(
-                        entry => !(entry.pendingAmount <= 0 && entry.activeAmount <= 0 && entry.storedAmount <= 0)
-                    )
-                    oldStatus.entries = sortByConditions(oldStatus.entries, [
-                        {key: 'pendingAmount', order: 'desc'},
-                        {key: 'activeAmount', order: 'desc'},
-                        {key: 'storedAmount', order: 'desc'}
-                    ])
-                    craftingStatus.value = oldStatus
-                }
+                craftingStatus.value = oldStatus
             }
-        } else {
-            craftingStatus.value = undefined
         }
+    } else {
+        craftingStatus.value = undefined
     }
-)
+})
 
 onMounted(() => {
     checkMobile()
@@ -108,34 +108,35 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="pt-4 h-85vh">
+    <div class="h-85vh pt-4">
         <div
             v-if="showMobileSidebar"
             class="mobile-mask"
             @click="closeMobileSidebar"
-        ></div>
+        />
         <el-container>
             <el-aside
-                class="relative p-t-32px sidebar-wrapper h-80vh"
+                class="sidebar-wrapper relative h-80vh p-t-32px"
                 :width="asideWidth"
                 :class="{
                     'collapsed': isCollapsed,
                     'mobile-show': showMobileSidebar
                 }"
             >
-                <div class="flex flex-col h-full overflow-y-scroll">
+                <div class="h-full flex flex-col overflow-y-scroll">
                     <CpuSelectionCard
                         v-for="cpu in cpus"
-                        class="cpu-selection-card my-1"
                         v-show="!isCollapsed"
+                        :key="cpu.id"
+                        class="cpu-selection-card m-1"
                         :status="cpu"
-                        :style="cpu.id == selectedCpu ? 'background-color: var(--app-mestack-hover-color);' : ''"
+                        :style="cpu.id === selectedCpu ? 'background-color: var(--app-mestack-hover-color);' : ''"
                         @click="() => selectCpu(cpu.id)"
                     />
                 </div>
-                <div class="absolute pos-top-0 pos-left-0" @click="toggleCollapse">
+                <div class="absolute pos-left-0 pos-top-0" @click="toggleCollapse">
                     <el-tooltip
-                        :content="isCollapsed ? '展开侧边栏' : '折叠侧边栏'"
+                        :content="isCollapsed ? tr('ae.crafting.sidebar.open') : tr('ae.crafting.sidebar.close')"
                         placement="top"
                     >
                         <Expand v-if="isCollapsed" class="w-32px"/>
@@ -145,10 +146,12 @@ onUnmounted(() => {
             </el-aside>
             <el-container>
                 <el-main>
-                    <div class="flex flex-col items-end h-77vh max-h-77vh">
-                        <el-text size="large" class="m-b-2 font-size-16px">合成状态</el-text>
-                        <div class="grow">
-                            <div class="flex flex-wrap overflow-y-scroll">
+                    <div class="h-77vh max-h-77vh flex flex-col items-end">
+                        <el-text size="large" class="m-b-2 font-size-16px">
+                            {{ tr('terminal.button.crafting_page') }}
+                        </el-text>
+                        <div class="grow overflow-y-scroll">
+                            <div class="flex flex-wrap items-start overflow-y-scroll">
                                 <CraftingStatusEntryCard
                                     v-for="entry in craftingStatus?.entries"
                                     :key="entry.serial"
@@ -156,7 +159,9 @@ onUnmounted(() => {
                                 />
                             </div>
                         </div>
-                        <el-button size="large" @click="cancelSelectCpuJob">Cancel</el-button>
+                        <el-button size="large" @click="cancelSelectCpuJob">
+                            {{ tr('common.button.cancel') }}
+                        </el-button>
                     </div>
                 </el-main>
             </el-container>
@@ -166,7 +171,7 @@ onUnmounted(() => {
 
 <style scoped>
 .sidebar-wrapper {
-    background-color: #304156;
+    background-color: var(--app-crafting-sidebar-wapper-bg);
     transition: width 0.3s ease;
     overflow: visible;
 

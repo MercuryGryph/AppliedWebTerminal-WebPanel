@@ -4,8 +4,8 @@ import type CraftingPlanSummary from "~/core/data/ae/craft/plan/CraftingPlanSumm
 import {ElNotification} from "element-plus";
 import {nextTick, onMounted, onUnmounted, ref} from "vue";
 import {createCraftPlan, submitCraftingPlan} from "~/core/AeUtils";
-import {useAppStorage} from "~/data/AppStorage";
 import {tr} from "~/core/I18nService";
+import {useAppStorage} from "~/data/AppStorage";
 
 const props = defineProps<{
     what: AeKeyObject
@@ -103,8 +103,10 @@ function onSubmit() {
                 <el-button class="w-28" size="large" @click="model = false">
                     {{ tr("ae.crafting.plan.cancel") }}
                 </el-button>
-                <el-button type="primary" class="w-28" size="large" :disabled="!summary || summary.simulation"
-                           @click="onSubmit">
+                <el-button
+                    type="primary" class="w-28" size="large" :disabled="!summary || summary.simulation"
+                    @click="onSubmit"
+                >
                     {{ tr("ae.crafting.plan.start") }}
                 </el-button>
             </el-row>

@@ -125,7 +125,7 @@ const text = computed<string>(() => {
         })
     }
 
-    const actualText: string = rawText || translatedString.value || translateKey
+    const actualText = rawText || translatedString.value || translateKey as string
 
     // Logger.debug(`Chosen: '${actualText}' , from: ['${translatedString.value}', ' ${translateKey}', '${rawText}']`)
 
@@ -148,7 +148,12 @@ const text = computed<string>(() => {
         <span :style="style" :class="classes">
             {{ text }}
         </span>
-        <ComponentView v-if="props.component.extra" v-for="c in props.component.extra" :component="c"/>
+        <span v-if="props.component.extra">
+            <ComponentView
+                v-for="(c, i) in props.component.extra"
+                :key="i"
+                :component="c"
+            />
+        </span>
     </span>
-
 </template>

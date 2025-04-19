@@ -1,17 +1,17 @@
 <script setup lang="ts">
 
 import type {MECraftingServiceStatusBundle} from "~/core/data/ae/MECraftingStatusBundle";
+import type LocalConfig from "~/data/LocalConfig";
 import {ElMessage} from "element-plus";
 import {onUnmounted, ref} from "vue";
+import {createSetUpdateIntervalCommand} from "~/core/data/ae/command/Commands";
 import {tr} from "~/core/I18nService";
 import {ConfigSubsciber, Subscriber} from "~/core/Subscriber"
 import WebSocketService from "~/core/WebSocketService";
 import {useAppStorage} from "~/data/AppStorage";
+import {useConfig} from "~/data/Config";
 import CraftingPage from "~/pages/terminal/CraftingPage.vue";
 import StoragePage from "~/pages/terminal/StoragePage.vue";
-import LocalConfig from "~/data/LocalConfig";
-import {createSetUpdateIntervalCommand} from "~/core/data/ae/command/Commands";
-import {useConfig} from "~/data/Config";
 
 const appStorage = useAppStorage()
 const localConfig = useConfig()
@@ -109,7 +109,7 @@ onUnmounted(() => {
                     </el-text>
                 </el-row>
 
-                <el-row class="float-right mx-4">
+                <el-row class="">
                     <el-button-group>
                         <el-button
                             :type="selectedPage === Page.Storage ? 'primary' : 'default'"
@@ -133,7 +133,7 @@ onUnmounted(() => {
         </el-card>
         <div>
             <StoragePage v-if="selectedPage === Page.Storage"/>
-            <CraftingPage :sender="messageSender" :messageSubscriber="messageSubscriber" v-else-if="selectedPage === Page.Crafting"/>
+            <CraftingPage v-else-if="selectedPage === Page.Crafting" :sender="messageSender" :message-subscriber="messageSubscriber"/>
         </div>
     </div>
 </template>
