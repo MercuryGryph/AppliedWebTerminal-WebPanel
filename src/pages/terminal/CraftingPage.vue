@@ -6,6 +6,7 @@ import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import {Expand, Fold} from "@element-plus/icons-vue";
 import {createSelectCpuCommand} from "~/core/data/ae/command/Commands";
+import {sortByConditions} from "~/core/SortUtil";
 
 const props = defineProps<{
     sender: Consumer<any>,
@@ -13,12 +14,11 @@ const props = defineProps<{
 }>()
 
 
-
 const isCollapsed = ref(false)
 const isMobile = ref(false)
 const showMobileSidebar = ref(false)
 const asideWidth = computed(() => {
-    return isCollapsed.value ? '32px' : '200px'
+    return isCollapsed.value ? '32px' : '208px'
 })
 
 const cpus = ref<MECpuStatusBundle[]>([])
@@ -49,33 +49,42 @@ const selectCpu = (cpuId: number) => {
 }
 
 props.messageSubscriber.subscribe(s => {
-    cpus.value = s.cpus
-    const status = s.craftingStatus
-    if (status) {
-        if (status.fullStatus) {
-            craftingStatus.value = status
-        } else {
-            const oldStatus = craftingStatus.value
-            if (oldStatus) {
-                oldStatus.startItemCount = status.startItemCount
-                oldStatus.remainingItemCount = status.remainingItemCount
-                oldStatus.elapsedTime = status.elapsedTime
-                const entryMap = new Map(oldStatus.entries.map(entry => [entry.serial, entry]))
-                for (const entry of status.entries) {
-                    const oltEntry = entryMap.get(entry.serial)
-                    if (oltEntry) {
-                        oltEntry.pendingAmount = entry.pendingAmount
-                        oltEntry.activeAmount = entry.activeAmount
-                        oltEntry.storedAmount = entry.storedAmount
+        cpus.value = s.cpus
+        const status = s.craftingStatus
+        if (status) {
+            if (status.fullStatus) {
+                craftingStatus.value = status
+            } else {
+                const oldStatus = craftingStatus.value
+                if (oldStatus) {
+                    oldStatus.startItemCount = status.startItemCount
+                    oldStatus.remainingItemCount = status.remainingItemCount
+                    oldStatus.elapsedTime = status.elapsedTime
+                    const entryMap = new Map(oldStatus.entries.map(entry => [entry.serial, entry]))
+                    for (const entry of status.entries) {
+                        const oltEntry = entryMap.get(entry.serial)
+                        if (oltEntry) {
+                            oltEntry.pendingAmount = entry.pendingAmount
+                            oltEntry.activeAmount = entry.activeAmount
+                            oltEntry.storedAmount = entry.storedAmount
+                        }
                     }
+                    oldStatus.entries = oldStatus.entries.filter(
+                        entry => !(entry.pendingAmount <= 0 && entry.activeAmount <= 0 && entry.storedAmount <= 0)
+                    )
+                    oldStatus.entries = sortByConditions(oldStatus.entries, [
+                        {key: 'pendingAmount', order: 'desc'},
+                        {key: 'activeAmount', order: 'desc'},
+                        {key: 'storedAmount', order: 'desc'}
+                    ])
+                    craftingStatus.value = oldStatus
                 }
-                craftingStatus.value = oldStatus
             }
+        } else {
+            craftingStatus.value = undefined
         }
-    } else {
-        craftingStatus.value = undefined
     }
-})
+)
 
 onMounted(() => {
     checkMobile()
@@ -94,24 +103,25 @@ onUnmounted(() => {
             class="mobile-mask"
             @click="closeMobileSidebar"
         ></div>
-        <el-container class="relative">
+        <el-container>
             <el-aside
-                class="relative p-t-32px sidebar-wrapper"
+                class="relative p-t-32px sidebar-wrapper h-80vh"
                 :width="asideWidth"
                 :class="{
                     'collapsed': isCollapsed,
                     'mobile-show': showMobileSidebar
                 }"
             >
-                <el-menu v-for="cpu in cpus">
+                <div class="flex flex-col h-full overflow-y-scroll">
                     <CpuSelectionCard
+                        v-for="cpu in cpus"
                         class="cpu-selection-card my-1"
                         v-show="!isCollapsed"
                         :status="cpu"
                         :style="cpu.id == selectedCpu ? 'background-color: var(--app-mestack-hover-color);' : ''"
                         @click="() => selectCpu(cpu.id)"
                     />
-                </el-menu>
+                </div>
                 <div class="absolute pos-top-0 pos-left-0" @click="toggleCollapse">
                     <el-tooltip
                         :content="isCollapsed ? '展开侧边栏' : '折叠侧边栏'"
@@ -124,9 +134,9 @@ onUnmounted(() => {
             </el-aside>
             <el-container>
                 <el-main>
-                    <div class="flex flex-col h-full">
-                        <el-text size="large">合成状态</el-text>
-                        <div class="grow flex overflow-y-scroll">
+                    <div class="flex flex-col items-end">
+                        <el-text size="large" class="m-b-2 font-size-16px">合成状态</el-text>
+                        <div class="grow flex flex-wrap max-h-70vh overflow-y-scroll">
                             <CraftingStatusEntryCard
                                 v-for="entry in craftingStatus?.entries"
                                 :key="entry.serial"
@@ -162,6 +172,7 @@ onUnmounted(() => {
         }
     }
 }
+
 .cpu-selection-card:hover {
     background-color: var(--app-mestack-hover-color);
 }

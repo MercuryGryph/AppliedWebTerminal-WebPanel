@@ -70,7 +70,7 @@ const tooltips = computed(() => {
         result.push(Component.literal(tr('ae.crafting.status.stored', formatNumber(props.entry.storedAmount))))
     }
     if (props.entry.activeAmount) {
-        result.push(Component.literal(tr('ae.crafting.status.active', formatNumber(props.entry.storedAmount))))
+        result.push(Component.literal(tr('ae.crafting.status.active', formatNumber(props.entry.activeAmount))))
     }
     if (props.entry.pendingAmount) {
         result.push(Component.literal(tr('ae.crafting.status.pending', formatNumber(props.entry.pendingAmount))))
@@ -87,7 +87,7 @@ const keyImageUrl = computed(() => {
 <template>
     <el-card
         ref="hoverElement"
-        class="relative m-2 max-w-220px min-w-220px"
+        class="relative m-1 max-w-220px min-w-220px"
         :class="classed"
         v-bind="$attrs"
         @mousemove="onMouseMove"
@@ -107,7 +107,7 @@ const keyImageUrl = computed(() => {
                     size="small"
                     class="my-1 block"
                 >
-                    {{ tr('ae.crafting.status.active', formatNumber(props.entry.storedAmount)) }}
+                    {{ tr('ae.crafting.status.active', formatNumber(props.entry.activeAmount)) }}
                 </el-text>
                 <el-text
                     v-if="props.entry.pendingAmount"
