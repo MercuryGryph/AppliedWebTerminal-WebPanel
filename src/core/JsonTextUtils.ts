@@ -1,4 +1,4 @@
-import type JsonText from "~/core/data/minecraft/JsonText";
+import type Component from "~/core/data/minecraft/Component";
 import type JsonTextString from "~/core/data/minecraft/JsonTextString";
 import {useTranslateStore} from "~/data/TranslateStore";
 
@@ -7,6 +7,6 @@ export async function fetchTranslation(key: string, language: string): Promise<s
     return store.getTranslation(language, key)
 }
 
-export function JsonTextFrom(str: JsonTextString): JsonText {
-    return JSON.parse(str) as JsonText;
+export function decodeComponent(str: string): Component {
+    return JSON.parse(str) as Component;
 }

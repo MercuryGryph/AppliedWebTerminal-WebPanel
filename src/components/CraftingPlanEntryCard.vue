@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
-import type jsonText from "~/core/data/minecraft/JsonText";
+import type jsonText from "~/core/data/minecraft/Component";
 
 import {useThrottleFn} from "@vueuse/core";
 import {computed, ref} from "vue";

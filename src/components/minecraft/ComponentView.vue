@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import type JsonText from "~/core/data/minecraft/JsonText";
+import type Component from "~/core/data/minecraft/Component";
 
 import {vsprintf} from "sprintf-js"
 import {computed, ref} from "vue";
@@ -9,7 +9,7 @@ import {useConfig} from "~/data/Config";
 
 const props = withDefaults(
     defineProps<{
-        jsonText: JsonText,
+        jsonText: Component,
         minecraftFont?: boolean,
     }>(),
     {

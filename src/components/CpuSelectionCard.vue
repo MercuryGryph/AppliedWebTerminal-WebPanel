@@ -1,12 +1,12 @@
 <script setup lang="ts">
 
 import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
-import type JsonText from "~/core/data/minecraft/JsonText";
+import type Component from "~/core/data/minecraft/Component";
 import {useThrottleFn} from "@vueuse/core";
 import {vsprintf} from "sprintf-js";
 import {computed, ref, watch} from "vue";
 import {tr} from "~/core/I18nService";
-import {fetchTranslation, JsonTextFrom} from "~/core/JsonTextUtils";
+import {fetchTranslation, decodeComponent} from "~/core/JsonTextUtils";
 import {formatNumber} from "~/core/NumberUtil";
 import {useConfig} from "~/data/Config";
 
@@ -18,7 +18,7 @@ const clickEventWrapper = () => props.clicked ? props.clicked(props.status) : un
 const config = useConfig()
 
 const name = computed(() => {
-    return props.status.name ? JsonTextFrom(props.status.name!) : {
+    return props.status.name ? decodeComponent(props.status.name!) : {
         text: tr("ae.crafting.cpu", props.status.id)
     }
 })
@@ -55,7 +55,7 @@ const tooltipStyle = computed<string>(() => {
     return `position: fixed; left: ${mousePosition.value.x + 10}px; top: ${mousePosition.value.y + 10}px;`
 })
 
-const getVisualOrderText = (text: JsonText) => {
+const getVisualOrderText = (text: Component) => {
     if (text.translate) {
         fetchTranslation(text.translate, config.localConfig.language)
             .then(it => {
@@ -69,14 +69,14 @@ const getVisualOrderText = (text: JsonText) => {
     itemNameText.value = text.text!
 }
 watch(props, _it => {
-    getVisualOrderText(JsonTextFrom(props.status.craftingStatus!.crafting.what.displayName))
+    getVisualOrderText(decodeComponent(props.status.craftingStatus!.crafting.what.displayName))
 }, {
     deep: true
 })
 
 if (props.status.craftingStatus) {
     console.log(props.status.craftingStatus)
-    getVisualOrderText(JsonTextFrom(props.status.craftingStatus!.crafting.what.displayName))
+    getVisualOrderText(decodeComponent(props.status.craftingStatus!.crafting.what.displayName))
 }
 
 const formatNanoseconds = (ns: number) => {
@@ -135,7 +135,7 @@ const onMouseLeave = () => {
         ref="hoverElement" class="h-23 h-full w-50 flex flex-col justify-end" @mousemove="onMouseMove" @mouseleave="onMouseLeave"
         @click="clickEventWrapper"
     >
-        <JsonTextSpan :json-text="name"/>
+        <ComponentView :json-text="name"/>
         <div class="mt-3">
             <div v-if="!props.status.busy" class="flex" style="align-items: center">
                 <span class="material-symbols-outlined">memory</span>

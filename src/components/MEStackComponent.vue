@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type MEStack from "~/core/data/ae/core/MEStack";
-import type jsonText from "~/core/data/minecraft/JsonText";
+import type jsonText from "~/core/data/minecraft/Component";
 import {useThrottleFn} from "@vueuse/core";
 import {computed, ref} from "vue";
 import {tr} from "~/core/I18nService";

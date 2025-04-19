@@ -2,9 +2,10 @@
 import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
 import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
-import type JsonText from "~/core/data/minecraft/JsonText";
+import type Component from "~/core/data/minecraft/Component";
+import {decodeComponent} from "~/core/JsonTextUtils";
 
-const tooltip1text: JsonText = {
+const tooltip1text: Component = {
     translate: 'block.ae2.sky_stone_block'
 }
 const tooltip1tips: string[] = [
@@ -129,6 +130,9 @@ const cpuStatus3: MECpuStatusBundle = {
 
 
 const testClick = (it: MECpuStatusBundle) => console.log(it)
+
+const s = "{\"extra\":[{\"text\":\"456\"},{\"color\":\"blue\",\"text\":\"7891\"}],\"text\":\"123\"}"
+console.log(decodeComponent(s))
 </script>
 
 <template>

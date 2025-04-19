@@ -1,4 +1,4 @@
-interface JsonText {
+interface Component {
     bold?: boolean;
     italic?: boolean;
     underline?: boolean;
@@ -9,6 +9,7 @@ interface JsonText {
     text?: string;
     translate?: string;
     with?: string[];
+    extra: Component[]
 }
 
-export default JsonText;
+export default Component;

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
 
-import type jsonText from "~/core/data/minecraft/JsonText";
+import type jsonText from "~/core/data/minecraft/Component";
 import {useThrottleFn} from "@vueuse/core";
 import {computed, ref} from "vue";
 import {tr} from "~/core/I18nService";
