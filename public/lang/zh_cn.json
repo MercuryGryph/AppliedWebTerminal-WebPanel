@@ -37,5 +37,5 @@
   "ae.cpu.storage": "%s 存储容量",
   "ae.cpu.coprocessors": "%d 并行处理单元",
   "ae.cpu.crafting": "正在合成 %d %s",
-  "ae.cpu.crafting_progress": "已合成 %.2f%%，用时 %s"
+  "ae.cpu.crafting_progress": "已合成 %s%%，用时 %s"
 }

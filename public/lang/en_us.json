@@ -29,16 +29,14 @@
   "ae.tooltip.craftable": "Craftable",
   "ae.tooltip.craft": "Craft",
   "ae.crafting.cpu": "CPU #%d",
-
   "ae.crafting.status.stored": "Stored: %s",
   "ae.crafting.status.active": "Crafting: %s",
   "ae.crafting.status.pending": "Scheduled: %s",
-
   "websocket.connection.error": "Connection Failed",
   "websocket.connection.established": "Connection Established",
   "websocket.connection.disconnected": "Disconnected from server",
   "ae.cpu.storage": "%s Storage",
   "ae.cpu.coprocessors": "%d Co-Processors",
   "ae.cpu.crafting": "Crafting %d %s",
-  "ae.cpu.crafting_progress": "Crafted %.2f%% in %s"
+  "ae.cpu.crafting_progress": "Crafted %s%% in %s"
 }

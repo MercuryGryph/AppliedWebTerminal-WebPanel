@@ -116,7 +116,7 @@ const tooltips = computed(() => {
         ))
         result.push(tr(
             "ae.cpu.crafting_progress",
-            (props.status.craftingStatus!.progress / props.status.craftingStatus.totalItems) * 100.0,
+            ((props.status.craftingStatus!.progress / props.status.craftingStatus.totalItems) * 100.0).toFixed(2),
             formatNanoseconds(props.status.craftingStatus.elapsedTimeNanos)
         ))
         return result

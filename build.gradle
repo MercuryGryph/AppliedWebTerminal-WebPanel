@@ -82,9 +82,9 @@ def toUpsideDown = { String normal ->
     for(int i = 0; i < normal.length(); ++i) {
         char c = normal.charAt(i);
         if (c != '%') {
-            int lookup = "abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_,;.?!/\\'".indexOf(c as int);
+            int lookup = "abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789()_,;.?!/\\'".indexOf(c as int);
             if (lookup >= 0) {
-                c = "ɐqɔpǝɟbɥıظʞןɯuuodbɹsʇnʌʍxʎzⱯᗺƆᗡƎℲ⅁HIſʞꞀWNOԀὉᴚS⟘∩ΛMXʎZ0ƖᄅƐㄣϛ9ㄥ86‾'؛˙¿¡/\\,".charAt(lookup);
+                c = "ɐqɔpǝɟbɥıظʞןɯuuodbɹsʇnʌʍxʎzⱯᗺƆᗡƎℲ⅁HIſʞꞀWNOԀὉᴚS⟘∩ΛMXʎZ0ƖᄅƐㄣϛ9ㄥ86)(‾'؛˙¿¡/\\,".charAt(lookup);
             }
 
             ud[normal.length() - 1 - i] = c;
@@ -102,21 +102,7 @@ def toUpsideDown = { String normal ->
             }
         }
     }
-
-    def rt = new StringBuilder()
-
-    ud.eachWithIndex { char c, int i ->
-        if ( c == '(') {
-            rt.append(')')
-        } else if (c == ')') {
-            rt.append('(')
-        } else {
-            rt.append(c)
-        }
-
-    }
-
-    return rt.toString()
+    return new String(ud)
 }
 
 tasks.register("generateUpsideDown") {
@@ -132,6 +118,8 @@ tasks.register("generateUpsideDown") {
                     key, toUpsideDown(value)
             ]
         }
+
+        enUDContent["lang.name"] = toUpsideDown("English(Upside Down)")
 
         def jsonString = prettyJson(enUDContent)
         targetFile.write(jsonString, "UTF-8")

@@ -1,5 +1,5 @@
 {
-  "lang.name": "(S∩) ɥsıןbuƎ",
+  "lang.name": "(uʍoᗡ ǝpısd∩)ɥsıןbuƎ",
   "common.button.cancel": "ןǝɔuɐƆ",
   "common.button.confirm": "ɯɹıɟuoƆ",
   "main.terminals.title": "ןɐuıɯɹǝ⟘ Ɐ ʇɔǝןǝS",
@@ -28,10 +28,15 @@
   "ae.tooltip.stored": " :pǝɹoʇS",
   "ae.tooltip.craftable": "ǝןqɐʇɟɐɹƆ",
   "ae.tooltip.craft": "ʇɟɐɹƆ",
+  "ae.crafting.cpu": "%d# ∩ԀƆ",
   "ae.crafting.status.stored": "%s :pǝɹoʇS",
   "ae.crafting.status.active": "%s :buıʇɟɐɹƆ",
   "ae.crafting.status.pending": "%s :pǝןnpǝɥɔS",
   "websocket.connection.error": "pǝןıɐℲ uoıʇɔǝuuoƆ",
   "websocket.connection.established": "pǝɥsıןqɐʇsƎ uoıʇɔǝuuoƆ",
-  "websocket.connection.disconnected": "ɹǝʌɹǝs ɯoɹɟ pǝʇɔǝuuoɔsıᗡ"
+  "websocket.connection.disconnected": "ɹǝʌɹǝs ɯoɹɟ pǝʇɔǝuuoɔsıᗡ",
+  "ae.cpu.storage": "ǝbɐɹoʇS %s",
+  "ae.cpu.coprocessors": "sɹossǝɔoɹԀ-oƆ %d",
+  "ae.cpu.crafting": "%s %d buıʇɟɐɹƆ",
+  "ae.cpu.crafting_progress": "%s uı %s%% pǝʇɟɐɹƆ"
 }
