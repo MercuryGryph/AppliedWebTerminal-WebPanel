@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
-import type Component from "~/core/data/minecraft/Component";
+import Component from "~/core/data/minecraft/Component";
 import {useThrottleFn} from "@vueuse/core";
 import {vsprintf} from "sprintf-js";
 import {computed, ref, watch} from "vue";
@@ -18,9 +18,7 @@ const clickEventWrapper = () => props.clicked ? props.clicked(props.status) : un
 const config = useConfig()
 
 const name = computed(() => {
-    return props.status.name ? decodeComponent(props.status.name!) : {
-        text: tr("ae.crafting.cpu", props.status.id)
-    }
+    return props.status.name ? decodeComponent(props.status.name!) : Component.literal(tr("ae.crafting.cpu", props.status.id))
 })
 
 const url = computed(() => {
@@ -105,20 +103,20 @@ const formatNanoseconds = (ns: number) => {
 
 
 const tooltips = computed(() => {
-    const result = new Array<string>()
-    result.push(tr("ae.cpu.storage", formatNumber(props.status.storageSize)))
-    result.push(tr("ae.cpu.coprocessors", props.status.coProcessorCount))
+    const result = new Array<Component>()
+    result.push(Component.literal(tr("ae.cpu.storage", formatNumber(props.status.storageSize))))
+    result.push(Component.literal(tr("ae.cpu.coprocessors", props.status.coProcessorCount)))
     if (props.status.craftingStatus) {
-        result.push(tr(
+        result.push(Component.literal(tr(
             "ae.cpu.crafting",
             props.status.craftingStatus!.crafting.amount,
             itemNameText.value
-        ))
-        result.push(tr(
+        )))
+        result.push(Component.literal(tr(
             "ae.cpu.crafting_progress",
             ((props.status.craftingStatus!.progress / props.status.craftingStatus.totalItems) * 100.0).toFixed(2),
             formatNanoseconds(props.status.craftingStatus.elapsedTimeNanos)
-        ))
+        )))
         return result
     }
     return result
@@ -135,7 +133,7 @@ const onMouseLeave = () => {
         ref="hoverElement" class="h-23 h-full w-50 flex flex-col justify-end" @mousemove="onMouseMove" @mouseleave="onMouseLeave"
         @click="clickEventWrapper"
     >
-        <ComponentView :json-text="name"/>
+        <ComponentView :component="name"/>
         <div class="mt-3">
             <div v-if="!props.status.busy" class="flex" style="align-items: center">
                 <span class="material-symbols-outlined">memory</span>

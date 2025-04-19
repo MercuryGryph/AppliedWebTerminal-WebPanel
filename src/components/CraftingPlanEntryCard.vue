@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
-import type jsonText from "~/core/data/minecraft/Component";
+import Component from "~/core/data/minecraft/Component";
 
 import {useThrottleFn} from "@vueuse/core";
 import {computed, ref} from "vue";
@@ -20,7 +20,7 @@ const classed = computed<string>(() => {
     return res
 })
 
-const displayName = computed<jsonText | undefined>(() => {
+const displayName = computed<Component | undefined>(() => {
     const raw = props.entry.what.displayName
     try {
         const jsonText = JSON.parse(raw)
@@ -62,15 +62,15 @@ const tooltipStyle = computed<string>(() => {
 })
 
 const tooltips = computed(() => {
-    const result = new Array<string>()
+    const result = new Array<Component>()
     if (props.entry.missingAmount) {
-        result.push(`${tr('ae.crafting.status.missing')}${formatNumber(props.entry.missingAmount)}`)
+        result.push(Component.literal(tr('ae.crafting.status.missing', formatNumber(props.entry.missingAmount))))
     }
     if (props.entry.storedAmount) {
-        result.push(`${tr('ae.crafting.status.available')}${formatNumber(props.entry.storedAmount)}`)
+        result.push(Component.literal(tr('ae.crafting.status.available', formatNumber(props.entry.storedAmount))))
     }
     if (props.entry.craftAmount) {
-        result.push(`${tr('ae.crafting.status.to_craft')}${formatNumber(props.entry.craftAmount)}`)
+        result.push(Component.literal(tr('ae.crafting.status.to_craft', formatNumber(props.entry.craftAmount))))
     }
     return result
 })
@@ -97,21 +97,21 @@ const keyImageUrl = computed(() => {
                     size="small"
                     class="my-1 block"
                 >
-                    {{ tr('ae.crafting.status.missing') }}{{ formatNumber(props.entry.missingAmount) }}
+                    {{ tr('ae.crafting.status.missing', formatNumber(props.entry.missingAmount)) }}
                 </el-text>
                 <el-text
                     v-if="props.entry.storedAmount"
                     size="small"
                     class="my-1 block"
                 >
-                    {{ tr('ae.crafting.status.available') }}{{ formatNumber(props.entry.storedAmount) }}
+                    {{ tr('ae.crafting.status.available', formatNumber(props.entry.storedAmount)) }}
                 </el-text>
                 <el-text
                     v-if="props.entry.craftAmount"
                     size="small"
                     class="my-1 block"
                 >
-                    {{ tr('ae.crafting.status.to_craft') }}{{ formatNumber(props.entry.craftAmount) }}
+                    {{ tr('ae.crafting.status.to_craft', formatNumber(props.entry.craftAmount)) }}
                 </el-text>
             </div>
             <img

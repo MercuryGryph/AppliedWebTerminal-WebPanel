@@ -1,22 +1,21 @@
 <script setup lang="ts">
 import type MEStack from "~/core/data/ae/core/MEStack";
-import type jsonText from "~/core/data/minecraft/Component";
 import {useThrottleFn} from "@vueuse/core";
 import {computed, ref} from "vue";
 import {tr} from "~/core/I18nService";
 import {formatNumber} from "~/core/NumberUtil";
 import Logger from "~/utils/Logger";
+import Component from "~/core/data/minecraft/Component";
 
 const props = defineProps<{
     stack: MEStack
 }>()
 
-const displayName = computed<jsonText | undefined>(() => {
+const displayName = computed<Component | undefined>(() => {
     const raw = props.stack.what.displayName
     try {
         const jsonText = JSON.parse(raw)
         if (jsonText) {
-            // Logger.info(jsonText)
             return jsonText
         }
     } catch (error) {
@@ -50,12 +49,12 @@ const tooltipStyle = computed<string>(() => {
 })
 
 const tooltips = computed(() => {
-    const result = new Array<string>()
+    const result = new Array<Component>()
     if (props.stack.amount) {
-        result.push(`${tr('ae.tooltip.stored')} ${props.stack.amount.toLocaleString()}`)
+        result.push((Component.literal(tr('ae.tooltip.stored', props.stack.amount.toLocaleString()))))
     }
     if (props.stack.craftable) {
-        result.push(`${tr('ae.tooltip.craftable')}`)
+        result.push(Component.literal(`${tr('ae.tooltip.craftable')}`))
     }
     return result
 })

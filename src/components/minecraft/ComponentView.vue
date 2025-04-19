@@ -9,7 +9,7 @@ import {useConfig} from "~/data/Config";
 
 const props = withDefaults(
     defineProps<{
-        jsonText: Component,
+        component: Component,
         minecraftFont?: boolean,
     }>(),
     {
@@ -30,26 +30,79 @@ const classes = computed<string>(() => {
 
 const style = computed<string>(() => {
     let result: string = ""
-    const jsonText = props.jsonText
-
-    if (jsonText.bold) {
+    const c = props.component
+    if (c.bold) {
         result += "font-weight: bold;\n"
     }
 
-    if (jsonText.italic) {
+    if (c.italic) {
         result += "font-style: italic;\n"
     }
 
-    if (jsonText.underline && jsonText.strikethrough) {
+    if (c.underline && c.strikethrough) {
         result += "text-decoration: underline line-through;\n"
-    } else if (jsonText.underline) {
+    } else if (c.underline) {
         result += "text-decoration: underline;\n"
-    } else if (jsonText.strikethrough) {
+    } else if (c.strikethrough) {
         result += "text-decoration: line-through;\n"
     }
 
-    if (jsonText.color) {
-        result += `color: ${jsonText.color}\n`
+    if (c.color) {
+        let color;
+        switch (c.color) {
+            case "black":
+                color = "#000000"
+                break;
+            case "dark_blue":
+                color = "#0000aa"
+                break;
+            case "dark_green":
+                color = "#00aa00"
+                break;
+            case "dark_aqua":
+                color = "#00aaaa"
+                break;
+            case "dark_red":
+                color = "#aa0000"
+                break;
+            case "dark_purple":
+                color = "#aa00aa"
+                break;
+            case "gold":
+                color = "#ffaa00"
+                break;
+            case "gray":
+                color = "#aaaaaa"
+                break;
+            case "dark_gray":
+                color = "#555555"
+                break;
+            case "blue":
+                color = "#5555ff"
+                break;
+            case "green":
+                color = "#55ff55"
+                break;
+            case "aqua":
+                color = "#55ffff"
+                break;
+            case "red":
+                color = "#ff5555"
+                break;
+            case "light_purple":
+                color = "#ff55ff"
+                break;
+            case "yellow":
+                color = "#ffff55"
+                break;
+            case "white":
+                color = "#ffffff"
+                break;
+            default:
+                color = c.color
+                break;
+        }
+        result += `color: ${color}\n`
     }
     return result
 })
@@ -58,8 +111,8 @@ const translatedString = ref<string | undefined>(undefined)
 const translatedLang = ref<string | undefined>(undefined)
 
 const text = computed<string>(() => {
-    const rawText = props.jsonText.text
-    const translateKey = props.jsonText.translate
+    const rawText = props.component.text
+    const translateKey = props.component.translate
     const lang = config.localConfig.language
 
     if (translateKey && translatedLang.value !== lang) {
@@ -77,8 +130,8 @@ const text = computed<string>(() => {
     // Logger.debug(`Chosen: '${actualText}' , from: ['${translatedString.value}', ' ${translateKey}', '${rawText}']`)
 
     try {
-        if (props.jsonText.with) {
-            return vsprintf(actualText, props.jsonText.with)
+        if (props.component.with) {
+            return vsprintf(actualText, props.component.with)
         } else {
             return actualText
         }
@@ -91,7 +144,11 @@ const text = computed<string>(() => {
 </script>
 
 <template>
-    <span :style="style" :class="classes">
-        {{ text }}
+    <span>
+        <span :style="style" :class="classes">
+            {{ text }}
+        </span>
+        <ComponentView v-if="props.component.extra" v-for="c in props.component.extra" :component="c"/>
     </span>
+
 </template>

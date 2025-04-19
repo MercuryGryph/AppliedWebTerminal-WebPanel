@@ -2,14 +2,13 @@
 import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
 import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
-import type Component from "~/core/data/minecraft/Component";
+import Component from "~/core/data/minecraft/Component";
 import {decodeComponent} from "~/core/JsonTextUtils";
+import ComponentView from "~/components/minecraft/ComponentView.vue";
 
-const tooltip1text: Component = {
-    translate: 'block.ae2.sky_stone_block'
-}
-const tooltip1tips: string[] = [
-    'Available: 800.0M'
+const tooltip1text: Component = Component.translatable('block.ae2.sky_stone_block')
+const tooltip1tips: Component[] = [
+    Component.literal('Available: 800.0M')
 ]
 
 const entry1: CraftingPlanSummaryEntry = {
@@ -131,8 +130,11 @@ const cpuStatus3: MECpuStatusBundle = {
 
 const testClick = (it: MECpuStatusBundle) => console.log(it)
 
-const s = "{\"extra\":[{\"text\":\"456\"},{\"color\":\"blue\",\"text\":\"7891\"}],\"text\":\"123\"}"
-console.log(decodeComponent(s))
+const s = "{\"extra\":[{\"text\":\"456\"},{\"color\":\"green\",\"text\":\"7891\"}],\"text\":\"123\"}"
+const testComponent1 = decodeComponent(s)
+console.log(testComponent1)
+
+const testComponent2 = Component.literal("111").append(Component.literal("222").withColor('red'))
 </script>
 
 <template>
@@ -148,5 +150,7 @@ console.log(decodeComponent(s))
         <CpuSelectionCard :status="cpuStatus1" :clicked="testClick"/>
         <CpuSelectionCard :status="cpuStatus2"/>
         <CpuSelectionCard :status="cpuStatus3"/>
+        <ComponentView :component="testComponent1"/>
+        <ComponentView :component="testComponent2"/>
     </div>
 </template>

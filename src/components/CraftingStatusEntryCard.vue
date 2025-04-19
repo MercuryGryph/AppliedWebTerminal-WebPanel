@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
 
-import type jsonText from "~/core/data/minecraft/Component";
+import Component from "~/core/data/minecraft/Component";
 import {useThrottleFn} from "@vueuse/core";
 import {computed, ref} from "vue";
 import {tr} from "~/core/I18nService";
@@ -23,7 +23,7 @@ const classed = computed<string>(() => {
     return ""
 })
 
-const displayName = computed<jsonText | undefined>(() => {
+const displayName = computed<Component | undefined>(() => {
     const raw = props.entry.what!.displayName
     try {
         const jsonText = JSON.parse(raw)
@@ -65,15 +65,15 @@ const tooltipStyle = computed<string>(() => {
 })
 
 const tooltips = computed(() => {
-    const result = new Array<string>()
+    const result = new Array<Component>()
     if (props.entry.storedAmount) {
-        result.push(tr('ae.crafting.status.stored', formatNumber(props.entry.storedAmount)))
+        result.push(Component.literal(tr('ae.crafting.status.stored', formatNumber(props.entry.storedAmount))))
     }
     if (props.entry.activeAmount) {
-        result.push(tr('ae.crafting.status.active', formatNumber(props.entry.storedAmount)))
+        result.push(Component.literal(tr('ae.crafting.status.active', formatNumber(props.entry.storedAmount))))
     }
     if (props.entry.pendingAmount) {
-        result.push(tr('ae.crafting.status.pending', formatNumber(props.entry.pendingAmount)))
+        result.push(Component.literal(tr('ae.crafting.status.pending', formatNumber(props.entry.pendingAmount))))
     }
     return result
 })
