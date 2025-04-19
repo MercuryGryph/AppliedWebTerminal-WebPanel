@@ -5,7 +5,7 @@ import type {Consumer, Subscriber} from "~/core/Subscriber";
 import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import {Expand, Fold} from "@element-plus/icons-vue";
-import {createSelectCpuCommand} from "~/core/data/ae/command/Commands";
+import {createCancelCpuJobCommand, createSelectCpuCommand} from "~/core/data/ae/command/Commands";
 import {sortByConditions} from "~/core/SortUtil";
 
 const props = defineProps<{
@@ -48,11 +48,22 @@ const selectCpu = (cpuId: number) => {
     props.sender(createSelectCpuCommand(cpuId))
 }
 
+const cancelSelectCpuJob = () => {
+    if (selectedCpu.value) {
+        props.sender(createCancelCpuJobCommand(selectedCpu.value))
+    }
+}
+
 props.messageSubscriber.subscribe(s => {
         cpus.value = s.cpus
         const status = s.craftingStatus
         if (status) {
             if (status.fullStatus) {
+                status.entries = sortByConditions(status.entries, [
+                    {key: 'pendingAmount', order: 'desc'},
+                    {key: 'activeAmount', order: 'desc'},
+                    {key: 'storedAmount', order: 'desc'}
+                ])
                 craftingStatus.value = status
             } else {
                 const oldStatus = craftingStatus.value
@@ -134,16 +145,16 @@ onUnmounted(() => {
             </el-aside>
             <el-container>
                 <el-main>
-                    <div class="flex flex-col items-end">
+                    <div class="flex flex-col items-end h-77vh max-h-77vh">
                         <el-text size="large" class="m-b-2 font-size-16px">合成状态</el-text>
-                        <div class="grow flex flex-wrap max-h-70vh overflow-y-scroll">
+                        <div class="grow flex flex-wrap overflow-y-scroll">
                             <CraftingStatusEntryCard
                                 v-for="entry in craftingStatus?.entries"
                                 :key="entry.serial"
                                 :entry="entry"
                             />
                         </div>
-                        <el-button>Cancel</el-button>
+                        <el-button size="large" @click="cancelSelectCpuJob">Cancel</el-button>
                     </div>
                 </el-main>
             </el-container>

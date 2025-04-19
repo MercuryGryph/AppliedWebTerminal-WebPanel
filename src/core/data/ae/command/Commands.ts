@@ -12,7 +12,7 @@ export function createSelectCpuCommand(cpuId: number) {
     }
 }
 
-export function cancelCpuJobCommand(cpuId: number) {
+export function createCancelCpuJobCommand(cpuId: number) {
     return {
         type: "cancel_job",
         cpuId: cpuId
