@@ -19,6 +19,16 @@ export default class LocalStorageManager<T> {
         } else {
             result = JSON.parse(data)
         }
+        let changed = false
+        for (let resultKey of Object.keys(this.defaultValue())) {
+            if (result[resultKey] === undefined) {
+                result[resultKey] = this.defaultValue()[resultKey]
+                changed = true
+            }
+        }
+        if (changed) {
+            this.set(result)
+        }
         Logger.info(`LocalStorageManager got ${this.localStorageKey}:`)
         Logger.debug(result)
         return result
