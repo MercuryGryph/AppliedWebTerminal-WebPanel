@@ -134,16 +134,24 @@ function onSelectClick() {
         :amount="requestAmount"
         class="h-80% w-80%"
     />
-    <el-dialog v-if="showAmountSelect" v-model="showAmountSelect" align-center>
+    <el-dialog v-if="showAmountSelect" v-model="showAmountSelect" align-center style="width: 30%">
         <template #header>
             <el-text>
                 {{ tr("ae.crafting.plan.select_amount") }}
             </el-text>
         </template>
-        <el-row class="justify-between">
+        <el-row class="justify-between items-center">
             <MEStackComponent :stack="{what: requestKey!, amount: 0, craftable: false}"/>
-            <el-input v-model.number="requestAmount" type="number" class="w-80 px-4 font-size-8" :min="0" @keyup.enter="onSelectClick"/>
-            <el-button class="h-64px w-30 font-size-8" size="large" :disabled="!requestAmount" @click="onSelectClick">
+            <el-input-number
+                class="w-40 h-32px px-4 font-size-16"
+                v-model="requestAmount"
+                size="large"
+                :controls="false"
+                :precision="0"
+                :min="0"
+                @keyup.enter="onSelectClick"
+            />
+            <el-button class="h-32px w-20" size="large" :disabled="!requestAmount" @click="onSelectClick">
                 {{ tr("ae.crafting.plan.next") }}
             </el-button>
         </el-row>

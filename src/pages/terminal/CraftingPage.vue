@@ -1,15 +1,18 @@
 <script setup lang="ts">
 
-import type {MECraftingServiceStatusBundle} from "~/core/data/ae/MECraftingStatusBundle";
+import {MECraftingServiceStatusBundle, MECraftingStatusBundle} from "~/core/data/ae/MECraftingStatusBundle";
 import type {Consumer, Subscriber} from "~/core/Subscriber";
 import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import {Expand, Fold} from "@element-plus/icons-vue";
+import {createSelectCpuCommand} from "~/core/data/ae/command/Commands";
 
 const props = defineProps<{
     sender: Consumer<any>,
     messageSubscriber: Subscriber<MECraftingServiceStatusBundle>
 }>()
+
+
 
 const isCollapsed = ref(false)
 const isMobile = ref(false)
@@ -19,6 +22,9 @@ const asideWidth = computed(() => {
 })
 
 const cpus = ref<MECpuStatusBundle[]>([])
+const craftingStatus = ref<MECraftingStatusBundle | undefined>(undefined)
+
+const selectedCpu = ref<number | undefined>(undefined)
 
 const checkMobile = () => {
     isMobile.value = document.body.clientWidth < 768
@@ -37,41 +43,48 @@ const closeMobileSidebar = () => {
     showMobileSidebar.value = false
 }
 
+const selectCpu = (cpuId: number) => {
+    selectedCpu.value = cpuId
+    props.sender(createSelectCpuCommand(cpuId))
+}
+
+props.messageSubscriber.subscribe(s => {
+    cpus.value = s.cpus
+    const status = s.craftingStatus
+    if (status) {
+        if (status.fullStatus) {
+            craftingStatus.value = status
+        } else {
+            const oldStatus = craftingStatus.value
+            if (oldStatus) {
+                oldStatus.startItemCount = status.startItemCount
+                oldStatus.remainingItemCount = status.remainingItemCount
+                oldStatus.elapsedTime = status.elapsedTime
+                const entryMap = new Map(oldStatus.entries.map(entry => [entry.serial, entry]))
+                for (const entry of status.entries) {
+                    const oltEntry = entryMap.get(entry.serial)
+                    if (oltEntry) {
+                        oltEntry.pendingAmount = entry.pendingAmount
+                        oltEntry.activeAmount = entry.activeAmount
+                        oltEntry.storedAmount = entry.storedAmount
+                    }
+                }
+                craftingStatus.value = oldStatus
+            }
+        }
+    } else {
+        craftingStatus.value = undefined
+    }
+})
+
 onMounted(() => {
     checkMobile()
     window.addEventListener("resize", checkMobile)
-    props.messageSubscriber.subscribe(s => {
-        cpus.value = s.cpus
-    })
 })
 
 onUnmounted(() => {
     window.removeEventListener("resize", checkMobile)
 })
-
-const cpuStatus3: MECpuStatusBundle = {
-    busy: true,
-    coProcessorCount: 2048,
-    craftingStatus: {
-        crafting: {
-            amount: 1000,
-            what: {
-                displayName: "{\"translate\":\"block.ae2.256k_crafting_storage\"}",
-                id: "ae2:256k_crafting_storage",
-                type: "ae2:i"
-            },
-            craftable: true
-        },
-        totalItems: 2147483647,
-        progress: 10717740,
-        elapsedTimeNanos: 1919810000
-    },
-    id: 2,
-    name: undefined,
-    storageSize: 536608768
-}
-
-
 </script>
 
 <template>
@@ -91,7 +104,13 @@ const cpuStatus3: MECpuStatusBundle = {
                 }"
             >
                 <el-menu v-for="cpu in cpus">
-                    <CpuSelectionCard class="cpu-selection-card my-1" v-show="!isCollapsed" :status="cpu"/>
+                    <CpuSelectionCard
+                        class="cpu-selection-card my-1"
+                        v-show="!isCollapsed"
+                        :status="cpu"
+                        :style="cpu.id == selectedCpu ? 'background-color: var(--app-mestack-hover-color);' : ''"
+                        @click="() => selectCpu(cpu.id)"
+                    />
                 </el-menu>
                 <div class="absolute pos-top-0 pos-left-0" @click="toggleCollapse">
                     <el-tooltip
@@ -105,7 +124,17 @@ const cpuStatus3: MECpuStatusBundle = {
             </el-aside>
             <el-container>
                 <el-main>
-                    TEST
+                    <div class="flex flex-col h-full">
+                        <el-text size="large">合成状态</el-text>
+                        <div class="grow flex overflow-y-scroll">
+                            <CraftingStatusEntryCard
+                                v-for="entry in craftingStatus?.entries"
+                                :key="entry.serial"
+                                :entry="entry"
+                            />
+                        </div>
+                        <el-button>Cancel</el-button>
+                    </div>
                 </el-main>
             </el-container>
         </el-container>

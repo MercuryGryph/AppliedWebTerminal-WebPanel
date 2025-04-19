@@ -75,7 +75,7 @@ function onSubmit() {
 </script>
 
 <template>
-    <el-dialog v-bind="$attrs" v-model="model" class="dialog_crafting_plan">
+    <el-dialog v-bind="$attrs" v-model="model" class="dialog_crafting_plan" @keyup.enter="onSubmit">
         <template #header>
             <el-text line-clamp="1" class="text-6">
                 {{
