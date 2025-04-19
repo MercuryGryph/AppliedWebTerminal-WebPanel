@@ -152,7 +152,7 @@ const onMouseLeave = () => {
 
 <template>
     <el-card
-        ref="hoverElement" class="h-23 h-full w-50 flex flex-col justify-end" @mousemove="onMouseMove"
+        ref="hoverElement" class="min-h-23 w-50 flex flex-col justify-end" @mousemove="onMouseMove"
         @mouseleave="onMouseLeave"
         @click="clickEventWrapper"
     >
