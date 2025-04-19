@@ -6,6 +6,7 @@ import {useConfig} from "~/data/Config";
 import {fetchServerConfig} from "~/data/ServerConfig";
 import MainPage from "~/pages/MainPage.vue";
 import TerminalPage from "~/pages/TerminalPage.vue";
+import {ConfigSubsciber} from "~/core/Subscriber";
 
 const config = useConfig()
 
@@ -18,6 +19,7 @@ const appStorage = useAppStorage()
 
 watch(config.localConfig, () => {
     appStorage.localConfigStoreManager.set(config.localConfig)
+    ConfigSubsciber.accept(config.localConfig)
 })
 
 </script>

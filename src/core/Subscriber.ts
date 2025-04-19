@@ -1,3 +1,5 @@
+import LocalConfig from "~/data/LocalConfig";
+
 export type Consumer<T> = ((it: T) => void)
 
 export class Subscriber<T> {
@@ -18,3 +20,5 @@ export class Subscriber<T> {
         this.listeners.filter(it => it !== cons)
     }
 }
+
+export let ConfigSubsciber = new Subscriber<LocalConfig>()

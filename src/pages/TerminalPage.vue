@@ -4,13 +4,17 @@ import type {MECraftingServiceStatusBundle} from "~/core/data/ae/MECraftingStatu
 import {ElMessage} from "element-plus";
 import {onUnmounted, ref} from "vue";
 import {tr} from "~/core/I18nService";
-import {Subscriber} from "~/core/Subscriber"
+import {ConfigSubsciber, Subscriber} from "~/core/Subscriber"
 import WebSocketService from "~/core/WebSocketService";
 import {useAppStorage} from "~/data/AppStorage";
 import CraftingPage from "~/pages/terminal/CraftingPage.vue";
 import StoragePage from "~/pages/terminal/StoragePage.vue";
+import LocalConfig from "~/data/LocalConfig";
+import {createSetUpdateIntervalCommand} from "~/core/data/ae/command/Commands";
+import {useConfig} from "~/data/Config";
 
 const appStorage = useAppStorage()
+const localConfig = useConfig()
 
 enum Page {
     Storage, Crafting
@@ -28,6 +32,11 @@ const messageSender = (msg: any) => {
         websocket.send(str)
     }
 }
+
+const onConfigChanged = (it: LocalConfig) => {
+    messageSender(createSetUpdateIntervalCommand(it.refreshInterval))
+}
+ConfigSubsciber.subscribe(onConfigChanged)
 
 messageSubscriber.subscribe(it => {
     if (it) {
@@ -48,6 +57,7 @@ websocket.addOnOpenListener("1", _it => {
     connected = true
     stateSubscriber.accept(connected)
     displaySuccess(tr("websocket.connection.established"))
+    messageSender(createSetUpdateIntervalCommand(localConfig.localConfig.refreshInterval))
 })
 
 websocket.addOnCloseListener("1", it => {
@@ -84,6 +94,7 @@ function displayFailure(message: string) {
 
 onUnmounted(() => {
     websocket.close()
+    ConfigSubsciber.remove(onConfigChanged)
 })
 
 </script>
