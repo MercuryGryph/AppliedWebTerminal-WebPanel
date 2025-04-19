@@ -147,12 +147,14 @@ onUnmounted(() => {
                 <el-main>
                     <div class="flex flex-col items-end h-77vh max-h-77vh">
                         <el-text size="large" class="m-b-2 font-size-16px">合成状态</el-text>
-                        <div class="grow flex flex-wrap overflow-y-scroll">
-                            <CraftingStatusEntryCard
-                                v-for="entry in craftingStatus?.entries"
-                                :key="entry.serial"
-                                :entry="entry"
-                            />
+                        <div class="grow">
+                            <div class="flex flex-wrap overflow-y-scroll">
+                                <CraftingStatusEntryCard
+                                    v-for="entry in craftingStatus?.entries"
+                                    :key="entry.serial"
+                                    :entry="entry"
+                                />
+                            </div>
                         </div>
                         <el-button size="large" @click="cancelSelectCpuJob">Cancel</el-button>
                     </div>
