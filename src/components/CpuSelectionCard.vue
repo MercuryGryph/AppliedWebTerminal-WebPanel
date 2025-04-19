@@ -6,7 +6,7 @@ import {useThrottleFn} from "@vueuse/core";
 import {sprintf, vsprintf} from "sprintf-js";
 import {computed, ref, watch} from "vue";
 import {tr} from "~/core/I18nService";
-import {fetchTranslation, decodeComponent} from "~/core/JsonTextUtils";
+import {decodeComponent, fetchTranslation} from "~/core/JsonTextUtils";
 import {formatNumber} from "~/core/NumberUtil";
 import {useConfig} from "~/data/Config";
 
@@ -67,7 +67,9 @@ const getVisualOrderText = (text: Component) => {
     itemNameText.value = text.text!
 }
 watch(props, _it => {
-    getVisualOrderText(decodeComponent(props.status.craftingStatus!.crafting.what.displayName))
+    if (props.status.craftingStatus) {
+        getVisualOrderText(decodeComponent(props.status.craftingStatus!.crafting.what.displayName))
+    }
 }, {
     deep: true
 })
@@ -168,12 +170,14 @@ const onMouseLeave = () => {
                 <img :alt="props.status.craftingStatus!.crafting.what.id" class="ms-1 h-32px w-32px" :src="url">
             </div>
         </div>
-        <ItemTooltip
-            v-show="showTooltip"
-            class="z-10000"
-            :tooltips="tooltips"
-            :style="tooltipStyle"
-            :text="name"
-        />
+        <Teleport to=".terminal_page">
+            <ItemTooltip
+                v-show="showTooltip"
+                class="z-10000"
+                :tooltips="tooltips"
+                :style="tooltipStyle"
+                :text="name"
+            />
+        </Teleport>
     </el-card>
 </template>

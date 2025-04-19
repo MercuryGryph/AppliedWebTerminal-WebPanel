@@ -85,18 +85,21 @@ const keyImageUrl = computed(() => {
             +
         </el-text>
     </div>
-    <ItemTooltip
-        v-if="displayName"
-        v-show="showTooltip"
-        :tooltips="tooltips"
-        :style="tooltipStyle"
-        :text="displayName"
-        class="z-10000"
-    />
+    <Teleport to=".terminal_page">
+        <ItemTooltip
+            v-if="displayName"
+            v-show="showTooltip"
+            :tooltips="tooltips"
+            :style="tooltipStyle"
+            :text="displayName"
+            class="z-10000"
+        />
+    </Teleport>
+
 </template>
 
 <style scoped>
 .stack-container:hover {
-    background-color: var(--app-mestack-color);
+    background-color: var(--app-mestack-hover-color);
 }
 </style>

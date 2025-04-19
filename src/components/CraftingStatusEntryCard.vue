@@ -123,13 +123,15 @@ const keyImageUrl = computed(() => {
                 :src="keyImageUrl"
             >
         </div>
-        <ItemTooltip
-            v-if="displayName"
-            v-show="showTooltip"
-            class="z-10000"
-            :tooltips="tooltips"
-            :style="tooltipStyle"
-            :text="displayName"
-        />
+        <Teleport to=".terminal_page">
+            <ItemTooltip
+                v-if="displayName"
+                v-show="showTooltip"
+                class="z-10000"
+                :tooltips="tooltips"
+                :style="tooltipStyle"
+                :text="displayName"
+            />
+        </Teleport>
     </el-card>
 </template>

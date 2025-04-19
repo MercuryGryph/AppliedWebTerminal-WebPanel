@@ -133,7 +133,7 @@ onUnmounted(() => {
         </el-card>
         <div>
             <StoragePage v-if="selectedPage === Page.Storage"/>
-            <CraftingPage v-else-if="selectedPage === Page.Crafting"/>
+            <CraftingPage :sender="messageSender" :messageSubscriber="messageSubscriber" v-else-if="selectedPage === Page.Crafting"/>
         </div>
     </div>
 </template>
