@@ -38,5 +38,15 @@
   "ae.cpu.storage": "ǝbɐɹoʇS %s",
   "ae.cpu.coprocessors": "sɹossǝɔoɹԀ-oƆ %d",
   "ae.cpu.crafting": "%s %d buıʇɟɐɹƆ",
-  "ae.cpu.crafting_progress": "%s uı %s%% pǝʇɟɐɹƆ"
+  "ae.cpu.crafting_progress": "%s uı %s%% pǝʇɟɐɹƆ",
+  "ae.crafting.plan.title": "uɐןԀ buıʇɟɐɹƆ",
+  "ae.crafting.plan.title_with_bytes": "pǝs∩ sǝʇʎᗺ %s - uɐןԀ buıʇɟɐɹƆ",
+  "ae.crafting.plan.calculating": "˙˙˙ʇıɐM ǝsɐǝןԀ buıʇɐןnɔןɐƆ",
+  "ae.crafting.plan.cancel": "ןǝɔuɐƆ",
+  "ae.crafting.plan.start": "ʇɹɐʇS",
+  "ae.crafting.plan.select_amount": "ʇunoɯⱯ ʇɔǝןǝS",
+  "ae.crafting.plan.next": "ʇxǝN",
+  "ae.crafting.plan.submit_successes": "ʎןןnɟssǝɔɔnS ʇıɯqnS uɐןԀ ʇɟɐɹƆ",
+  "ae.crafting.plan.submit_failure": "ǝɹnןıɐℲ ʇıɯqnS uɐןԀ ʇɟɐɹƆ",
+  "ae.crafting.plan.submit_failed_by": "%s ʎq pǝןıɐɟ ʇıɯqnS uɐןԀ ʇɟɐɹƆ"
 }

@@ -119,6 +119,7 @@ function onStackClick(stack: MEStack) {
 }
 
 function onSelectClick() {
+    if (requestAmount.value <= 0) return
     showAmountSelect.value = false
     showCraftPlan.value = true
 }
@@ -129,21 +130,21 @@ function onSelectClick() {
     <CraftingPlanSummaryComponent
         v-if="showCraftPlan"
         v-model="showCraftPlan"
-        :what="requestKey"
+        :what="requestKey!"
         :amount="requestAmount"
         class="h-80% w-80%"
     />
     <el-dialog v-if="showAmountSelect" v-model="showAmountSelect" align-center>
         <template #header>
             <el-text>
-                Select Amount
+                {{ tr("ae.crafting.plan.select_amount") }}
             </el-text>
         </template>
-        <el-row>
-            <MEStackComponent :stack="{what: requestKey, amount: 0, craftable: false}"/>
-            <el-input v-model="requestAmount" type="number" class="w-80 px-4"/>
-            <el-button class="h-64px w-20" size="large" :disabled="!requestAmount" @click="onSelectClick">
-                Next
+        <el-row class="justify-between">
+            <MEStackComponent :stack="{what: requestKey!, amount: 0, craftable: false}"/>
+            <el-input v-model.number="requestAmount" type="number" class="w-80 px-4 font-size-8" :min="0" @keyup.enter="onSelectClick"/>
+            <el-button class="h-64px w-30 font-size-8" size="large" :disabled="!requestAmount" @click="onSelectClick">
+                {{ tr("ae.crafting.plan.next") }}
             </el-button>
         </el-row>
     </el-dialog>

@@ -5,6 +5,7 @@ import {ElNotification} from "element-plus";
 import {nextTick, onMounted, onUnmounted, ref} from "vue";
 import {createCraftPlan, submitCraftingPlan} from "~/core/AeUtils";
 import {useAppStorage} from "~/data/AppStorage";
+import {tr} from "~/core/I18nService";
 
 const props = defineProps<{
     what: AeKeyObject
@@ -55,13 +56,13 @@ function onSubmit() {
             if (data) {
                 if (data.success) {
                     ElNotification({
-                        title: "Craft Plan Submit Successfully",
+                        title: tr("ae.crafting.plan.submit_successes"),
                         type: "success",
                     })
                 } else {
                     ElNotification({
-                        title: "Craft Plan Submit Failure",
-                        message: `Craft Plan Submit failed by ${data.errorCode}`,
+                        title: tr("ae.crafting.plan.submit_failure"),
+                        message: tr("ae.crafting.plan.submit_failed_by", data.errorCode),
                         type: "error",
                     })
                 }
@@ -77,7 +78,9 @@ function onSubmit() {
     <el-dialog v-bind="$attrs" v-model="model" class="dialog_crafting_plan">
         <template #header>
             <el-text line-clamp="1" class="text-6">
-                Crafting Plan {{ summary ? `- ${summary.usedBytes.toLocaleString()} Bytes Used` : "" }}
+                {{
+                    summary ? tr('ae.crafting.plan.title_with_bytes', summary.usedBytes.toLocaleString()) : tr('ae.crafting.plan.title')
+                }}
             </el-text>
         </template>
         <div ref="containerRef" class="content-container h-full w-full flex items-center justify-center">
@@ -92,16 +95,17 @@ function onSubmit() {
                 />
             </div>
             <p v-if="!summary" class="adaptive-text">
-                Calculating Please Wait...
+                {{ tr("ae.crafting.plan.calculating") }}
             </p>
         </div>
         <template #footer>
             <el-row justify="space-between" class="px-2">
                 <el-button class="w-28" size="large" @click="model = false">
-                    Cancel
+                    {{ tr("ae.crafting.plan.cancel") }}
                 </el-button>
-                <el-button type="primary" class="w-28" size="large" :disabled="!summary || summary.simulation" @click="onSubmit">
-                    Start
+                <el-button type="primary" class="w-28" size="large" :disabled="!summary || summary.simulation"
+                           @click="onSubmit">
+                    {{ tr("ae.crafting.plan.start") }}
                 </el-button>
             </el-row>
         </template>

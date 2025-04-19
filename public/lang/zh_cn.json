@@ -37,5 +37,16 @@
   "ae.cpu.storage": "%s 存储容量",
   "ae.cpu.coprocessors": "%d 并行处理单元",
   "ae.cpu.crafting": "正在合成 %d %s",
-  "ae.cpu.crafting_progress": "已合成 %s%%，用时 %s"
+  "ae.cpu.crafting_progress": "已合成 %s%%，用时 %s",
+  "ae.crafting.cpu": "CPU #%d",
+  "ae.crafting.plan.title": "合成计划",
+  "ae.crafting.plan.title_with_bytes": "合成计划 - %s 字节已使用",
+  "ae.crafting.plan.calculating": "计算中，请稍后...",
+  "ae.crafting.plan.cancel": "取消",
+  "ae.crafting.plan.start": "开始",
+  "ae.crafting.plan.select_amount": "选择数量",
+  "ae.crafting.plan.next": "下一步",
+  "ae.crafting.plan.submit_successes": "合成计划提交成功",
+  "ae.crafting.plan.submit_failure": "合成计划提交失败",
+  "ae.crafting.plan.submit_failed_by": "由于 %s，合成计划提交失败"
 }
