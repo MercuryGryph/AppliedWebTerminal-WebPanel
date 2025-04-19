@@ -40,7 +40,6 @@
   "ae.cpu.crafting": "Crafting ",
   "ae.cpu.crafting_progress": "Crafted ",
   "ae.cpu.crafting_progress.in": " in ",
-  "settings.title": "Settings",
   "ae.crafting.plan.title": "Crafting Plan",
   "ae.crafting.plan.title_with_bytes": "Crafting Plan - %s Bytes Used",
   "ae.crafting.plan.calculating": "Calculating Please Wait...",
@@ -50,5 +49,11 @@
   "ae.crafting.plan.next": "Next",
   "ae.crafting.plan.submit_successes": "Craft Plan Submit Successfully",
   "ae.crafting.plan.submit_failure": "Craft Plan Submit Failure",
-  "ae.crafting.plan.submit_failed_by": "Craft Plan Submit failed by %s"
+  "ae.crafting.plan.submit_failed_by": "Craft Plan Submit failed by %s",
+  "settings.title": "Settings",
+  "settings.item.terminal": "Terminal",
+  "settings.item.terminal.refresh_interval": "Refresh Interval",
+  "settings.item.status": "Status",
+  "settings.item.language": "Language",
+  "settings.item.language.configure": "Configure"
 }
