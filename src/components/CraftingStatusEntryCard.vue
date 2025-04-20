@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
 
-import Component from "~/core/data/minecraft/Component";
 import {useThrottleFn} from "@vueuse/core";
 import {computed, ref} from "vue";
+import Component from "~/core/data/minecraft/Component";
 import {tr} from "~/core/I18nService";
 import {formatNumber} from "~/core/NumberUtil";
 import Logger from "~/utils/Logger";
@@ -87,7 +87,7 @@ const keyImageUrl = computed(() => {
 <template>
     <el-card
         ref="hoverElement"
-        class="relative m-1 max-w-220px min-w-220px"
+        class="relative m-1 h-100px max-w-220px min-w-220px"
         :class="classed"
         v-bind="$attrs"
         @mousemove="onMouseMove"

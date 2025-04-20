@@ -1,4 +1,4 @@
-import LocalConfig from "~/data/LocalConfig";
+import type LocalConfig from "~/data/LocalConfig";
 
 export type Consumer<T> = ((it: T) => void)
 
@@ -21,4 +21,4 @@ export class Subscriber<T> {
     }
 }
 
-export let ConfigSubsciber = new Subscriber<LocalConfig>()
+export const ConfigSubsciber = new Subscriber<LocalConfig>()

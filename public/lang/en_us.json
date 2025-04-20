@@ -58,5 +58,7 @@
   "settings.item.language.configure": "Configure",
   "settings.item.terminal.sorting": "Sorting",
   "settings.item.terminal.sorting.ascending": "Ascending",
-  "settings.item.terminal.sorting.descending": "Descending"
+  "settings.item.terminal.sorting.descending": "Descending",
+  "ae.crafting.sidebar.open": "Open Sidebar",
+  "ae.crafting.sidebar.close": "Collapse Sidebar"
 }

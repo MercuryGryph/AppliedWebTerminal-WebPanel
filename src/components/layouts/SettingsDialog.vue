@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import {useAppStorage} from "~/data/AppStorage";
-import {useConfig} from "~/data/Config";
-import {tr} from "~/core/I18nService";
 import {computed, ref} from "vue";
+import {tr} from "~/core/I18nService";
+import {useConfig} from "~/data/Config";
+import Logger from "~/utils/Logger";
+import {clamp} from "~/utils/utils";
 import {sortingAsTranslationKey, StorageSorting} from "~/core/data/ae/StorageSorting";
 
 const display = defineModel<boolean>()
 
 const config = useConfig()
-const appStorage = useAppStorage()
 
 const displayLanguage = ref(false)
 const interval = ref(config.localConfig.refreshInterval)
@@ -30,6 +30,17 @@ const onSortingChanged = (it: StorageSorting) => {
     sorting.value = it
     config.localConfig.sorting = it
 }
+const dialogWidth = computed<number>(() => {
+    const width = document.documentElement.clientWidth
+
+    const min = 300
+    const max = 500
+    const relativeFactor = 0.6
+
+    const res = clamp(relativeFactor * width, min, max)
+    Logger.debug(`dialog width: ${res}`)
+    return res
+})
 </script>
 
 <template>
@@ -38,9 +49,11 @@ const onSortingChanged = (it: StorageSorting) => {
         v-model="display"
         :title='tr("settings.title", config.localConfig.language)'
         class="w-100"
+        :width="dialogWidth"
     >
         <div class="flex flex-col">
-            <el-divider content-position="left" class="font-size-16px">{{ tr("settings.item.terminal", lang) }}
+            <el-divider content-position="left" class="font-size-16px">
+                {{ tr("settings.item.terminal", lang) }}
             </el-divider>
             <div class="flex mt-2 justify-between items-center">
                 {{ tr("settings.item.terminal.sorting", lang) }}
@@ -68,6 +81,5 @@ const onSortingChanged = (it: StorageSorting) => {
             <el-button class="w-fit" @click="acceptLanguage">{{ tr("settings.item.language.configure", lang) }}
             </el-button>
         </div>
-
     </el-dialog>
 </template>

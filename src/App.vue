@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {watch} from "vue";
 
+import {ConfigSubsciber} from "~/core/Subscriber";
 import {useAppStorage} from "~/data/AppStorage";
 import {useConfig} from "~/data/Config";
 import {fetchServerConfig} from "~/data/ServerConfig";
 import MainPage from "~/pages/MainPage.vue";
 import TerminalPage from "~/pages/TerminalPage.vue";
-import {ConfigSubsciber} from "~/core/Subscriber";
 
 const config = useConfig()
 

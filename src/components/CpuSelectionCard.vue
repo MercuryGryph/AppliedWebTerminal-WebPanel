@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
 import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
-import Component from "~/core/data/minecraft/Component";
 import {useThrottleFn} from "@vueuse/core";
 import {sprintf, vsprintf} from "sprintf-js";
 import {computed, ref, watch} from "vue";
+import Component from "~/core/data/minecraft/Component";
 import {tr} from "~/core/I18nService";
 import {decodeComponent, fetchTranslation} from "~/core/JsonTextUtils";
 import {formatNumber} from "~/core/NumberUtil";
@@ -100,7 +100,7 @@ const formatNanoseconds = (ns: number) => {
 
 const precentColor = computed(() => {
     if (props.status.craftingStatus) {
-        let p = props.status.craftingStatus.progress / props.status.craftingStatus.totalItems
+        const p = props.status.craftingStatus.progress / props.status.craftingStatus.totalItems
         const r = Math.floor(255.0 * Math.max(0.0, Math.min(2.0 - 2.0 * p, 1.0)));
         const g = Math.floor(255.0 * Math.max(0.0, Math.min(2.0 * p, 1.0)));
         const rgb = (r << 16) + (g << 8);
@@ -131,9 +131,9 @@ const tooltips = computed(() => {
             .append(numberComponent(props.status.craftingStatus!.crafting.amount))
             .append(Component.literal(` ${itemNameText.value}`))
         )
-        let progress = ((props.status.craftingStatus!.progress / props.status.craftingStatus.totalItems) * 100.0)
+        const progress = ((props.status.craftingStatus!.progress / props.status.craftingStatus.totalItems) * 100.0)
             .toFixed(2)
-        let time = formatNanoseconds(props.status.craftingStatus.elapsedTimeNanos)
+        const time = formatNanoseconds(props.status.craftingStatus.elapsedTimeNanos)
         result.push(Component.literal(tr("ae.cpu.crafting_progress"))
             .append(Component.literal(`${progress}%`).withColor(precentColor.value))
             .append(Component.literal(tr("ae.cpu.crafting_progress.in")))

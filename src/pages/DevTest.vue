@@ -2,9 +2,9 @@
 import type MECraftingStatusEntry from "~/core/data/ae/cpu/crafting/MECraftingStatusEntry";
 import type MECpuStatusBundle from "~/core/data/ae/cpu/MECpuStatusBundle";
 import type CraftingPlanSummaryEntry from "~/core/data/ae/craft/plan/CraftingPlanSummaryEntry";
+import ComponentView from "~/components/minecraft/ComponentView.vue";
 import Component from "~/core/data/minecraft/Component";
 import {decodeComponent} from "~/core/JsonTextUtils";
-import ComponentView from "~/components/minecraft/ComponentView.vue";
 
 const tooltip1text: Component = Component.translatable('block.ae2.sky_stone_block')
 const tooltip1tips: Component[] = [

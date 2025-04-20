@@ -2,10 +2,10 @@
 import type MEStack from "~/core/data/ae/core/MEStack";
 import {useThrottleFn} from "@vueuse/core";
 import {computed, ref} from "vue";
+import Component from "~/core/data/minecraft/Component";
 import {tr} from "~/core/I18nService";
 import {formatNumber} from "~/core/NumberUtil";
 import Logger from "~/utils/Logger";
-import Component from "~/core/data/minecraft/Component";
 
 const props = defineProps<{
     stack: MEStack
@@ -79,7 +79,7 @@ const keyImageUrl = computed(() => {
             :src="keyImageUrl"
         >
         <el-text class="absolute pos-bottom-2px pos-right-2px" size="small">
-            {{ (!props.stack.amount && props.stack.craftable) ? tr("ae.tooltip.craft") : formatNumber(props.stack.amount) }}
+            {{ (!props.stack.amount && props.stack.craftable) ? tr("ae.tooltip.craft") : (props.stack.amount ? formatNumber(props.stack.amount) : '') }}
         </el-text>
         <el-text v-if="props.stack.craftable" class="absolute pos-left-2px pos-top-0px">
             +
@@ -95,7 +95,6 @@ const keyImageUrl = computed(() => {
             class="z-10000"
         />
     </Teleport>
-
 </template>
 
 <style scoped>
