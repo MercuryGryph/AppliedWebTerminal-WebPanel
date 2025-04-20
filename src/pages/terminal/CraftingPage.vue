@@ -7,7 +7,6 @@ import {Expand, Fold} from "@element-plus/icons-vue";
 import {computed, onMounted, onUnmounted, ref} from "vue";
 import {createCancelCpuJobCommand, createSelectCpuCommand} from "~/core/data/ae/command/Commands";
 import {tr} from "~/core/I18nService";
-import {sortByConditions} from "~/core/SortUtil";
 
 const props = defineProps<{
     sender: Consumer<any>,
@@ -25,7 +24,7 @@ const asideWidth = computed(() => {
 const cpus = ref<MECpuStatusBundle[]>([])
 const craftingStatus = ref<MECraftingStatusBundle | undefined>(undefined)
 
-const selectedCpu = ref<number | undefined>(undefined)
+const selectedCpuId = ref<number | undefined>(undefined)
 
 const checkMobile = () => {
     isMobile.value = document.body.clientWidth < 768
@@ -45,26 +44,50 @@ const closeMobileSidebar = () => {
 }
 
 const selectCpu = (cpuId: number) => {
-    selectedCpu.value = cpuId
+    selectedCpuId.value = cpuId
     props.sender(createSelectCpuCommand(cpuId))
 }
 
 const cancelSelectCpuJob = () => {
-    if (selectedCpu.value) {
-        props.sender(createCancelCpuJobCommand(selectedCpu.value))
+    if (selectedCpuId.value) {
+        props.sender(createCancelCpuJobCommand(selectedCpuId.value))
     }
 }
+const selectedCpu = computed<MECpuStatusBundle | undefined>(() => {
+    return cpus.value.find(cpu => cpu.id === selectedCpuId.value)
+})
 
-props.messageSubscriber.subscribe(s => {
-    cpus.value = s.cpus
-    const status = s.craftingStatus
+const isBusy = computed(() => {
+    return selectedCpu.value?.busy
+})
+
+let lastBusy = false
+
+const onReceiveWSMessage = (data: MECraftingServiceStatusBundle) => {
+    if (isBusy.value && !lastBusy) {
+        console.log(isBusy.value, lastBusy)
+        console.log(selectedCpuId.value)
+        if (selectedCpuId.value) {
+            props.sender(createSelectCpuCommand(selectedCpuId.value))
+        }
+    }
+    lastBusy = !!isBusy.value
+    if (!cpus.value.length) {
+        selectedCpuId.value = data.cpus.at(0)?.id
+        if (selectedCpuId.value) {
+            props.sender(createSelectCpuCommand(selectedCpuId.value))
+        }
+    }
+    cpus.value = data.cpus
+    const status = data.craftingStatus
     if (status) {
         if (status.fullStatus) {
-            status.entries = sortByConditions(status.entries, [
-                {key: 'pendingAmount', order: 'desc'},
-                {key: 'activeAmount', order: 'desc'},
-                {key: 'storedAmount', order: 'desc'}
-            ])
+            status.entries = status.entries.sort((a, b) => {
+                const sumA = a.pendingAmount + a.activeAmount
+                const sumB = b.pendingAmount + b.activeAmount
+
+                return sumB - sumA || b.pendingAmount - a.pendingAmount || b.activeAmount - a.activeAmount || b.storedAmount - a.storedAmount
+            })
             craftingStatus.value = status
         } else {
             const oldStatus = craftingStatus.value
@@ -84,26 +107,30 @@ props.messageSubscriber.subscribe(s => {
                 oldStatus.entries = oldStatus.entries.filter(
                     entry => !(entry.pendingAmount <= 0 && entry.activeAmount <= 0 && entry.storedAmount <= 0)
                 )
-                oldStatus.entries = sortByConditions(oldStatus.entries, [
-                    {key: 'pendingAmount', order: 'desc'},
-                    {key: 'activeAmount', order: 'desc'},
-                    {key: 'storedAmount', order: 'desc'}
-                ])
+                oldStatus.entries = oldStatus.entries.sort((a, b) => {
+                    const sumA = a.pendingAmount + a.activeAmount
+                    const sumB = b.pendingAmount + b.activeAmount
+
+                    return sumB - sumA || b.pendingAmount - a.pendingAmount || b.activeAmount - a.activeAmount || b.storedAmount - a.storedAmount
+                })
                 craftingStatus.value = oldStatus
             }
         }
-    } else {
+    } else if (!selectedCpu.value?.busy) {
         craftingStatus.value = undefined
     }
-})
+}
 
 onMounted(() => {
     checkMobile()
     window.addEventListener("resize", checkMobile)
+    props.messageSubscriber.subscribe(onReceiveWSMessage)
 })
 
 onUnmounted(() => {
     window.removeEventListener("resize", checkMobile)
+    props.sender(createSelectCpuCommand(-1))
+    props.messageSubscriber.remove(onReceiveWSMessage)
 })
 </script>
 
@@ -130,7 +157,7 @@ onUnmounted(() => {
                         :key="cpu.id"
                         class="cpu-selection-card m-1"
                         :status="cpu"
-                        :style="cpu.id === selectedCpu ? 'background-color: var(--app-mestack-hover-color);' : ''"
+                        :style="cpu.id === selectedCpuId ? 'background-color: var(--app-mestack-hover-color);' : ''"
                         @click="() => selectCpu(cpu.id)"
                     />
                 </div>
@@ -159,7 +186,7 @@ onUnmounted(() => {
                                 />
                             </div>
                         </div>
-                        <el-button size="large" @click="cancelSelectCpuJob">
+                        <el-button class="px-8" size="large" :disabled="!isBusy" @click="cancelSelectCpuJob">
                             {{ tr('common.button.cancel') }}
                         </el-button>
                     </div>
