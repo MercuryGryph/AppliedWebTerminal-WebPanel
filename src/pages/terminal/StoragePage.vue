@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type {TerminalSort} from "~/core/AeUtils";
 import type AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
 
 import type MEStack from "~/core/data/ae/core/MEStack";
@@ -13,14 +12,13 @@ import {useAppStorage} from "~/data/AppStorage";
 import {useConfig} from "~/data/Config";
 import Logger from "~/utils/Logger";
 import {clamp} from "~/utils/utils";
+import {StorageSortingOrder} from "~/core/data/ae/StorageSortingOrder";
+import {ConfigSubsciber} from "~/core/Subscriber";
 
 const appStorage = useAppStorage()
 const config = useConfig()
 
 const STACK_PER_PAGE = 15 * 5
-
-const sort = ref<TerminalSort>('BY_NAME')
-const decrease = ref(false)
 
 const showStorage = ref(true)
 
@@ -54,8 +52,8 @@ function loadMore() {
     fetchAeStoragePaged(
         loadedPage.value,
         STACK_PER_PAGE,
-        sort.value,
-        decrease.value,
+        config.localConfig.storageSorting,
+        config.localConfig.sortingOrder === StorageSortingOrder.Descending,
         search.value,
         config.localConfig.language,
         appStorage.token!,
@@ -103,6 +101,10 @@ function refreshStorage() {
         loadMore()
     })
 }
+
+ConfigSubsciber.subscribe(_ => {
+    debounceRefreshStorage()
+})
 
 const debounceRefreshStorage = useDebounceFn(refreshStorage, 500, {rejectOnCancel: true})
 

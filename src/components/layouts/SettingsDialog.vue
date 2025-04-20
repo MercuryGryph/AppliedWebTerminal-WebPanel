@@ -4,7 +4,12 @@ import {tr} from "~/core/I18nService";
 import {useConfig} from "~/data/Config";
 import Logger from "~/utils/Logger";
 import {clamp} from "~/utils/utils";
-import {sortingAsTranslationKey, StorageSorting} from "~/core/data/ae/StorageSorting";
+import {
+    sortingAsTranslationKey,
+    sortingOrderAsTranslationKey,
+    StorageSorting,
+    StorageSortingOrder
+} from "~/core/data/ae/StorageSortingOrder";
 
 const display = defineModel<boolean>()
 
@@ -18,18 +23,27 @@ const handleIntervalChanged = (value: number) => {
     interval.value = value
 }
 
+
+
 const acceptLanguage = () => {
     displayLanguage.value = true
 }
 
 const lang = computed(() => config.localConfig.language)
-const sorting = ref(config.localConfig.sorting)
-const options = [StorageSorting.Ascending, StorageSorting.Descending]
+const order = ref(config.localConfig.sortingOrder)
+const sorting = ref(config.localConfig.storageSorting)
+const orderOptions = [StorageSortingOrder.Ascending, StorageSortingOrder.Descending]
+const sortingOptions = [StorageSorting.BY_NAME, StorageSorting.BY_COUNT, StorageSorting.BY_MOD]
 
+const onSortingOrderChanged = (it: StorageSortingOrder) => {
+    order.value = it
+    config.localConfig.sortingOrder = it
+}
 const onSortingChanged = (it: StorageSorting) => {
     sorting.value = it
-    config.localConfig.sorting = it
+    config.localConfig.storageSorting = it
 }
+
 const dialogWidth = computed<number>(() => {
     const width = document.documentElement.clientWidth
 
@@ -56,20 +70,36 @@ const dialogWidth = computed<number>(() => {
                 {{ tr("settings.item.terminal", lang) }}
             </el-divider>
             <div class="flex mt-2 justify-between items-center">
+                {{ tr("settings.item.terminal.order", lang) }}
+                <el-select
+                    v-model="order"
+                    @change="onSortingOrderChanged"
+                    class="w-150px"
+                >
+                    <el-option
+                        v-for="item in orderOptions"
+                        :key="item"
+                        :label="tr(sortingOrderAsTranslationKey(item))"
+                        :value="item"
+                    />
+                </el-select>
+            </div>
+            <div class="flex mt-2 justify-between items-center">
                 {{ tr("settings.item.terminal.sorting", lang) }}
                 <el-select
                     v-model="sorting"
                     @change="onSortingChanged"
-                    class="w-150px"
+                    class="w-150px mt-2"
                 >
                     <el-option
-                        v-for="item in options"
+                        v-for="item in sortingOptions"
                         :key="item"
                         :label="tr(sortingAsTranslationKey(item))"
                         :value="item"
                     />
                 </el-select>
             </div>
+
             <el-divider content-position="left">{{ tr("settings.item.status", lang) }}</el-divider>
 
             <div class="flex mt-2 justify-between items-center">

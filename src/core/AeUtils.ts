@@ -6,13 +6,12 @@ import type CraftingPlanSubmitRequest from "~/core/data/ae/craft/plan/CraftingPl
 import type CraftingPlanSubmitResult from "~/core/data/ae/craft/plan/CraftingPlanSubmitResult";
 import type CraftingPlanSummary from "~/core/data/ae/craft/plan/CraftingPlanSummary";
 import type StorageData from "~/core/data/ae/StorageData";
-
-export type TerminalSort = 'BY_COUNT' | 'BY_NAME' | 'BY_ID'
+import {StorageSorting} from "~/core/data/ae/StorageSortingOrder";
 
 export async function fetchAeStoragePaged(
     pageIndex: number,
     limitPerPage: number,
-    sort: TerminalSort,
+    sort: StorageSorting,
     decrease: boolean,
     searchText: string,
     language: string,
