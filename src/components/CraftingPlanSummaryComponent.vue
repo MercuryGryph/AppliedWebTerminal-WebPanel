@@ -6,6 +6,10 @@ import {nextTick, onMounted, onUnmounted, ref} from "vue";
 import {createCraftPlan, submitCraftingPlan} from "~/core/AeUtils";
 import {tr} from "~/core/I18nService";
 import {useAppStorage} from "~/data/AppStorage";
+import {fetchTranslation} from "~/core/JsonTextUtils";
+import {useConfig} from "~/data/Config";
+import {sprintf} from "sprintf-js";
+import UnsuitableCpuError from "~/core/data/ae/craft/plan/error/UnsuitableCpuError";
 
 const props = defineProps<{
     what: AeKeyObject
@@ -13,7 +17,7 @@ const props = defineProps<{
 }>()
 
 const appStorage = useAppStorage()
-
+const config = useConfig()
 
 const model = defineModel<boolean>()
 const summary = ref<CraftingPlanSummary | undefined>(undefined)
@@ -50,24 +54,61 @@ onUnmounted(() => {
     window.removeEventListener("resize", calcPadding)
 })
 
-function onSubmit() {
+async function onSubmit() {
     if (summary.value) {
-        submitCraftingPlan(summary.value.id, appStorage.token!).then((data) => {
-            if (data) {
-                if (data.success) {
-                    ElNotification({
-                        title: tr("ae.crafting.plan.submit_successes"),
-                        type: "success",
-                    })
-                } else {
-                    ElNotification({
-                        title: tr("ae.crafting.plan.submit_failure"),
-                        message: tr("ae.crafting.plan.submit_failed_by", data.errorCode),
-                        type: "error",
-                    })
+        const data = await submitCraftingPlan(summary.value.id, appStorage.token!)
+        if (data) {
+            if (data.success) {
+                ElNotification({
+                    title: tr("ae.crafting.plan.submit_successes"),
+                    type: "success",
+                })
+            } else {
+                let reasonTranslatable: string
+                let reasonExtra: string[] = []
+                switch (data.errorCode) {
+                    case "MISSING_INGREDIENT":
+                        reasonTranslatable = "gui.ae2.CraftErrorMissingIngredient"
+                        break
+                    case "NO_SUITABLE_CPU_FOUND":
+                        reasonTranslatable = "gui.ae2.CraftErrorNoSuitableCpu"
+                        const detail = data.errorDetail as UnsuitableCpuError
+                        reasonExtra = [
+                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuBusy", config.localConfig.language), detail.busy),
+                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuExcluded", config.localConfig.language), detail.excluded),
+                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuOffline", config.localConfig.language), detail.offline),
+                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuTooSmall", config.localConfig.language), detail.tooSmall),
+                        ]
+                        break
+                    case "CPU_BUSY":
+                        reasonTranslatable = "gui.ae2.CraftErrorCpuBusy"
+                        break
+                    case "CPU_OFFLINE":
+                        reasonTranslatable = "gui.ae2.CraftErrorCpuOffline"
+                        break
+                    case "CPU_TOO_SMALL":
+                        reasonTranslatable = "gui.ae2.CraftErrorCpuTooSmall"
+                        break
+                    case "CRAFTING_PLAN_NOT_FOUND":
+                        reasonTranslatable = "gui.ae2.CraftErrorPlanNotFound"
+                        break
+                    case "INCOMPLETE_PLAN":
+                        reasonTranslatable = "gui.ae2.CraftErrorIncompletePlan"
+                        break
+                    case "NO_CPU_FOUND":
+                        reasonTranslatable = "gui.ae2.CraftErrorNoCpuFound"
+                        break
                 }
+                reasonTranslatable = await fetchTranslation(reasonTranslatable, config.localConfig.language)
+                let message = reasonTranslatable + "<br/>" + reasonExtra.join("<br/>")
+                ElNotification({
+                    dangerouslyUseHTMLString: true,
+                    title: tr("ae.crafting.plan.submit_failure"),
+                    message: message,
+                    type: "error",
+                })
             }
-        })
+        }
         model.value = false
     }
 }

@@ -23,8 +23,6 @@ const handleIntervalChanged = (value: number) => {
     interval.value = value
 }
 
-
-
 const acceptLanguage = () => {
     displayLanguage.value = true
 }

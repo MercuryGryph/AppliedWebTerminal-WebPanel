@@ -19,6 +19,11 @@ const props = withDefaults(
 
 const config = useConfig()
 
+const visit = (it: Component) => {
+    let translated = false
+
+}
+
 
 const classes = computed<string>(() => {
     let result: string = ""
