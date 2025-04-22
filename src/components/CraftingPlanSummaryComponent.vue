@@ -2,7 +2,7 @@
 import type AeKeyObject from "~/core/data/ae/core/aekey/AeKeyObject";
 import type CraftingPlanSummary from "~/core/data/ae/craft/plan/CraftingPlanSummary";
 import {ElNotification} from "element-plus";
-import {nextTick, onMounted, onUnmounted, ref} from "vue";
+import {nextTick, onMounted, onUnmounted, ref, h, VNode} from "vue";
 import {createCraftPlan, submitCraftingPlan} from "~/core/AeUtils";
 import {tr} from "~/core/I18nService";
 import {useAppStorage} from "~/data/AppStorage";
@@ -11,6 +11,7 @@ import {useConfig} from "~/data/Config";
 import {sprintf} from "sprintf-js";
 import UnsuitableCpuError from "~/core/data/ae/craft/plan/error/UnsuitableCpuError";
 import MissingIngredientError from "~/core/data/ae/craft/plan/error/MissingIngredientError";
+import MEStackComponent from "~/components/MEStackComponent.vue";
 
 const props = defineProps<{
     what: AeKeyObject
@@ -66,21 +67,23 @@ async function onSubmit() {
                 })
             } else {
                 let reasonTranslatable: string
-                let reasonExtra: string[] = []
+                let reasonExtra: VNode[] = []
                 switch (data.errorCode) {
                     case "MISSING_INGREDIENT":
                         reasonTranslatable = "gui.ae2.CraftErrorMissingIngredient"
                         const missingIngredientDetail = data.errorDetail as MissingIngredientError
-                        missingIngredientDetail.what.displayName
+                        reasonExtra = [
+                            h(MEStackComponent, {stack: {what: missingIngredientDetail.what, amount: missingIngredientDetail.amount, craftable: false}})
+                        ]
                         break
                     case "NO_SUITABLE_CPU_FOUND":
                         reasonTranslatable = "gui.ae2.CraftErrorNoSuitableCpu"
                         const unsuitableDetail = data.errorDetail as UnsuitableCpuError
                         reasonExtra = [
-                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuBusy", config.localConfig.language), unsuitableDetail.busy),
-                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuExcluded", config.localConfig.language), unsuitableDetail.excluded),
-                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuOffline", config.localConfig.language), unsuitableDetail.offline),
-                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuTooSmall", config.localConfig.language), unsuitableDetail.tooSmall),
+                            h('p', sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuBusy", config.localConfig.language), unsuitableDetail.busy)),
+                            h('p', sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuExcluded", config.localConfig.language), unsuitableDetail.excluded)),
+                            h('p', sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuOffline", config.localConfig.language), unsuitableDetail.offline)),
+                            h('p', sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuTooSmall", config.localConfig.language), unsuitableDetail.tooSmall)),
                         ]
                         break
                     case "CPU_BUSY":
@@ -103,11 +106,13 @@ async function onSubmit() {
                         break
                 }
                 reasonTranslatable = await fetchTranslation(reasonTranslatable, config.localConfig.language)
-                let message = reasonTranslatable + "<br/>" + reasonExtra.join("<br/>")
                 ElNotification({
                     dangerouslyUseHTMLString: true,
                     title: tr("ae.crafting.plan.submit_failure"),
-                    message: message,
+                    message: h('p', [
+                        h('span', reasonTranslatable),
+                        h('p', reasonExtra)
+                    ]),
                     type: "error",
                 })
             }
