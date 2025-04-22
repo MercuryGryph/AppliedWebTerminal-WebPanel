@@ -124,7 +124,6 @@ class WebSocketService {
         this._webSocket.addEventListener("message", this._onMessage.bind(this))
         this._webSocket.addEventListener("close", this._onClose.bind(this))
         this._webSocket.addEventListener("error", this._onError.bind(this))
-        console.log("?")
     }
 
     public send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void {

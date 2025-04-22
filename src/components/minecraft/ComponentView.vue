@@ -2,8 +2,7 @@
 
 import Component, {createHtml} from "~/core/data/minecraft/Component";
 
-import {computed, h, ref} from "vue";
-import {useConfig} from "~/data/Config";
+import {computed, h, ref, render, watch} from "vue";
 import {computedAsync} from "@vueuse/core";
 
 const props = withDefaults(
@@ -16,19 +15,26 @@ const props = withDefaults(
     }
 )
 
-const content = computedAsync(async () => {
-    let a = h(
+const content = computedAsync(async (onCancel) => {
+    const abortController = new AbortController()
+    onCancel(() => {
+        abortController.abort()
+    })
+    let inner = await createHtml(props.component)
+    return h(
         "div",
-        {class: classes},
-        await createHtml(props.component)
+        {class: classes.value},
+        inner
     )
-    console.log(a)
-    return a
+}, null)
+
+const container = ref<HTMLElement | null>(null)
+
+watch(content, (newVNode) => {
+    if (container.value && newVNode) {
+        render(newVNode, container.value)
+    }
 })
-
-const contentRef = ref()
-
-const config = useConfig()
 
 const classes = computed<string>(() => {
     let result: string = ""
@@ -41,7 +47,5 @@ const classes = computed<string>(() => {
 </script>
 
 <template>
-    <div>
-        {{ content }}
-    </div>
+    <component :is="content"/>
 </template>

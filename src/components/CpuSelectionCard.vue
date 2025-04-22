@@ -75,7 +75,6 @@ watch(props, _it => {
 })
 
 if (props.status.craftingStatus) {
-    console.log(props.status.craftingStatus)
     getVisualOrderText(decodeComponent(props.status.craftingStatus!.crafting.what.displayName))
 }
 
@@ -109,8 +108,6 @@ const precentColor = computed(() => {
     return ""
 })
 
-console.log(precentColor.value)
-
 const numberComponent = (it: number) => {
     return Component.literal(formatNumber(it)).withColor("#886eff")
 }
@@ -119,11 +116,11 @@ const tooltips = computed(() => {
     const result = new Array<Component>()
     result.push(
         numberComponent(props.status.storageSize)
-            .append(Component.literal(tr("ae.cpu.storage")))
+            .append(Component.literal(tr("ae.cpu.storage")).withColor("gray"))
     )
     result.push(
         numberComponent(props.status.coProcessorCount)
-            .append(Component.literal(tr("ae.cpu.coprocessors")))
+            .append(Component.literal(tr("ae.cpu.coprocessors")).withColor("gray"))
     )
 
     if (props.status.craftingStatus) {

@@ -220,14 +220,14 @@ async function visitComponent(component: Component, parentStyle: Style, appender
             tr,
             (i) => component.with![i]
         )
-        translatedContent.forEach(it => {
+        for (let it of translatedContent) {
             if (it.isComponent && it.component) {
-                visitComponent(it.component, composeStyle(it.component, style), appender)
+                await visitComponent(it.component, composeStyle(it.component, style), appender)
             }
             if (it.literal) {
                 visitLiteral(it.literal, style, appender)
             }
-        })
+        }
     }
     if (component.text) {
         visitLiteral(component.text, style, appender)
@@ -244,14 +244,15 @@ function decomposeTranslatable(
     argumentSupplier: (i: number) => any,
 ): TranslatableContainer[] {
     let ret = new Array<TranslatableContainer>()
+
     try {
         let i = 0
         let j = 0;
 
         let match: RegExpExecArray | null;
-        while ((match = FORMAT_PATTERN.exec(formatTemplate)) !== null) {
+        while ((match = FORMAT_PATTERN.exec(formatTemplate.substring(j))) !== null) {
             const k = match.index;
-            const l = FORMAT_PATTERN.lastIndex;
+            const l = match.index + match[0].length - 1;
 
             if (k > j) {
                 const s = formatTemplate.substring(j, k);
@@ -265,7 +266,7 @@ function decomposeTranslatable(
             }
 
             const s4 = match[2];
-            const s1 = formatTemplate.substring(k, l);
+            const s1 = formatTemplate.substring(k, l + 1);
 
             if (s4 === '%' && s1 === '%%') {
                 ret.push({
@@ -280,18 +281,21 @@ function decomposeTranslatable(
                 const s2 = match[1];
                 const i1 = s2 ? parseInt(s2, 10) - 1 : i++;
                 let arg = argumentSupplier(i1)
-                try {
+                if (typeof arg === "string" || typeof arg === "number") {
+                    ret.push({
+                        isComponent: false,
+                        literal: arg.toString()
+                    })
+                } else {
                     ret.push({
                         isComponent: true,
-                        component: JSON.parse(arg),
+                        component: Component.createFromJson(arg),
                         literal: undefined
                     })
-                } catch (e) {
-                    ret.push(arg.toString())
                 }
             }
 
-            j = l;
+            j = l + 1;
         }
 
         if (j < formatTemplate.length) {
@@ -300,7 +304,7 @@ function decomposeTranslatable(
                 throw new Error('IllegalArgumentException');
             }
             ret.push({
-                literal: "%",
+                literal: s3,
                 isComponent: false
             });
         }
