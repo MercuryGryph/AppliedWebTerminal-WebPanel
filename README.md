@@ -16,5 +16,4 @@ Add your `{lang}.json` to [`public/lang`](/public/lang)
 
 Add the file name to [`public/lang/all.json`](/public/lang/all.json)
 
-### Add lang to language selection dialog
-For now, the lang file you add won't show in the list automatically,
+The lang you add will show in the list automatically.
