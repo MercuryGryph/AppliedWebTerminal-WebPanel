@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {ref, watch} from "vue";
-import {tr, trLanguageName} from "~/core/I18nService";
+import {getLanguageList, languageList, tr, trLanguageName} from "~/core/I18nService";
 import {fetchTranslation} from "~/core/JsonTextUtils";
 import {useAppStorage} from "~/data/AppStorage";
 import {useConfig} from "~/data/Config";
@@ -105,17 +105,20 @@ function removeLanguage(
         :title="tr('language.selector.title')"
         class="language-selector w-fit"
     >
-        <el-radio-group v-model="selectedLanguage" class="max-h-60vh w-full flex-col items-stretch">
-            <el-card class="my-0.5">
-                <el-radio value="zh_cn" class="w-full ps-4 m-0!">
-                    {{ trLanguageName("zh_cn") }}
-                </el-radio>
-            </el-card>
-            <el-card class="my-0.5">
-                <el-radio value="en_us" class="w-full ps-4 m-0!">
-                    {{ trLanguageName("en_us") }}
-                </el-radio>
-            </el-card>
+        <el-radio-group
+            v-model="selectedLanguage"
+            class="max-h-60vh w-full flex-col items-stretch"
+        >
+            <div
+                v-for="lang in getLanguageList()"
+                :key="lang"
+            >
+                <el-card class="my-0.5">
+                    <el-radio :value="lang.replace('.json', '')" class="w-full px-4 m-0!">
+                        {{ trLanguageName(lang.replace('.json', '')) }}
+                    </el-radio>
+                </el-card>
+            </div>
             <div
                 v-for="lang in config.localConfig.customLanguages"
                 :key="lang"

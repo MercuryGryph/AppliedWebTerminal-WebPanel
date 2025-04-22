@@ -1,51 +1,20 @@
-# element-plus-vite-starter
+# Applied Web Terminal - Web Frontend
 
-> A starter kit for Element Plus with Vite
+[![Static Badge](https://img.shields.io/badge/Vue.js-%234FC08D?logo=Vue.js&logoColor=white)](https://vuejs.org/)
+[![Static Badge](https://img.shields.io/badge/Element_Plus-%23409EFF)](https://element-plus.org/)
 
-- Preview: <https://vite-starter.element-plus.org>
+Web Frontend of [**Applied Web Terminal**](https://github.com/ZhuRuoLing/AppliedWebTerminal)
 
-This is an example of on-demand element-plus
-with [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components).
+This frontend is already built into the mod file, no need to deploy separately.
 
-> If you want to import all, it may be so simple that no examples are needed. Just
-> follow [quickstart | Docs](https://element-plus.org/zh-CN/guide/quickstart.html) and import them.
+## Help to translate?
 
-If you just want an on-demand import example `manually`, you can
-check [unplugin-element-plus/examples/vite](https://github.com/element-plus/unplugin-element-plus/tree/main/examples/vite).
+### Add lang file
+Add your `{lang}.json` to [`public/lang`](/public/lang)
 
-If you want to a nuxt starter,
-see [element-plus-nuxt-starter](https://github.com/element-plus/element-plus-nuxt-starter/).
+(Replace `{lang}` to the `Locale code`, just like in Minecraft)
 
-## Project setup
+Add the file name to [`public/lang/all.json`](/public/lang/all.json)
 
-```bash
-pnpm install
-
-# npm install
-# yarn install
-```
-
-### Compiles and hot-reloads for development
-
-```bash
-npm run dev
-```
-
-### Compiles and minifies for production
-
-```bash
-npm run build
-```
-
-## Usage
-
-```bash
-git clone https://github.com/element-plus/element-plus-vite-starter
-cd element-plus-vite-starter
-npm i
-npm run dev
-```
-
-### Custom theme
-
-See `src/styles/element/index.scss`.
+### Add lang to language selection dialog
+For now, the lang file you add won't show in the list automatically,

@@ -1,7 +1,12 @@
 import { vsprintf} from "sprintf-js";
 import {useConfig} from "~/data/Config";
 
+const languageList: string[] = [];
 const fetchedTranslate: Map<string, Map<string, string>> = new Map();
+
+export function getLanguageList(): string[] {
+    return [...languageList];
+}
 
 export function trLanguageName(
     language: string
@@ -37,6 +42,7 @@ export async function initTranslate() {
     const resp = await fetch(`/lang/all.json`)
     if (!resp.ok) return
     const list = await resp.json() as Array<string>
+    languageList.push(...list)
     for (let i = 0; i < list.length; i++) {
         const lang = list[i]
         const langResp = await fetch(`/lang/${lang}`)
