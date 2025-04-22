@@ -5,14 +5,20 @@ import type {MECraftingServiceStatusBundle, MECraftingStatusBundle} from "~/core
 import type {Consumer, Subscriber} from "~/core/Subscriber";
 import {Expand, Fold} from "@element-plus/icons-vue";
 import {computed, onMounted, onUnmounted, ref} from "vue";
-import {createCancelCpuJobCommand, createSelectCpuCommand} from "~/core/data/ae/command/Commands";
+import {
+    createCancelCpuJobCommand,
+    createSelectCpuCommand,
+    createSetUpdateIntervalCommand
+} from "~/core/data/ae/command/Commands";
 import {tr} from "~/core/I18nService";
+import {useConfig} from "~/data/Config";
 
 const props = defineProps<{
     sender: Consumer<any>,
     messageSubscriber: Subscriber<MECraftingServiceStatusBundle>
 }>()
 
+const config = useConfig()
 
 const isCollapsed = ref(false)
 const isMobile = ref(false)
@@ -125,6 +131,7 @@ onMounted(() => {
     checkMobile()
     window.addEventListener("resize", checkMobile)
     props.messageSubscriber.subscribe(onReceiveWSMessage)
+    props.sender(createSetUpdateIntervalCommand(config.localConfig.refreshInterval))
 })
 
 onUnmounted(() => {

@@ -10,6 +10,7 @@ import {fetchTranslation} from "~/core/JsonTextUtils";
 import {useConfig} from "~/data/Config";
 import {sprintf} from "sprintf-js";
 import UnsuitableCpuError from "~/core/data/ae/craft/plan/error/UnsuitableCpuError";
+import MissingIngredientError from "~/core/data/ae/craft/plan/error/MissingIngredientError";
 
 const props = defineProps<{
     what: AeKeyObject
@@ -69,15 +70,17 @@ async function onSubmit() {
                 switch (data.errorCode) {
                     case "MISSING_INGREDIENT":
                         reasonTranslatable = "gui.ae2.CraftErrorMissingIngredient"
+                        const missingIngredientDetail = data.errorDetail as MissingIngredientError
+                        missingIngredientDetail.what.displayName
                         break
                     case "NO_SUITABLE_CPU_FOUND":
                         reasonTranslatable = "gui.ae2.CraftErrorNoSuitableCpu"
-                        const detail = data.errorDetail as UnsuitableCpuError
+                        const unsuitableDetail = data.errorDetail as UnsuitableCpuError
                         reasonExtra = [
-                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuBusy", config.localConfig.language), detail.busy),
-                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuExcluded", config.localConfig.language), detail.excluded),
-                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuOffline", config.localConfig.language), detail.offline),
-                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuTooSmall", config.localConfig.language), detail.tooSmall),
+                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuBusy", config.localConfig.language), unsuitableDetail.busy),
+                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuExcluded", config.localConfig.language), unsuitableDetail.excluded),
+                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuOffline", config.localConfig.language), unsuitableDetail.offline),
+                            sprintf(await fetchTranslation("gui.ae2.CraftErrorNoSuitableCpuTooSmall", config.localConfig.language), unsuitableDetail.tooSmall),
                         ]
                         break
                     case "CPU_BUSY":

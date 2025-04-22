@@ -10,7 +10,7 @@ class Component {
 
     text?: string;
     translate?: string;
-    with?: string[];
+    with?: any[];
     extra?: Component[]
 
     withColor(color: string) {
@@ -51,6 +51,24 @@ class Component {
         const component = new Component()
         component.translate = key
         component.with = args
+        return component
+    }
+
+    static createFromJson(json: any): Component {
+        const component = new Component()
+        component.bold = json.bold
+        component.italic = json.italic
+        component.underline = json.underline
+        component.strikethrough = json.strikethrough
+        component.obfuscated = json.obfuscated
+        component.color = json.color
+
+        component.text = json.text
+        component.translate = json.translate
+        component.with = json.with
+
+        component.extra = json.extra?.map((extraJson: any) => Component.createFromJson(extraJson))
+
         return component
     }
 }

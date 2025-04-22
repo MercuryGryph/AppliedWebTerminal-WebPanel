@@ -1,4 +1,4 @@
-import type Component from "~/core/data/minecraft/Component";
+import Component from "~/core/data/minecraft/Component";
 import {useTranslateStore} from "~/data/TranslateStore";
 
 export async function fetchTranslation(key: string, language: string): Promise<string> {
@@ -7,5 +7,5 @@ export async function fetchTranslation(key: string, language: string): Promise<s
 }
 
 export function decodeComponent(str: string): Component {
-    return JSON.parse(str) as Component;
+    return Component.createFromJson(JSON.parse(str));
 }
