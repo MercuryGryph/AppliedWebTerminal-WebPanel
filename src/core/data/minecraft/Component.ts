@@ -1,4 +1,6 @@
 import {useConfig} from "~/data/Config";
+import {fetchTranslation} from "~/core/JsonTextUtils";
+import {h, VNode} from "vue";
 
 class Component {
     bold?: boolean;
@@ -101,15 +103,140 @@ interface TranslatableContainer {
     literal?: string
 }
 
-function createHtml(component: Component, parentStyle: Style) {
-    const config = useConfig()
-    if (component.translate) {
-        let translatedContent = decomposeTranslatable(
-            component.translate,
-            (i) => component.with![i]
-        )
+export async function createHtml(component: Component): Promise<VNode[]> {
+    let elements = new Array<VNode>()
+    await visitComponent(component, createStyle(component), it => elements.push(it))
+    return elements
+}
+
+function parseStyle(c: Style): string {
+    let result = ""
+    if (c.bold) {
+        result += "font-weight: bold;\n"
     }
 
+    if (c.italic) {
+        result += "font-style: italic;\n"
+    }
+
+    if (c.underline && c.strikethrough) {
+        result += "text-decoration: underline line-through;\n"
+    } else if (c.underline) {
+        result += "text-decoration: underline;\n"
+    } else if (c.strikethrough) {
+        result += "text-decoration: line-through;\n"
+    }
+
+    if (c.color) {
+        let color;
+        switch (c.color) {
+            case "black":
+                color = "#000000"
+                break;
+            case "dark_blue":
+                color = "#0000aa"
+                break;
+            case "dark_green":
+                color = "#00aa00"
+                break;
+            case "dark_aqua":
+                color = "#00aaaa"
+                break;
+            case "dark_red":
+                color = "#aa0000"
+                break;
+            case "dark_purple":
+                color = "#aa00aa"
+                break;
+            case "gold":
+                color = "#ffaa00"
+                break;
+            case "gray":
+                color = "#aaaaaa"
+                break;
+            case "dark_gray":
+                color = "#555555"
+                break;
+            case "blue":
+                color = "#5555ff"
+                break;
+            case "green":
+                color = "#55ff55"
+                break;
+            case "aqua":
+                color = "#55ffff"
+                break;
+            case "red":
+                color = "#ff5555"
+                break;
+            case "light_purple":
+                color = "#ff55ff"
+                break;
+            case "yellow":
+                color = "#ffff55"
+                break;
+            case "white":
+                color = "#ffffff"
+                break;
+            default:
+                color = c.color
+                break;
+        }
+        result += `color: ${color}\n`
+    }
+    return result
+}
+
+function composeStyle(a: Style, b: Style): Style {
+    return {
+        bold: a.bold ? a.bold : b.bold,
+        italic: a.italic ? a.italic : b.italic,
+        underline: a.underline ? a.underline : b.underline,
+        strikethrough: a.strikethrough ? a.strikethrough : b.strikethrough,
+        obfuscated: a.obfuscated ? a.obfuscated : b.obfuscated,
+        color: a.color ? a.color : b.color
+    }
+}
+
+function visitLiteral(literal: string, style: Style, appender: (it: VNode) => void) {
+    const parsedStyle = parseStyle(style)
+    appender(
+        h(
+            "span",
+            {
+                style: parsedStyle,
+            },
+            literal
+        )
+    )
+}
+
+async function visitComponent(component: Component, parentStyle: Style, appender: (it: VNode) => void) {
+    const config = useConfig()
+    const style = composeStyle(createStyle(component), parentStyle)
+    if (component.translate) {
+        let tr = await fetchTranslation(component.translate, config.localConfig.language)
+        let translatedContent = decomposeTranslatable(
+            tr,
+            (i) => component.with![i]
+        )
+        translatedContent.forEach(it => {
+            if (it.isComponent && it.component) {
+                visitComponent(it.component, composeStyle(it.component, style), appender)
+            }
+            if (it.literal) {
+                visitLiteral(it.literal, style, appender)
+            }
+        })
+    }
+    if (component.text) {
+        visitLiteral(component.text, style, appender)
+    }
+    if (component.extra) {
+        for (let c of component.extra) {
+            await visitComponent(c, style, appender)
+        }
+    }
 }
 
 function decomposeTranslatable(
