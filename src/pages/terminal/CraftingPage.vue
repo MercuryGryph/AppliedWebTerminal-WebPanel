@@ -150,7 +150,7 @@ onUnmounted(() => {
         />
         <el-container>
             <el-aside
-                class="sidebar-wrapper relative h-80vh p-t-32px"
+                class="sidebar-wrapper relative h-80vh p-t-32px z-10000"
                 :width="asideWidth"
                 :class="{
                     'collapsed': isCollapsed,
