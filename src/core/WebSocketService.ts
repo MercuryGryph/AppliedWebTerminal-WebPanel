@@ -112,7 +112,8 @@ class WebSocketService {
         const configUrl = config.serverConfig.webSocketUrl
         let baseUrl: string
         if (configUrl === "~") {
-            baseUrl = `ws://${location.host}/${endPoint}`
+            const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+            baseUrl = `${wsProtocol}://${location.host}/${endPoint}`
         } else {
             baseUrl = `${configUrl}/${endPoint}`
         }
